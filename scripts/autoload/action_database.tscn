@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://dghw2pn61wh0b"]
+
+[ext_resource type="Script" path="res://scripts/autoload/action_database.gd" id="1_agah6"]
+[ext_resource type="Script" path="res://scripts/battle/resources/actions/damage_action.gd" id="2_vf170"]
+
+[sub_resource type="Resource" id="Resource_5btcr"]
+script = ExtResource("2_vf170")
+type = "physical"
+scaling_stat = "attack"
+value = 0.8
+attack_modifiers = Array[Resource("res://scripts/battle/resources/actions/attack_modifier.gd")]([])
+name = "Slash"
+category = ""
+
+[node name="ActionDatabase" type="Node"]
+script = ExtResource("1_agah6")
+actions = {
+"slash": SubResource("Resource_5btcr")
+}

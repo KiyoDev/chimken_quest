@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://dhl0vs5vhq4ya"]
+
+[ext_resource type="Script" path="res://scripts/chimken/job.gd" id="2_xr7ko"]
+
+[sub_resource type="GDScript" id="GDScript_nduva"]
+script/source = "class_name Character extends Node2D
+
+
+@onready var n_sprite := $Sprite2D;
+@onready var n_animator := $AnimationPlayer;
+@onready var n_job = $Job
+
+@export var info : CharacterDefinition;
+
+
+# combat options: attack, skills, items, run
+# how to store attack and skills?
+#	inside a list or dict?
+#		if in list, ui should grab the names and get the proper info from the ActionDatabase
+"
+
+[node name="Character" type="Node2D"]
+script = SubResource("GDScript_nduva")
+
+[node name="Job" type="Node" parent="."]
+script = ExtResource("2_xr7ko")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

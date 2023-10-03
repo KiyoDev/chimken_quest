@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=3 uid="uid://ckofsuxdlbuqf"]
+
+[ext_resource type="Script" path="res://scripts/autoload/battle_manager.gd" id="1_3ul8d"]
+[ext_resource type="FontFile" uid="uid://wx688f5xyobx" path="res://assets/fonts/orange_font_for_import.png" id="2_xejpd"]
+
+[sub_resource type="Theme" id="Theme_060nd"]
+default_font = ExtResource("2_xejpd")
+/fonts/Font = ExtResource("2_xejpd")
+
+[node name="BattleSystem" type="Node"]
+script = ExtResource("1_3ul8d")
+
+[node name="AllyContainer" type="Node" parent="."]
+
+[node name="EnemyContainer" type="Node" parent="."]
+
+[node name="BattleUI" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+
+[node name="ActionCategories" type="GridContainer" parent="BattleUI"]
+unique_name_in_owner = true
+texture_filter = 1
+offset_right = 40.0
+offset_bottom = 40.0
+theme = SubResource("Theme_060nd")
+
+[node name="Attacks" type="Button" parent="BattleUI/ActionCategories"]
+layout_mode = 2
+text = "Attacks"
+
+[node name="Skills" type="Button" parent="BattleUI/ActionCategories"]
+layout_mode = 2
+text = "Skills"
+
+[node name="Items" type="Button" parent="BattleUI/ActionCategories"]
+layout_mode = 2
+text = "Items"
+
+[node name="Escape" type="Button" parent="BattleUI/ActionCategories"]
+layout_mode = 2
+text = "Escape "

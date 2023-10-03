@@ -10,15 +10,15 @@ config_version=5
 
 [application]
 
-config/name="chimken_quest"
-config/features=PackedStringArray("4.1", "GL Compatibility")
-config/icon="res://icon.svg"
+config/name="Chimken Quest"
+config/features=PackedStringArray("4.1")
+
+[autoload]
+
+ExperienceTable="*res://scripts/autoload/experience_table.gd"
+ActionDatabase="*res://scripts/autoload/action_database.tscn"
+Rng="*res://scripts/autoload/rng.gd"
 
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/abfi/plugin.cfg", "res://addons/gut/plugin.cfg")
-
-[rendering]
-
-renderer/rendering_method="gl_compatibility"
-renderer/rendering_method.mobile="gl_compatibility"

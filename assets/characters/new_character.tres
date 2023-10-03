@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=2 format=3 uid="uid://bx6gy3ayo1yur"]
+
+[ext_resource type="Script" path="res://scripts/chimken/character_definition.gd" id="1_hli2a"]
+
+[resource]
+script = ExtResource("1_hli2a")
+character_name = "placeholder"
+level = 1
+curr_exp = 0
+exp_needed = 0
+max_hp = 10
+max_mp = 10
+curr_hp = 10
+curr_mp = 10
+attack = 5
+magic = 5
+defense = 5
+magic_resist = 5
