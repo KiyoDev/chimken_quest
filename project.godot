@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Chimken Quest"
+run/main_scene="res://scenes/world.tscn"
 config/features=PackedStringArray("4.1")
 
 [autoload]
@@ -18,6 +19,12 @@ config/features=PackedStringArray("4.1")
 ExperienceTable="*res://scripts/autoload/experience_table.gd"
 ActionDatabase="*res://scripts/autoload/action_database.tscn"
 Rng="*res://scripts/autoload/rng.gd"
+BattleSystem="*res://scenes/battle/battle_system.tscn"
+
+[display]
+
+window/size/viewport_width=960
+window/size/viewport_height=540
 
 [editor_plugins]
 

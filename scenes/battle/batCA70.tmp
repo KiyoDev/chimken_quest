@@ -7,6 +7,9 @@
 
 [node name="BattleSystem" type="Node"]
 script = ExtResource("1_3ul8d")
+turn_queue = null
+ally_turns = null
+enemy_turns = null
 
 [node name="AllyContainer" type="Node" parent="."]
 
@@ -144,28 +147,5 @@ layout_mode = 2
 layout_mode = 2
 mouse_filter = 2
 text = "Potion
-"
-script = ExtResource("3_evtcr")
-
-[node name="EscapePanel" type="PanelContainer" parent="BattleUI/StyleControl"]
-visible = false
-layout_mode = 0
-offset_left = 92.0
-offset_top = 15.0
-offset_right = 132.0
-offset_bottom = 73.0
-
-[node name="EscapeList" type="VBoxContainer" parent="BattleUI/StyleControl/EscapePanel"]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="yes" type="Button" parent="BattleUI/StyleControl/EscapePanel/EscapeList"]
-layout_mode = 2
-text = "Yes"
-script = ExtResource("3_evtcr")
-
-[node name="no" type="Button" parent="BattleUI/StyleControl/EscapePanel/EscapeList"]
-layout_mode = 2
-text = "No
 "
 script = ExtResource("3_evtcr")
