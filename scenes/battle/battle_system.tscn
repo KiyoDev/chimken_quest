@@ -1,12 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://ckofsuxdlbuqf"]
+[gd_scene load_steps=6 format=3 uid="uid://ckofsuxdlbuqf"]
 
 [ext_resource type="Script" path="res://scripts/autoload/battle_manager.gd" id="1_3ul8d"]
 [ext_resource type="Script" path="res://scripts/battle/nodes/battle_ui.gd" id="2_7g0n2"]
 [ext_resource type="Theme" uid="uid://1qeq3n04pcoe" path="res://assets/fonts/battle_ui.theme" id="2_i8bjo"]
+[ext_resource type="Script" path="res://scripts/chimken/character.gd" id="2_jgbtj"]
 [ext_resource type="Script" path="res://scripts/ui/v_button.gd" id="3_evtcr"]
 
 [node name="BattleSystem" type="Node"]
 script = ExtResource("1_3ul8d")
+metadata/_edit_vertical_guides_ = []
+
+[node name="dummy" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_jgbtj")
 
 [node name="AllyContainer" type="Node" parent="."]
 
@@ -14,14 +20,17 @@ script = ExtResource("1_3ul8d")
 
 [node name="BattleUI" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
+visible = false
 script = ExtResource("2_7g0n2")
 
 [node name="StyleControl" type="Control" parent="BattleUI"]
 texture_filter = 1
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 143.0
+offset_top = 40.0
+offset_right = 183.0
+offset_bottom = 80.0
 mouse_filter = 2
 theme = ExtResource("2_i8bjo")
 
@@ -159,13 +168,26 @@ offset_bottom = 73.0
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="yes" type="Button" parent="BattleUI/StyleControl/EscapePanel/EscapeList"]
+[node name="confirm" type="Button" parent="BattleUI/StyleControl/EscapePanel/EscapeList"]
 layout_mode = 2
 text = "Yes"
 script = ExtResource("3_evtcr")
 
-[node name="no" type="Button" parent="BattleUI/StyleControl/EscapePanel/EscapeList"]
+[node name="cancel" type="Button" parent="BattleUI/StyleControl/EscapePanel/EscapeList"]
 layout_mode = 2
 text = "No
 "
+script = ExtResource("3_evtcr")
+
+[node name="DummyContainer" type="PanelContainer" parent="BattleUI/StyleControl"]
+unique_name_in_owner = true
+visible = false
+offset_left = 126.0
+offset_top = 78.0
+offset_right = 166.0
+offset_bottom = 118.0
+
+[node name="Dummy Button" type="Button" parent="BattleUI/StyleControl/DummyContainer"]
+layout_mode = 2
+text = "dummy"
 script = ExtResource("3_evtcr")

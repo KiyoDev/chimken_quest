@@ -106,3 +106,6 @@ func add_exp(exp : int):
 		exp_needed -= curr_exp;
 		leveled_up.emit(self, level, next_lvl); # emit original level and new level for front end
 		level = next_lvl;
+
+func _to_string():
+	return "'%s':{'type':'%s', 'level':%s, 'speed':%s}" % [character_name, type, level, speed];

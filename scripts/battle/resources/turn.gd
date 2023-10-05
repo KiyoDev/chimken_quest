@@ -9,3 +9,7 @@ func _init(char : Character) -> void:
 
 func _execute(character : Character):
 	pass
+
+
+func _to_string():
+	return "turn - %s" % [character];

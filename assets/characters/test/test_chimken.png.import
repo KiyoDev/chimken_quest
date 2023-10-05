@@ -2,23 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ba2sgost7my3x"
-path="res://.godot/imported/red.png-47a557c3922e800f76686bc1a4ad0c3c.ctex"
+uid="uid://ccn2ymotc6nlo"
+path="res://.godot/imported/test_chimken.png-525aa3aa0c2a4f2318a84468f4187390.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/gut/images/red.png"
-dest_files=["res://.godot/imported/red.png-47a557c3922e800f76686bc1a4ad0c3c.ctex"]
+source_file="res://assets/characters/test/test_chimken.png"
+dest_files=["res://.godot/imported/test_chimken.png-525aa3aa0c2a4f2318a84468f4187390.ctex"]
 
 [params]
 
 compress/mode=0
+compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
-compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=false
