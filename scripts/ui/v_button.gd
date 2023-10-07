@@ -10,4 +10,6 @@ func _ready():
 	var index := get_index();
 	set_focus_neighbor(SIDE_TOP, p.get_child(max(0, index - 1)).get_path());
 	set_focus_neighbor(SIDE_BOTTOM, p.get_child(min(index + 1, p.get_child_count() - 1)).get_path());
+	
+	mouse_filter = MOUSE_FILTER_IGNORE;
 

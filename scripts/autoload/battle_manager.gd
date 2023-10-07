@@ -12,8 +12,8 @@ extends Node
 
 @export var current_actor : Character;
 
-static var round := 0;
-static var in_battle := false;
+var round := 0;
+var in_battle := false;
 
 
 func _ready():
@@ -30,46 +30,58 @@ func _test(event):
 		print("Start battle...");
 		in_battle = true;
 		# TODO: normally would get populated based on party list & encountered enemy
-		var c1 = test_generate_character("Chimken", 10);
-		var c2 = test_generate_character("Chonken", 5);
-		var e1 = test_generate_character("Bad Chimken", 6, "Enemy");
+		var c1 = test_generate_character("Chimken", 10, ALLY_CONTAINER);
+		var c2 = test_generate_character("Chonken", 5, ALLY_CONTAINER);
+		var e1 = test_generate_character("Bad Chimken", 6, ENEMY_CONTAINER, "Enemy");
+		var e2 = test_generate_character("Bad Chimken 2", 4, ENEMY_CONTAINER, "Enemy");
 		
-		c2.transform.origin = Vector2(c1.transform.origin.x, c1.transform.origin.y + 32);
-		e1.transform.origin = Vector2(c1.transform.origin.x + 64, c1.transform.origin.y + 16);
+		c1.position = Vector2(0, 0);
+		c2.position = Vector2(c1.position.x, c1.position.y + 32);
+		e1.position = Vector2(c1.position.x + 64, c1.position.y + 16);
+		e2.position = Vector2(e1.position.x, e1.position.y + 32);
 		
-		ALLY_CONTAINER.add_child(c1);
-		ALLY_CONTAINER.add_child(c2);
-		ENEMY_CONTAINER.add_child(e1);
+		print("c1 - %s" % [c1.position]);
+		print("e2 - %s" % [e2.position]);
+#		ALLY_CONTAINER.add_child(c1);
+#		ALLY_CONTAINER.add_child(c2);
+#		# TODO: instantiate enemies from a list based on the area
+#		ENEMY_CONTAINER.add_child(e1);
+#		ENEMY_CONTAINER.add_child(e2);
 		
-		BATTLE_UI.on_battle_start();
-		init_battle(ALLY_CONTAINER.get_children(), ENEMY_CONTAINER.get_child(0));
+		init_battle(ALLY_CONTAINER.get_children(), ENEMY_CONTAINER.get_children());
+		BATTLE_UI.on_battle_start(ALLY_CONTAINER.get_children(), ENEMY_CONTAINER.get_children());
 		pass;
 	elif(event.is_action_pressed(&"test_battle_end")):
 		end_battle();
 	elif(event.is_action_pressed(&"test_battle_print")):
 		test_print();
 
-@onready var test_chimken = Image.load_from_file("res://assets/characters/test/test_chimken.png");
 
-func test_generate_character(name, speed, type := "Ally"):
-	var char = Character.new() if type == "Ally" else Enemy.new();
+@onready var test_chimken = preload("res://scenes/characters/test_character.tscn").instantiate();
+@onready var test_enemy = preload("res://scenes/characters/test_enemy.tscn").instantiate();
+#@onready var test_chimken = Image.load_from_file("res://assets/characters/test/test_chimken.png");
+
+
+func test_generate_character(name, speed, node : Node, type := "Ally"):
+	var char = test_chimken.duplicate() if type == "Ally" else test_enemy.duplicate();
+	node.add_child(char);
+#	if(char.n_sprite == null): char.n_sprite = Sprite2D.new();
 	char.info.character_name = name;
 	char.info.speed = speed;
 	
-	var sprite = Sprite2D.new();
-	var texture : ImageTexture = ImageTexture.create_from_image(test_chimken);
-	sprite.texture = texture;
-	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST;
-	char.add_child(sprite);
-	
+#	var texture : ImageTexture = ImageTexture.create_from_image(test_chimken);
+#	char.n_sprite.texture = texture;
+#	char.n_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST;
+	print("char - %s, %s" % [char.info.character_name, char.n_sprite.name]);
 	return char;
 
 
 func test_print():
-	print("allies - %s" % [ALLY_CONTAINER.get_children()]);
-	print("enemies - %s" % [ENEMY_CONTAINER.get_children()]);
-	print("turn_queue %s" % [turn_queue]);
+#	print("allies - %s" % [ALLY_CONTAINER.get_children()]);
+#	print("enemies - %s" % [ENEMY_CONTAINER.get_children()]);
+#	print("turn_queue %s" % [turn_queue]);
 #	print("turn queue - %s"  % turn_queue);
+#	print(ActionDefinition.target_type("All"));
 	BATTLE_UI.test_print();
 
 
@@ -78,23 +90,21 @@ func _process(delta):
 	pass;
 
 
-func init_battle(allies, enemy):
+func init_battle(allies, enemies):
 	# init battle, calculate turn order, create turns
 	# TODO: populate ally and enemy containers
 	# TODO: populate lists of actions for each character that can swap out when turns change
-	# TODO: instantiate enemies from a list based on the area
 	print("initializing battle...");
 	round = 0;
-	var enemy_list : Array[Character] = [enemy.duplicate(), enemy.duplicate()];
 	
 	for a in allies:
 		ally_turns.append(AllyTurn.new(a as Character));
 	
-	for e in enemy_list:
-		enemy_turns.append(EnemyTurn.new(e));
+	for e in enemies:
+		enemy_turns.append(EnemyTurn.new(e as Enemy));
 	
-	print("ally  turns  -  %s" % [ally_turns]);
-	print("enemy  turns  -  %s" % [enemy_turns]);
+#	print("ally  turns  -  %s" % [ally_turns]);
+#	print("enemy  turns  -  %s" % [enemy_turns]);
 	
 	new_round();
 
@@ -133,13 +143,19 @@ func get_next_turn() -> Turn:
 func new_round():
 	turn_queue.append_array(ally_turns);
 	turn_queue.append_array(enemy_turns);
-	print("before - %s" % [turn_queue]);
+#	print("before - %s" % [turn_queue]);
 	calc_turn_order();
 	round += 1;
+	
+	start_turn();
 
 
 func calc_turn_order():
-	turn_queue.sort_custom(func(a : Turn, b : Turn): return a.character.info.speed > b.character.info.speed);
+	turn_queue.sort_custom(
+		func(a : Turn, b : Turn): 
+#			print("a=[%s] b=[%s]" % [a, b]);
+			return a.character.info.speed > b.character.info.speed
+	);
 
 
 func _on_attacks_focus_entered():

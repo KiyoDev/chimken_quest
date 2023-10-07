@@ -131,28 +131,11 @@ offset_bottom = 55.0
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="chain_frost" type="Button" parent="BattleUI/StyleControl/SkillListPanel/SkillList"]
+[node name="heavy_slash" type="Button" parent="BattleUI/StyleControl/SkillListPanel/SkillList"]
 layout_mode = 2
 mouse_filter = 2
-text = "Chain Frost"
-script = ExtResource("3_evtcr")
-
-[node name="focus" type="Button" parent="BattleUI/StyleControl/SkillListPanel/SkillList"]
-layout_mode = 2
-mouse_filter = 2
-text = "Focus"
-script = ExtResource("3_evtcr")
-
-[node name="avalanche" type="Button" parent="BattleUI/StyleControl/SkillListPanel/SkillList"]
-layout_mode = 2
-mouse_filter = 2
-text = "Avalanche"
-script = ExtResource("3_evtcr")
-
-[node name="mass_heal" type="Button" parent="BattleUI/StyleControl/SkillListPanel/SkillList"]
-layout_mode = 2
-mouse_filter = 2
-text = "Chain Frost"
+text = "Heavy Slash
+"
 script = ExtResource("3_evtcr")
 
 [node name="ItemListPanel" type="PanelContainer" parent="BattleUI/StyleControl"]
@@ -219,8 +202,8 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Allies" type="Node2D" parent="BattleUI/StyleControl/TargetList"]
+[node name="Allies" type="Node" parent="BattleUI/StyleControl/TargetList"]
 unique_name_in_owner = true
 
-[node name="Enemies" type="Node2D" parent="BattleUI/StyleControl/TargetList"]
+[node name="Enemies" type="Node" parent="BattleUI/StyleControl/TargetList"]
 unique_name_in_owner = true

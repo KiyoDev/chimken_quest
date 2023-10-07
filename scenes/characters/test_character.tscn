@@ -1,30 +1,56 @@
-[gd_scene load_steps=3 format=3 uid="uid://dhl0vs5vhq4ya"]
+[gd_scene load_steps=6 format=3 uid="uid://iexx011lw3e4"]
 
+[ext_resource type="Script" path="res://scripts/chimken/character.gd" id="1_3br1s"]
+[ext_resource type="Texture2D" uid="uid://ccn2ymotc6nlo" path="res://assets/characters/test/test_chimken.png" id="2_122hd"]
+[ext_resource type="Script" path="res://scripts/chimken/character_definition.gd" id="2_wtj1n"]
 [ext_resource type="Script" path="res://scripts/chimken/job.gd" id="2_xr7ko"]
 
-[sub_resource type="GDScript" id="GDScript_nduva"]
-script/source = "class_name Character extends Node2D
-
-
-@onready var n_sprite := $Sprite2D;
-@onready var n_animator := $AnimationPlayer;
-@onready var n_job = $Job
-
-@export var info : CharacterDefinition;
-
-
-# combat options: attack, skills, items, run
-# how to store attack and skills?
-#	inside a list or dict?
-#		if in list, ui should grab the names and get the proper info from the ActionDatabase
-"
+[sub_resource type="Resource" id="Resource_87sjr"]
+script = ExtResource("2_wtj1n")
+character_name = "Chimken"
+type = 1
+level = 1
+curr_exp = 0
+exp_needed = 0
+max_hp = 10
+max_mp = 10
+curr_hp = 10
+curr_mp = 10
+attack = 5
+magic = 5
+defense = 5
+magic_resist = 5
+speed = 5
+luck = 5
+crit_rate = 0.0
+crit_damage = 0.0
+pierce = 0.0
+fire_mastery = 0.0
+water_mastery = 0.0
+electric_mastery = 0.0
+earth_mastery = 0.0
+wind_mastery = 0.0
+light_mastery = 0.0
+dark_mastery = 0.0
+void_mastery = 0.0
+fire_resist = 0.0
+water_resist = 0.0
+electric_resist = 0.0
+earth_resist = 0.0
+wind_resist = 0.0
+light_resist = 0.0
+dark_resist = 0.0
+void_resist = 0.0
 
 [node name="Character" type="Node2D"]
-script = SubResource("GDScript_nduva")
+texture_filter = 1
+script = ExtResource("1_3br1s")
+info = SubResource("Resource_87sjr")
 
 [node name="Job" type="Node" parent="."]
 script = ExtResource("2_xr7ko")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_122hd")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

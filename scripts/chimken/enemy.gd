@@ -3,7 +3,7 @@ class_name Enemy extends Character
 
 func _init():
 	super._init();
-	info.type = "Enemy";
+	info.type = CharacterDefinition.Type.Enemy;
 
 
 # Called when the node enters the scene tree for the first time.

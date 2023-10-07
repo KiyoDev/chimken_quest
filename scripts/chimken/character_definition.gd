@@ -8,8 +8,14 @@ signal gained_exp;
 signal leveled_up;
 
 
+enum Type {
+	Ally	= 1,
+	Enemy	= 2
+}
+
+
 @export var character_name := "placeholder";
-@export_enum("Ally", "Enemy") var type := "Ally"; 
+@export_enum("Ally:1", "Enemy:2") var type := 1; 
 
 @export_group("Level")
 @export var level := 1;

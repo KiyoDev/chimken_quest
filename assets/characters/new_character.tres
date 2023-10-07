@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=2 format=3 uid="uid://bx6gy3ayo1yur"]
+[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=2 format=3 uid="uid://dkj42qc08hga2"]
 
 [ext_resource type="Script" path="res://scripts/chimken/character_definition.gd" id="1_hli2a"]
 
 [resource]
 script = ExtResource("1_hli2a")
 character_name = "placeholder"
+type = "Ally"
 level = 1
 curr_exp = 0
 exp_needed = 0
@@ -16,3 +17,24 @@ attack = 5
 magic = 5
 defense = 5
 magic_resist = 5
+speed = 5
+luck = 5
+crit_rate = 0.0
+crit_damage = 0.0
+pierce = 0.0
+fire_mastery = 0.0
+water_mastery = 0.0
+electric_mastery = 0.0
+earth_mastery = 0.0
+wind_mastery = 0.0
+light_mastery = 0.0
+dark_mastery = 0.0
+void_mastery = 0.0
+fire_resist = 0.0
+water_resist = 0.0
+electric_resist = 0.0
+earth_resist = 0.0
+wind_resist = 0.0
+light_resist = 0.0
+dark_resist = 0.0
+void_resist = 0.0

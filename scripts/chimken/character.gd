@@ -11,6 +11,17 @@ class_name Character extends Node2D
 func _init():
 	if(info == null):
 		info = CharacterDefinition.new();
+	
+#	if(n_sprite == null):
+#		n_sprite = Sprite2D.new();
+
+
+func _ready():
+	if(info == null):
+		info = CharacterDefinition.new();
+	if(n_sprite == null):
+		n_sprite = Sprite2D.new();
+
 
 # combat options: attack, skills, items, run
 # how to store attack and skills?
