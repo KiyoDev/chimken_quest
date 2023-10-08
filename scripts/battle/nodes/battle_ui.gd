@@ -18,24 +18,24 @@ enum TargetableType {
 }
 
 
-@onready var ACTION_CATEGORIES := %ActionCategories;
-@onready var ATTACK_CATEGORY := %Attacks
-@onready var SKILL_CATEGORY := %Skills;
-@onready var ITEM_CATEGORY := %Items;
-@onready var ESCAPE_CATEGORY := %Escape;
+@onready var ActionCategories := %ActionCategories;
+@onready var AttackCategory := %Attacks
+@onready var SkillCategory := %Skills;
+@onready var ItemCategory := %Items;
+@onready var EscapeCategory := %Escape;
 
 # TODO: attack and skill lists should have instances for each character
 @onready var ATTACK_LIST := %AttackList;
 # TODO: skills need to listen on character mana_updated signals; lets know if button should be disabled
-@onready var SKILL_LIST := %SkillList;
-@onready var ITEM_LIST := %ItemList;
-@onready var ESCAPE_LIST := %EscapeList;
-@onready var TARGET_LIST := %TargetList;
+@onready var SkillList := %SkillList;
+@onready var _ItemList := %ItemList;
+@onready var EscapeList := %EscapeList;
+@onready var TargetList := %TargetList;
 
-@onready var DUMMY_LIST := %DummyContainer;
+@onready var DummyList := %DummyContainer;
 
-@onready var CURSOR : Cursor = preload("res://scenes/ui/cursor.tscn").instantiate();
-@onready var TARGET_CURSOR : TargetCursor = preload("res://scenes/ui/target_cursor.tscn").instantiate();
+@onready var Cursor : Cursor = preload("res://scenes/ui/cursor.tscn").instantiate();
+@onready var TargetCursor : TargetCursor = preload("res://scenes/ui/target_cursor.tscn").instantiate();
 
 #@onready var ALLY_CONTAINER = $AllyContainer;
 #@onready var ENEMY_CONTAINER = $EnemyContainer;
@@ -67,15 +67,15 @@ var targetable_type : TargetableType;
 #		bring up another window to show attacks, skills, items
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print(CURSOR);
+	print(Cursor);
 #	print(skill_list.get_children()[0].get_children());
 
-#	print(ACTION_CATEGORIES);
+#	print(ActionCategories);
 #	get_viewport().connect(&"gui_focus_changed", _on_focus_changed);
-#	var default_foc : Control = ACTION_CATEGORIES.get_child(0);
+#	var default_foc : Control = ActionCategories.get_child(0);
 #	default_foc.grab_focus();
 #	focused_ele = default_foc;
-#	curr_menu = ACTION_CATEGORIES;
+#	curr_menu = ActionCategories;
 #	select_state = SelectState.Categories;
 	pass;
 
@@ -122,14 +122,14 @@ func _on_focus_changed(control : Control):
 	print("focus changed - '%s', [%s, %s]" % [control, SelectState.keys()[select_state], curr_menu]);
 	focused_ele = control;
 	if(select_state == SelectState.Target):
-		CURSOR.visible = false;
+		Cursor.visible = false;
 #		if(focused_ele is TargetCursor):
 #			focused_ele._select();
-#		CURSOR._target_selected();
+#		Cursor._target_selected();
 	else:
-		if(!CURSOR.visible): CURSOR.visible = true;
-		CURSOR.position = Vector2(focused_ele.global_position.x - 12, focused_ele.global_position.y + (focused_ele.size.y / 2));
-		CURSOR._menu();
+		if(!Cursor.visible): Cursor.visible = true;
+		Cursor.position = Vector2(focused_ele.global_position.x - 12, focused_ele.global_position.y + (focused_ele.size.y / 2));
+		Cursor._menu();
 		
 		if(select_state == SelectState.Action):
 			_test_action(focused_ele.name);
@@ -138,28 +138,28 @@ func _on_focus_changed(control : Control):
 func on_battle_start(allies, enemies):
 	visible = true;
 	
-	add_child(CURSOR);
+	add_child(Cursor);
 	get_viewport().connect(&"gui_focus_changed", _on_focus_changed);
-	ACTION_CATEGORIES.visible = true;
-	var default_foc : Control = ACTION_CATEGORIES.get_child(0);
+	ActionCategories.visible = true;
+	var default_foc : Control = ActionCategories.get_child(0);
 	default_foc.grab_focus();
 	focused_ele = default_foc;
-	curr_menu = ACTION_CATEGORIES;
+	curr_menu = ActionCategories;
 	select_state = SelectState.Categories;
 	
-	print("ciruir - %s, %s" % [CURSOR, CURSOR.n_sprite]);
-	CURSOR.transform.origin = Vector2(focused_ele.global_position.x - 12, focused_ele.global_position.y + (focused_ele.size.y / 2));
+	print("ciruir - %s, %s" % [Cursor, Cursor.n_sprite]);
+	Cursor.transform.origin = Vector2(focused_ele.global_position.x - 12, focused_ele.global_position.y + (focused_ele.size.y / 2));
 	init_target_cursors(allies, enemies);
 
 # TODO: updated target selection. allow only target cursors to be focused
 func init_target_cursors(allies, enemies):
-	TARGET_LIST.visible = false;
+	TargetList.visible = false;
 	for a in allies:
-		var cursor : TargetCursor = TARGET_CURSOR.duplicate();
+		var cursor : TargetCursor = TargetCursor.duplicate();
 		cursor.visible = false;
-#		TARGET_LIST.get_child(0).add_child(cursor);
-#		TARGET_LIST.get_node("%Allies").visible = false;
-		TARGET_LIST.get_node("%Allies").add_child(cursor);
+#		TargetList.get_child(0).add_child(cursor);
+#		TargetList.get_node("%Allies").visible = false;
+		TargetList.get_node("%Allies").add_child(cursor);
 		
 		print("targetea [%s, %s] (%s, %s)- %s, %s" % [a, a.n_sprite, a.n_sprite.global_position, a.n_sprite.position, cursor, cursor.n_sprite]); 
 		print("texture - ally_sprite[%s], cursor[%s]" % [a.n_sprite.texture.get_width(), cursor.n_sprite.texture.get_width()]);
@@ -170,10 +170,10 @@ func init_target_cursors(allies, enemies):
 	#- (a.n_sprite.texture.get_width() / 2) - (cursor.n_sprite.texture.get_width() / 8 / 2)
 	# - (a.n_sprite.texture.get_height() / 2) - (cursor.n_sprite.texture.get_height() / 2)
 	for e in enemies:
-		var cursor : TargetCursor = TARGET_CURSOR.duplicate();
+		var cursor : TargetCursor = TargetCursor.duplicate();
 		cursor.visible = false;
-#		TARGET_LIST.get_node("%Enemies").visible = false;
-		TARGET_LIST.get_node("%Enemies").add_child(cursor);
+#		TargetList.get_node("%Enemies").visible = false;
+		TargetList.get_node("%Enemies").add_child(cursor);
 		
 		cursor.character = e;
 		cursor.n_sprite.global_position = Vector2(e.n_sprite.global_position.x - (e.n_sprite.texture.get_width() / 2) - (cursor.n_sprite.texture.get_width() / 8 / 2), e.n_sprite.global_position.y - (e.n_sprite.texture.get_height() / 2) - (cursor.n_sprite.texture.get_height() / 8 / 2));
@@ -194,12 +194,12 @@ func on_battle_end():
 	visible = false;
 	_untarget();
 	# Remove all targets from sub lists
-	for n in TARGET_LIST.get_children():
+	for n in TargetList.get_children():
 		for c in n.get_children():
 			c._unselect();
 			n.remove_child(c);
-	TARGET_LIST.visible = true;
-	remove_child(CURSOR);
+	TargetList.visible = true;
+	remove_child(Cursor);
 	get_viewport().disconnect(&"gui_focus_changed", _on_focus_changed);
 
 
@@ -218,18 +218,18 @@ func select_category():
 	select_state = SelectState.Action;
 	menu_stack.push_back(curr_menu);
 	focus_stack.push_back(focused_ele);
-	if(focused_ele == ATTACK_CATEGORY):
+	if(focused_ele == AttackCategory):
 		curr_menu = ATTACK_LIST.get_parent();
 		focused_ele = ATTACK_LIST.get_child(0);
-	elif(focused_ele == SKILL_CATEGORY):
-		curr_menu = SKILL_LIST.get_parent();
-		focused_ele = SKILL_LIST.get_child(0);
-	elif(focused_ele == ITEM_CATEGORY):
-		curr_menu = ITEM_LIST.get_parent();
-		focused_ele = ITEM_LIST.get_child(0);
-	elif(focused_ele == ESCAPE_CATEGORY):
-		curr_menu = ESCAPE_LIST.get_parent();
-		focused_ele = ESCAPE_LIST.get_child(0);
+	elif(focused_ele == SkillCategory):
+		curr_menu = SkillList.get_parent();
+		focused_ele = SkillList.get_child(0);
+	elif(focused_ele == ItemCategory):
+		curr_menu = _ItemList.get_parent();
+		focused_ele = _ItemList.get_child(0);
+	elif(focused_ele == EscapeCategory):
+		curr_menu = EscapeList.get_parent();
+		focused_ele = EscapeList.get_child(0);
 
 	curr_menu.visible = true;
 	focused_ele.grab_focus();
@@ -238,7 +238,7 @@ func select_category():
 func select_action(action):
 	print("selected action");
 	print("curr_menu - [%s, %s]" % [curr_menu, focused_ele]);
-	if(curr_menu == ESCAPE_LIST.get_parent()):
+	if(curr_menu == EscapeList.get_parent()):
 		if(focused_ele.name == "confirm"):
 			BattleSystem.end_battle();
 		else:
@@ -254,14 +254,14 @@ func select_action(action):
 		_test_action(focused_ele.name);
 		
 		_target();
-#		curr_menu = DUMMY_LIST;
-#		focused_ele = DUMMY_LIST.get_child(0);
+#		curr_menu = DummyList;
+#		focused_ele = DummyList.get_child(0);
 		
-		curr_menu = TARGET_LIST;
-		focused_ele = TARGET_LIST.get_child(0).get_child(0);
+		curr_menu = TargetList;
+		focused_ele = TargetList.get_child(0).get_child(0);
 		print("chose action, focused - %s" % [focused_ele]);
 		
-#		TARGET_LIST.visible = true;
+#		TargetList.visible = true;
 		
 		curr_menu.visible = true;
 		focused_ele.grab_focus();
@@ -275,7 +275,7 @@ func _target():
 		if(BattleSystem.current_actor.info.type == CharacterDefinition.Type.Ally):
 			print("targeting ally self");
 			targetable_type |= TargetableType.Ally;
-			var allies = TARGET_LIST.get_node("%Allies");
+			var allies = TargetList.get_node("%Allies");
 			for a in allies.get_children():
 				print("a - %s" % [a.character.info.character_name]);
 				if(a.character.info.character_name == BattleSystem.current_actor.info.character_name):
@@ -287,7 +287,7 @@ func _target():
 					break;
 		else:
 			targetable_type |= TargetableType.Enemy;
-			var enemies = TARGET_LIST.get_node("%Enemies");
+			var enemies = TargetList.get_node("%Enemies");
 			for e in enemies.get_children():
 				if(e.character.info.character_name == BattleSystem.current_actor.info.character_name):
 					enemies.visible = true;
@@ -298,7 +298,7 @@ func _target():
 	else:
 		if(curr_action.target & ActionDefinition.Target.Ally > 0):
 			targetable_type |= TargetableType.Ally;
-			var allies = TARGET_LIST.get_node("%Allies");
+			var allies = TargetList.get_node("%Allies");
 			allies.visible = true;
 			var i := 0;
 			for a in allies.get_children():
@@ -309,7 +309,7 @@ func _target():
 			
 		if(curr_action.target & ActionDefinition.Target.Enemy > 0):
 			targetable_type |= TargetableType.Enemy;
-			var enemies = TARGET_LIST.get_node("%Enemies");
+			var enemies = TargetList.get_node("%Enemies");
 			enemies.visible = true;
 			for e in enemies.get_children():
 				e._show();
@@ -329,7 +329,7 @@ func _target():
 
 
 func set_target_neighbors():
-	var ally_count = TARGET_LIST.get_node("%Allies").get_child_count();
+	var ally_count = TargetList.get_node("%Allies").get_child_count();
 	match(targetable.size()):
 		2: #2, 1:1
 			if(ally_count == 1):
@@ -443,8 +443,8 @@ func _untarget():
 	for t in targetable:
 		t._unselect();
 	targetable.clear();
-	TARGET_LIST.get_node("%Allies").visible = false;
-	TARGET_LIST.get_node("%Enemies").visible = false;
+	TargetList.get_node("%Allies").visible = false;
+	TargetList.get_node("%Enemies").visible = false;
 
 
 func _test_action(ele_name):

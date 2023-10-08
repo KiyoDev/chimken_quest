@@ -1,9 +1,9 @@
 extends Node
 
 
-@onready var BATTLE_UI = %BattleUI;
-@onready var ALLY_CONTAINER := $AllyContainer;
-@onready var ENEMY_CONTAINER := $EnemyContainer;
+@onready var BattleUI = %BattleUI;
+@onready var AllyContainer := $AllyContainer;
+@onready var EnemyContainer := $EnemyContainer;
 
 @export var turn_queue : Array[Turn] = [];
 
@@ -30,10 +30,10 @@ func _test(event):
 		print("Start battle...");
 		in_battle = true;
 		# TODO: normally would get populated based on party list & encountered enemy
-		var c1 = test_generate_character("Chimken", 10, ALLY_CONTAINER);
-		var c2 = test_generate_character("Chonken", 5, ALLY_CONTAINER);
-		var e1 = test_generate_character("Bad Chimken", 6, ENEMY_CONTAINER, "Enemy");
-		var e2 = test_generate_character("Bad Chimken 2", 4, ENEMY_CONTAINER, "Enemy");
+		var c1 = test_generate_character("Chimken", 10, AllyContainer);
+		var c2 = test_generate_character("Chonken", 5, AllyContainer);
+		var e1 = test_generate_character("Bad Chimken", 6, EnemyContainer, "Enemy");
+		var e2 = test_generate_character("Bad Chimken 2", 4, EnemyContainer, "Enemy");
 		
 		c1.position = Vector2(0, 0);
 		c2.position = Vector2(c1.position.x, c1.position.y + 32);
@@ -42,14 +42,14 @@ func _test(event):
 		
 		print("c1 - %s" % [c1.position]);
 		print("e2 - %s" % [e2.position]);
-#		ALLY_CONTAINER.add_child(c1);
-#		ALLY_CONTAINER.add_child(c2);
+#		AllyContainer.add_child(c1);
+#		AllyContainer.add_child(c2);
 #		# TODO: instantiate enemies from a list based on the area
-#		ENEMY_CONTAINER.add_child(e1);
-#		ENEMY_CONTAINER.add_child(e2);
+#		EnemyContainer.add_child(e1);
+#		EnemyContainer.add_child(e2);
 		
-		init_battle(ALLY_CONTAINER.get_children(), ENEMY_CONTAINER.get_children());
-		BATTLE_UI.on_battle_start(ALLY_CONTAINER.get_children(), ENEMY_CONTAINER.get_children());
+		init_battle(AllyContainer.get_children(), EnemyContainer.get_children());
+		BattleUI.on_battle_start(AllyContainer.get_children(), EnemyContainer.get_children());
 		pass;
 	elif(event.is_action_pressed(&"test_battle_end")):
 		end_battle();
@@ -77,12 +77,12 @@ func test_generate_character(name, speed, node : Node, type := "Ally"):
 
 
 func test_print():
-#	print("allies - %s" % [ALLY_CONTAINER.get_children()]);
-#	print("enemies - %s" % [ENEMY_CONTAINER.get_children()]);
+#	print("allies - %s" % [AllyContainer.get_children()]);
+#	print("enemies - %s" % [EnemyContainer.get_children()]);
 #	print("turn_queue %s" % [turn_queue]);
 #	print("turn queue - %s"  % turn_queue);
 #	print(ActionDefinition.target_type("All"));
-	BATTLE_UI.test_print();
+	BattleUI.test_print();
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -113,13 +113,13 @@ func end_battle():
 	if(!in_battle): return;
 	in_battle = false;
 	print("End battle");
-	BATTLE_UI.on_battle_end();
+	BattleUI.on_battle_end();
 	
-	for n in ALLY_CONTAINER.get_children():
-		ALLY_CONTAINER.remove_child(n);
+	for n in AllyContainer.get_children():
+		AllyContainer.remove_child(n);
 		
-	for n in ENEMY_CONTAINER.get_children():
-		ENEMY_CONTAINER.remove_child(n);
+	for n in EnemyContainer.get_children():
+		EnemyContainer.remove_child(n);
 		
 	turn_queue.clear();
 

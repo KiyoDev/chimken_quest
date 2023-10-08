@@ -152,7 +152,7 @@ script = ExtResource("3_evtcr")
 [node name="mass_heal" type="Button" parent="BattleUI/StyleControl/SkillListPanel/SkillList"]
 layout_mode = 2
 mouse_filter = 2
-text = "Chain Frost"
+text = "Mass Heal"
 script = ExtResource("3_evtcr")
 
 [node name="ItemListPanel" type="PanelContainer" parent="BattleUI/StyleControl"]
