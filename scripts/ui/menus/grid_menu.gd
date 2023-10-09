@@ -17,6 +17,7 @@ class_name GridMenu extends BaseMenu
 # curr + 1 % (columns) + ((curr / columns) * columns)
 
 # curr - 1 + (curr/columns) * columns
+# COULD make actual 2D array, if menu children are just row containers that contain column children
 @export var rows := 2;
 @export var columns := 2;
 @export var wrap := false;
@@ -30,6 +31,8 @@ func _navigate(direction):
 
 
 func nav_helper(direction):
+	if(!is_focused || get_child_count() == 0): return get_child(focused_index);
+	
 	if(wrap):
 		var size = (rows * columns);
 		if(direction.x > 0): # right

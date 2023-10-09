@@ -4,6 +4,9 @@ class_name HMenu extends BaseMenu
 # childrene are the elements
 #@export var elements := [];
 
+@export var wrap := false;
+
+
 var focused_index := 0;
 
 
@@ -12,11 +15,18 @@ func _ready():
 
 
 func _navigate(direction):
-	if(!is_focused): return;
-	if(direction.x > 0): # right
-		focused_index = (focused_index + 1) % get_child_count();
-	elif(direction.x < 0): # left
-		focused_index = (focused_index - 1 + get_child_count()) % get_child_count();
+	if(!is_focused || get_child_count() == 0): return get_child(focused_index);
+	
+	if(wrap):
+		if(direction.x > 0): # right
+			focused_index = (focused_index + 1) % get_child_count();
+		elif(direction.x < 0): # left
+			focused_index = (focused_index - 1 + get_child_count()) % get_child_count();
+	else:
+		if(direction.x > 0): # right
+			focused_index = min(focused_index + 1, get_child_count() - 1);
+		elif(direction.x < 0): # left
+			focused_index = max(focused_index - 1, 0);
 	return get_child(focused_index);
 
 

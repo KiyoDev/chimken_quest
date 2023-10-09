@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://dwtg21se41jpm"]
 
 [ext_resource type="Texture2D" uid="uid://xbm8088nvmcy" path="res://assets/chimken_cursors.png" id="1_dg270"]
-[ext_resource type="Script" path="res://scripts/ui/cursor.gd" id="1_m6c7s"]
+[ext_resource type="Script" path="res://scripts/ui/menus/cursor.gd" id="1_edwo6"]
 
 [sub_resource type="Animation" id="Animation_4mgm8"]
 resource_name = "menu_cursor"
@@ -94,7 +94,7 @@ _data = {
 
 [node name="Cursor" type="Node2D"]
 texture_filter = 1
-script = ExtResource("1_m6c7s")
+script = ExtResource("1_edwo6")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_dg270")
