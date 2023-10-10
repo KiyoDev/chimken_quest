@@ -11,8 +11,8 @@ func _ready():
 	_menu();
 
 
-func _navigate(element):
-	n_sprite.global_position = element._cursor_position();
+func _on_navigate(element):
+	global_position = element._cursor_position(n_sprite);
 #	n_sprite.global_position = Vector2(element.n_sprite.global_position.x - (element.n_sprite.texture.get_width() / 2) - (n_sprite.texture.get_width() / 8 / 2), element.n_sprite.global_position.y - (element.n_sprite.texture.get_height() / 2) - (n_sprite.texture.get_height() / 8 / 2));
 
 

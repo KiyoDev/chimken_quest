@@ -27,6 +27,7 @@ func _navigate(direction):
 			focused_index = max(focused_index - 1, 0);
 	return get_child(focused_index);
 
+
 func _on_focus():
 	super._on_focus();
 

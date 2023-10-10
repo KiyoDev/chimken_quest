@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwrd2k5efcqy"]
+
+[ext_resource type="Script" path="res://scripts/ui/menus/v_menu.gd" id="1_ty52u"]
+[ext_resource type="Script" path="res://scripts/ui/menus/menu_element.gd" id="2_oh0y2"]
+
+[node name="Menu" type="Node2D"]
+script = ExtResource("1_ty52u")
+
+[node name="Attacks" type="Node2D" parent="." node_paths=PackedStringArray("menu")]
+script = ExtResource("2_oh0y2")
+menu = NodePath("ActionList")
+
+[node name="ActionList" type="Node2D" parent="Attacks"]
+visible = false
+script = ExtResource("1_ty52u")
+
+[node name="Skills" type="Node2D" parent="."]
+script = ExtResource("2_oh0y2")
+
+[node name="Items" type="Node2D" parent="."]
+script = ExtResource("2_oh0y2")
+
+[node name="Escape" type="Node2D" parent="."]
+script = ExtResource("2_oh0y2")
