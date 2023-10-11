@@ -31,17 +31,21 @@ func _ready():
 @onready var BattleMenu := preload("res://scenes/ui/battle_menu.tscn").instantiate();
 
 func test(event : InputEvent):
-	if(event is InputEventKey && (event as InputEventKey).keycode == KEY_O):
-		print("MenuController - O");
-		if(!menu_open):
-#			Menu = BattleMenu;
-			remove_child(get_node("Menu"));
-			add_child(BattleMenu);
-			curr_menu = BattleMenu;
-#			print("ctrl - Menu %s" % [get_node("Menu")]);
-			print("curr_menu %s" % [curr_menu]);
-			open();
-		pass;
+	if(event is InputEventKey):
+		if((event as InputEventKey).keycode == KEY_O):
+			print("MenuController - O");
+			if(!menu_open):
+	#			Menu = BattleMenu;
+				remove_child(get_node("Menu"));
+				add_child(BattleMenu);
+				curr_menu = BattleMenu;
+	#			print("ctrl - Menu %s" % [get_node("Menu")]);
+				print("curr_menu %s" % [curr_menu]);
+				open();
+		elif((event as InputEventKey).keycode == KEY_Q):
+			if(menu_open):
+				print("force exit menu");
+				close();
 	pass;
 
 
@@ -51,54 +55,57 @@ func _input(event):
 	if(!menu_open): return; # do nothing if menu isn't open
 	if(event.is_action_pressed(&"ui_left") || event.is_action_pressed(&"ui_right") ||
 	   event.is_action_pressed(&"ui_up") || event.is_action_pressed(&"ui_down")):
-		var next = curr_menu._navigate(Input.get_vector(&"ui_left", &"ui_right", &"ui_up", &"ui_down"));
+		var next_option = curr_menu._navigate(Input.get_vector(&"ui_left", &"ui_right", &"ui_up", &"ui_down"));
 		
-		if(next == focused_opt): return;
+		if(next_option == null || next_option == focused_opt): return;
 		
-		change_focus(next);
+		change_focus(next_option);
 	elif(event.is_action_pressed(&"ui_accept")):
 		var next_option = curr_menu._select_option();
+		print("accept option - '%s'" % [next_option]);
 		
 		if(next_option == null): return;
 		
-		next_option._select();
+#		next_option._selected(); # TODO: i believe this can be called from the menu itself
 		change_focus(next_option);
-		print("accept option - '%s'" % [next_option]);
 	elif(event.is_action_pressed(&"ui_cancel")):
 		print("cancel on '%s'" % [curr_menu]);
 		if(!menu_stack.is_empty()):
 			print("!menu_stack.is_empty() '%s'" % [curr_menu]);
 			curr_menu._cancel();
 			curr_menu = menu_stack.pop_back();
+			curr_menu._focus();
 			print("after - '%s'" % [curr_menu]);
+			change_focus(curr_menu._get_current_option());
+		else:
+			curr_menu._try_exit(); # Try to exit menu if escapeable
 
 
 func change_focus(next):
 	if(focused_opt != null): 
 		focused_opt._unfocus(); # unfocus previous option
 		
-	if(next != null):
-		focused_opt = next;
-		focused_opt._focus(); # focus new option
-		Cursor._on_navigate(focused_opt);
-		focus_changed.emit(focused_opt);
+	focused_opt = next;
+	focused_opt._focus(); # focus new option
+	Cursor._on_navigate(focused_opt);
+	focus_changed.emit(focused_opt);
 
 
 func open():
 	menu_open = true;
 	curr_menu._open();
-	curr_menu._on_focus();
 	if(!Cursor.visible): Cursor.visible = true;
-	curr_menu.add_child(Cursor);
+	add_child(Cursor);
 	focused_opt = curr_menu.get_child(0);
 	Cursor._menu();
-	Cursor._on_navigate(focused_opt);
+	Cursor._on_navigate(focused_opt); # TODO: maybe instead of moving a cursor, could have animated cursor on each element that changes from selected/unselected, etc...
 	menu_opened.emit();
 
 
 func close():
-	curr_menu._cancel();
-	curr_menu._on_unfocus();
+	curr_menu._exit();
+	while(!menu_stack.is_empty()):
+		menu_stack.pop_back()._exit();
 	Cursor.visible = false;
 	menu_open = false;
 	menu_closed.emit();
@@ -118,4 +125,5 @@ func on_menu_selected(menu):
 	print("menu[%s] selected" % [menu]);
 	menu_stack.push_back(curr_menu);
 	curr_menu = menu;
-	curr_menu._open();
+#	change_focus(curr_menu._open());
+	

@@ -30,12 +30,12 @@ func _navigate(direction):
 	return get_child(focused_index);
 
 
-func _on_focus():
-	super._on_focus();
+func _focus():
+	super._focus();
 
 
-func _on_unfocus():
-	super._on_unfocus();
+func _unfocus():
+	super._unfocus();
 	
 	
 func _open():

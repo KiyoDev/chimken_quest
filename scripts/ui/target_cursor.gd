@@ -58,11 +58,11 @@ func _change_select(direction) -> TargetCursor:
 
 
 func _show():
-	visible = true;
+	show();
 
 
 func _hide():
-	visible = false;
+	hide();
 
 
 # Used to tell if character can be targeted by an action; get target type from action

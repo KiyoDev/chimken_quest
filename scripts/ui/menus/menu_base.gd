@@ -3,8 +3,10 @@ class_name MenuBase extends Node2D
 
 # v menu, h menu, grid menu
 
-#signal option_selected;
+signal menu_closed;
 
+
+@export var escapeable := false;
 
 var is_focused := false;
 
@@ -18,29 +20,46 @@ func _navigate(direction):
 	pass;
 
 
-func _show():
-	visible = true;
-
-
-func _hide():
-	visible = false;
-
-
-func _on_focus():
+func _focus():
 	is_focused = true;
 
 
-func _on_unfocus():
+func _unfocus():
 	is_focused = false;
 
 
-func _open():
-	visible = true;
+func _show():
+	show();
 
+
+func _hide():
+	hide();
+	_unfocus();
+
+
+## Opens the menu, showing and focusing
+func _open():
+	_show();
+
+
+func _exit():
+	print("Exiting MenuBase - '%s'" % [self]);
+	_hide();
+	menu_closed.emit();
+
+
+func _try_exit():
+	if(!escapeable): return;
+	_hide();
+	
 
 func _select_option():
 	pass;
 
 
+func _get_current_option():
+	pass;
+
+
 func _cancel():
-	visible = false;
+	_unfocus();

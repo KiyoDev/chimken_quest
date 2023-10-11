@@ -13,12 +13,12 @@ class_name ItemOption extends OptionBase
 
 
 func _ready():
-	pass # Replace with function body.
+	super._ready();
 
 
 func _cursor_position():
 	pass;
 
 
-func _select():
+func _selected():
 	pass;

@@ -3,6 +3,7 @@ class_name VMenu extends MenuBase
 
 
 @export var wrap := false;
+@export var hide_when_unfocused := true;
 
 
 var focused_index := 0;
@@ -14,7 +15,9 @@ func _ready():
 	
 	
 func _navigate(direction):
-	if(!is_focused || get_child_count() == 0): return get_child(focused_index);
+	if(!is_focused || get_child_count() == 0): 
+		print("trying to navigate an unfocused menu....");
+		return get_child(focused_index);
 	
 	if(wrap):
 		if(direction.y > 0): # down
@@ -29,29 +32,42 @@ func _navigate(direction):
 	return get_child(focused_index);
 
 
-func _on_focus():
-	super._on_focus();
+func _focus():
+	super._focus();
 
 
-func _on_unfocus():
-	super._on_unfocus();
+func _unfocus():
+	super._unfocus();
 
 
 func _open():
-	show();
+	_show();
+	_focus();
+	return get_child(0);
+
+
+func _try_exit():
+	print("Trying to exit...");
+	if(!escapeable): return;
+	print("Exited");
+	_hide();
+	
+
+func _hide():
+	super._hide(); 
 
 
 func _select_option():
 	print("'%s'[%s, i=%s]" % [name, get_child_count(), focused_index]);
 	if(get_child_count() == 0): return;
 	
-	var child = get_child(focused_index);
-	child.visible = true;
-	child._select();
-#	option_selected.emit(child);
-	return child;
+	_unfocus();
+	return _get_current_option()._selected();
+
+
+func _get_current_option():
+	return get_child(focused_index);
 
 
 func _cancel():
-	pass;
-#	visible = false;
+	_hide() if hide_when_unfocused else _unfocus();

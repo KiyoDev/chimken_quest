@@ -1,8 +1,11 @@
 class_name ActionOption extends OptionBase
 
 
+@onready var Background : Sprite2D = $Background; # background to show when option is selected
 @onready var Sprite : Sprite2D = $Sprite2D;
-@onready var NameLabel := $Label;
+@onready var NameLabel := $Name;
+@onready var CostLabel := $Cost;
+@onready var CursorPosition := $CursorPosition;
 
 @export var action : ActionDefinition:
 	set(act):
@@ -12,12 +15,20 @@ class_name ActionOption extends OptionBase
 
 
 func _ready():
-	pass # Replace with function body.
+	super._ready();
 
 
 func _cursor_position():
-	pass;
+	return CursorPosition.position;
 
 
-func _select():
+func _cursor_global_position():
+	print("Background %s" % [Background]);
+	print("NameLabel %s" % [NameLabel]);
+	print("CostLabel %s" % [CostLabel]);
+	print("CursorPosition %s" % [CursorPosition]);
+	return CursorPosition.global_position;
+
+
+func _selected():
 	pass;

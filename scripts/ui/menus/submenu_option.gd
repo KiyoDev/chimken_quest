@@ -15,6 +15,7 @@ signal menu_selected;
 
 
 func _ready():
+	super._ready();
 	menu_selected.connect(MenuController.on_menu_selected);
 	MenuController.menu_closed.connect(_on_menu_closed);
 	Background = unfocused_background;
@@ -33,8 +34,10 @@ func _cursor_global_position():
 	return CursorPosition.global_position;
 
 
-func _select():
+func _selected():
+#	show();
 	menu_selected.emit(Menu);
+	return Menu._open();
 
 
 func _focus():
