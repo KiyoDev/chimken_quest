@@ -1,4 +1,4 @@
-class_name ElementBase extends Node2D
+class_name OptionBase extends Node2D
 # Interface for menu children; 
 
 ## Return designated cursor position
@@ -6,13 +6,13 @@ func _cursor_position():
 	pass;
 
 
-func _on_select():
+func _select():
 	pass;
 
 
-func _on_menu_opened():
+func _focus():
 	pass;
 
 
-func _on_menu_closed():
+func _unfocus():
 	pass;

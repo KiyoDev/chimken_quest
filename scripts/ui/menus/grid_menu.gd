@@ -1,5 +1,5 @@
 @tool
-class_name GridMenu extends BaseMenu
+class_name GridMenu extends MenuBase
 
 
 # [3][4]
@@ -62,5 +62,5 @@ func nav_helper(direction):
 		return get_child(focused_index);
 
 
-func _select():
+func _select_option():
 	return get_child(focused_index);

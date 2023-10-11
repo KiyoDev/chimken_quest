@@ -1,4 +1,4 @@
-class_name VMenu extends BaseMenu
+class_name VMenu extends MenuBase
 # no reference to possible previous menus; should have some menu manager to take care of inputs and menu stacks
 
 
@@ -9,6 +9,7 @@ var focused_index := 0;
 
 
 func _ready():
+	super._ready();
 	visible = false;
 	
 	
@@ -37,12 +38,16 @@ func _on_unfocus():
 
 
 func _open():
-	visible = true;
+	show();
 
 
-func _select():
+func _select_option():
+	if(get_child_count() == 0): return;
+	
 	var child = get_child(focused_index);
 	child.visible = true;
+	child._select();
+#	option_selected.emit(child);
 	return child;
 
 

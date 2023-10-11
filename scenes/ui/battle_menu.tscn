@@ -1,24 +1,68 @@
-[gd_scene load_steps=3 format=3 uid="uid://dwrd2k5efcqy"]
+[gd_scene load_steps=4 format=3 uid="uid://dwrd2k5efcqy"]
 
 [ext_resource type="Script" path="res://scripts/ui/menus/v_menu.gd" id="1_ty52u"]
-[ext_resource type="Script" path="res://scripts/ui/menus/menu_element.gd" id="2_oh0y2"]
+[ext_resource type="Script" path="res://scripts/ui/menus/submenu_option.gd" id="2_oq70d"]
+[ext_resource type="Theme" uid="uid://1qeq3n04pcoe" path="res://assets/fonts/battle_ui.theme" id="3_ui3bp"]
 
 [node name="Menu" type="Node2D"]
 script = ExtResource("1_ty52u")
 
-[node name="Attacks" type="Node2D" parent="." node_paths=PackedStringArray("menu")]
-script = ExtResource("2_oh0y2")
-menu = NodePath("ActionList")
+[node name="Attacks" type="Node2D" parent="."]
+script = ExtResource("2_oq70d")
 
-[node name="ActionList" type="Node2D" parent="Attacks"]
-visible = false
+[node name="Menu" type="Node2D" parent="Attacks"]
 script = ExtResource("1_ty52u")
 
+[node name="Background" type="Sprite2D" parent="Attacks"]
+
+[node name="Label" type="Label" parent="Attacks"]
+texture_filter = 1
+offset_right = 40.0
+offset_bottom = 23.0
+theme = ExtResource("3_ui3bp")
+text = "Attacks"
+
 [node name="Skills" type="Node2D" parent="."]
-script = ExtResource("2_oh0y2")
+script = ExtResource("2_oq70d")
+
+[node name="Menu" type="Node2D" parent="Skills"]
+script = ExtResource("1_ty52u")
+
+[node name="Background" type="Sprite2D" parent="Skills"]
+
+[node name="Label" type="Label" parent="Skills"]
+texture_filter = 1
+offset_right = 40.0
+offset_bottom = 23.0
+theme = ExtResource("3_ui3bp")
+text = "Skills"
 
 [node name="Items" type="Node2D" parent="."]
-script = ExtResource("2_oh0y2")
+script = ExtResource("2_oq70d")
+
+[node name="Menu" type="Node2D" parent="Items"]
+script = ExtResource("1_ty52u")
+
+[node name="Background" type="Sprite2D" parent="Items"]
+
+[node name="Label" type="Label" parent="Items"]
+texture_filter = 1
+offset_right = 40.0
+offset_bottom = 23.0
+theme = ExtResource("3_ui3bp")
+text = "Items"
 
 [node name="Escape" type="Node2D" parent="."]
-script = ExtResource("2_oh0y2")
+script = ExtResource("2_oq70d")
+
+[node name="Menu" type="Node2D" parent="Escape"]
+script = ExtResource("1_ty52u")
+
+[node name="Background" type="Sprite2D" parent="Escape"]
+
+[node name="Label" type="Label" parent="Escape"]
+texture_filter = 1
+offset_right = 40.0
+offset_bottom = 23.0
+theme = ExtResource("3_ui3bp")
+text = "Escape"

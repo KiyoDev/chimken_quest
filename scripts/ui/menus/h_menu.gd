@@ -1,5 +1,5 @@
 # no reference to possible previous menus; should have some menu manager to take care of inputs and menu stacks
-class_name HMenu extends BaseMenu
+class_name HMenu extends MenuBase
 
 # childrene are the elements
 #@export var elements := [];
@@ -42,7 +42,7 @@ func _open():
 	visible = true;
 	
 
-func _select():
+func _select_option():
 	return get_child(focused_index);
 
 
