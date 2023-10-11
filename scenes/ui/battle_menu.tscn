@@ -22,7 +22,11 @@ offset_bottom = 23.0
 theme = ExtResource("3_ui3bp")
 text = "Attacks"
 
+[node name="CursorPosition" type="Node2D" parent="Attacks"]
+position = Vector2(-16, 8)
+
 [node name="Skills" type="Node2D" parent="."]
+position = Vector2(0, 16)
 script = ExtResource("2_oq70d")
 
 [node name="Menu" type="Node2D" parent="Skills"]
@@ -37,7 +41,11 @@ offset_bottom = 23.0
 theme = ExtResource("3_ui3bp")
 text = "Skills"
 
+[node name="CursorPosition" type="Node2D" parent="Skills"]
+position = Vector2(-16, 8)
+
 [node name="Items" type="Node2D" parent="."]
+position = Vector2(0, 32)
 script = ExtResource("2_oq70d")
 
 [node name="Menu" type="Node2D" parent="Items"]
@@ -52,7 +60,11 @@ offset_bottom = 23.0
 theme = ExtResource("3_ui3bp")
 text = "Items"
 
+[node name="CursorPosition" type="Node2D" parent="Items"]
+position = Vector2(-16, 8)
+
 [node name="Escape" type="Node2D" parent="."]
+position = Vector2(0, 48)
 script = ExtResource("2_oq70d")
 
 [node name="Menu" type="Node2D" parent="Escape"]
@@ -66,3 +78,6 @@ offset_right = 40.0
 offset_bottom = 23.0
 theme = ExtResource("3_ui3bp")
 text = "Escape"
+
+[node name="CursorPosition" type="Node2D" parent="Escape"]
+position = Vector2(-16, 8)

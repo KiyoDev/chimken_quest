@@ -42,6 +42,7 @@ func _open():
 
 
 func _select_option():
+	print("'%s'[%s, i=%s]" % [name, get_child_count(), focused_index]);
 	if(get_child_count() == 0): return;
 	
 	var child = get_child(focused_index);
@@ -52,4 +53,5 @@ func _select_option():
 
 
 func _cancel():
-	visible = false;
+	pass;
+#	visible = false;

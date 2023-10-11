@@ -5,9 +5,10 @@ signal menu_selected;
 
 @onready var Background : Sprite2D = $Background; # background to show when option is selected
 @onready var NameLabel := $Label;
-@onready var menu := $Menu;
+@onready var Menu := $Menu;
+@onready var CursorPosition := $CursorPosition;
 
-# reference to menu scene / or use $Menu? 
+# reference to Menu scene / or use $Menu? 
 
 @export var focused_background : Sprite2D;
 @export var unfocused_background : Sprite2D;
@@ -15,17 +16,25 @@ signal menu_selected;
 
 func _ready():
 	menu_selected.connect(MenuController.on_menu_selected);
-	MenuController.menu_closed.connect(_on_menu_closed());
+	MenuController.menu_closed.connect(_on_menu_closed);
 	Background = unfocused_background;
+#	print("CursorPosition %s" % [CursorPosition]);
 
 
 func _cursor_position():
-#	Sprite.position
-	pass;
+	return CursorPosition.position;
+
+
+func _cursor_global_position():
+	print("Background %s" % [Background]);
+	print("NameLabel %s" % [NameLabel]);
+	print("Menu %s" % [Menu]);
+	print("CursorPosition %s" % [CursorPosition]);
+	return CursorPosition.global_position;
 
 
 func _select():
-	menu_selected.emit(menu);
+	menu_selected.emit(Menu);
 
 
 func _focus():
