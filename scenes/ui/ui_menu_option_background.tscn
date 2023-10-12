@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://d4fcp74bnegbd"]
+
+[node name="Background" type="NinePatchRect"]
+offset_left = -8.0
+offset_top = -4.0
+offset_right = 72.0
+offset_bottom = 20.0
+patch_margin_left = 7
+patch_margin_top = 4
+patch_margin_right = 7
+patch_margin_bottom = 5

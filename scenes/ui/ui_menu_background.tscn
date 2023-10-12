@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0chtymgiamjd"]
+
+[ext_resource type="Texture2D" uid="uid://cffxmsj1oguji" path="res://assets/battle/ui/chimken_battle_menu_background.png" id="1_br5pc"]
+
+[node name="Background" type="NinePatchRect"]
+offset_left = -14.0
+offset_top = -31.0
+offset_right = 78.0
+offset_bottom = 103.0
+texture = ExtResource("1_br5pc")
+patch_margin_left = 8
+patch_margin_top = 32
+patch_margin_right = 8
+patch_margin_bottom = 8

@@ -1,131 +1,472 @@
-[gd_scene load_steps=5 format=3 uid="uid://dwrd2k5efcqy"]
+[gd_scene load_steps=18 format=3 uid="uid://dwrd2k5efcqy"]
 
 [ext_resource type="Script" path="res://scripts/ui/menus/v_menu.gd" id="1_ty52u"]
 [ext_resource type="Script" path="res://scripts/ui/menus/submenu_option.gd" id="2_oq70d"]
 [ext_resource type="Script" path="res://scripts/ui/menus/action_option.gd" id="3_af8un"]
 [ext_resource type="Theme" uid="uid://1qeq3n04pcoe" path="res://assets/fonts/battle_ui.theme" id="3_ui3bp"]
+[ext_resource type="Texture2D" uid="uid://bgfifx7n7sr7q" path="res://assets/battle/ui/chimken_battle_label_background_selectable.png" id="5_h83ow"]
+[ext_resource type="Texture2D" uid="uid://cffxmsj1oguji" path="res://assets/battle/ui/chimken_battle_menu_background.png" id="5_jp8la"]
+[ext_resource type="Texture2D" uid="uid://bkfp7mvsvqofw" path="res://assets/battle/ui/chimken_battle_label_background_unselectable.png" id="6_8iq7s"]
+[ext_resource type="Texture2D" uid="uid://cveehm54xofd1" path="res://assets/battle/ui/chimken_battle_attacks_title.png" id="6_bd7sd"]
+[ext_resource type="Texture2D" uid="uid://tmecff3vjw6" path="res://assets/battle/ui/chimken_battle_skills_title.png" id="9_otcfm"]
+[ext_resource type="Texture2D" uid="uid://f8myetpspf7i" path="res://assets/battle/ui/chimken_battle_items_title.png" id="10_mdg65"]
+[ext_resource type="Script" path="res://scripts/ui/menus/item_option.gd" id="10_t50w4"]
+[ext_resource type="PackedScene" uid="uid://b0chtymgiamjd" path="res://scenes/ui/ui_menu_background.tscn" id="12_21wyt"]
+[ext_resource type="PackedScene" uid="uid://d4fcp74bnegbd" path="res://scenes/ui/ui_menu_option_background.tscn" id="12_q1s6e"]
+
+[sub_resource type="Animation" id="Animation_1sfn4"]
+resource_name = "focused_selectable"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OptionBackground:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("5_h83ow")]
+}
+
+[sub_resource type="Animation" id="Animation_fe33o"]
+resource_name = "unfocused"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OptionBackground:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
+[sub_resource type="Animation" id="Animation_8rsf4"]
+resource_name = "focused_unselectable"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OptionBackground:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("6_8iq7s")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fvxpe"]
+_data = {
+"focused_selectable": SubResource("Animation_1sfn4"),
+"focused_unselectable": SubResource("Animation_8rsf4"),
+"unfocused": SubResource("Animation_fe33o")
+}
 
 [node name="Menu" type="Node2D"]
 texture_filter = 1
 script = ExtResource("1_ty52u")
 
-[node name="Attacks" type="Node2D" parent="."]
+[node name="Options" type="Node2D" parent="."]
+
+[node name="Attacks" type="Node2D" parent="Options"]
+z_index = 1
+position = Vector2(0, 4)
 script = ExtResource("2_oq70d")
 
-[node name="Menu" type="Node2D" parent="Attacks"]
+[node name="Menu" type="Node2D" parent="Options/Attacks"]
+visible = false
+z_index = 1
 script = ExtResource("1_ty52u")
 
-[node name="Slash" type="Node2D" parent="Attacks/Menu"]
-position = Vector2(110, 30)
+[node name="Options" type="Node2D" parent="Options/Attacks/Menu"]
+z_index = 1
+
+[node name="Slash" type="Node2D" parent="Options/Attacks/Menu/Options"]
+position = Vector2(110, 20)
 script = ExtResource("3_af8un")
 
-[node name="Background" type="Sprite2D" parent="Attacks/Menu/Slash"]
-
-[node name="Name" type="Label" parent="Attacks/Menu/Slash"]
+[node name="Name" type="Label" parent="Options/Attacks/Menu/Options/Slash"]
+z_index = 1
 texture_filter = 1
 offset_right = 40.0
 offset_bottom = 23.0
 theme = ExtResource("3_ui3bp")
-text = "Slash"
+text = "SLASH"
+metadata/_edit_use_anchors_ = true
 
-[node name="Cost" type="Label" parent="Attacks/Menu/Slash"]
+[node name="Cost" type="Label" parent="Options/Attacks/Menu/Options/Slash"]
+z_index = 1
 texture_filter = 1
 offset_left = 100.0
 offset_right = 142.0
 offset_bottom = 23.0
 theme = ExtResource("3_ui3bp")
+horizontal_alignment = 2
+metadata/_edit_use_anchors_ = true
 
-[node name="CursorPosition" type="Node2D" parent="Attacks/Menu/Slash"]
-position = Vector2(-16, -8)
+[node name="CursorPosition" type="Node2D" parent="Options/Attacks/Menu/Options/Slash"]
+position = Vector2(-12, 8)
 
-[node name="Peck2" type="Node2D" parent="Attacks/Menu"]
-position = Vector2(110, 14)
+[node name="OptionBackground" type="NinePatchRect" parent="Options/Attacks/Menu/Options/Slash"]
+offset_left = -8.0
+offset_top = -4.0
+offset_right = 72.0
+offset_bottom = 20.0
+texture = ExtResource("5_h83ow")
+patch_margin_left = 7
+patch_margin_top = 4
+patch_margin_right = 7
+patch_margin_bottom = 5
+metadata/_edit_use_anchors_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Attacks/Menu/Options/Slash"]
+libraries = {
+"": SubResource("AnimationLibrary_fvxpe")
+}
+
+[node name="Peck" type="Node2D" parent="Options/Attacks/Menu/Options"]
+position = Vector2(110, 44)
 script = ExtResource("3_af8un")
 
-[node name="Background" type="Sprite2D" parent="Attacks/Menu/Peck2"]
-
-[node name="Name" type="Label" parent="Attacks/Menu/Peck2"]
+[node name="Name" type="Label" parent="Options/Attacks/Menu/Options/Peck"]
+z_index = 1
 texture_filter = 1
 offset_right = 40.0
 offset_bottom = 23.0
 theme = ExtResource("3_ui3bp")
-text = "Peck"
+text = "PECK"
 
-[node name="Cost" type="Label" parent="Attacks/Menu/Peck2"]
+[node name="Cost" type="Label" parent="Options/Attacks/Menu/Options/Peck"]
+z_index = 1
 texture_filter = 1
 offset_left = 100.0
 offset_right = 140.0
 offset_bottom = 23.0
 theme = ExtResource("3_ui3bp")
+horizontal_alignment = 2
 
-[node name="CursorPosition" type="Node2D" parent="Attacks/Menu/Peck2"]
-position = Vector2(-16, 24)
+[node name="CursorPosition" type="Node2D" parent="Options/Attacks/Menu/Options/Peck"]
+position = Vector2(-12, 8)
 
-[node name="Background" type="Sprite2D" parent="Attacks"]
+[node name="OptionBackground" type="NinePatchRect" parent="Options/Attacks/Menu/Options/Peck"]
+offset_left = -8.0
+offset_top = -4.0
+offset_right = 72.0
+offset_bottom = 20.0
+patch_margin_left = 7
+patch_margin_top = 4
+patch_margin_right = 7
+patch_margin_bottom = 5
 
-[node name="Label" type="Label" parent="Attacks"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Attacks/Menu/Options/Peck"]
+libraries = {
+"": SubResource("AnimationLibrary_fvxpe")
+}
+
+[node name="Background" type="NinePatchRect" parent="Options/Attacks/Menu"]
+offset_left = 95.0
+offset_top = -15.0
+offset_right = 189.0
+offset_bottom = 75.0
+texture = ExtResource("5_jp8la")
+patch_margin_left = 8
+patch_margin_top = 32
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="Title" type="Sprite2D" parent="Options/Attacks/Menu"]
+z_index = 1
+position = Vector2(112, -1)
+texture = ExtResource("6_bd7sd")
+centered = false
+
+[node name="Label" type="Label" parent="Options/Attacks"]
+z_index = 1
 texture_filter = 1
 offset_right = 40.0
 offset_bottom = 23.0
 theme = ExtResource("3_ui3bp")
-text = "Attacks"
+text = "ATTACKS"
 
-[node name="CursorPosition" type="Node2D" parent="Attacks"]
-position = Vector2(-16, 8)
+[node name="CursorPosition" type="Node2D" parent="Options/Attacks"]
+position = Vector2(-12, 8)
 
-[node name="Skills" type="Node2D" parent="."]
-position = Vector2(0, 16)
+[node name="OptionBackground" parent="Options/Attacks" instance=ExtResource("12_q1s6e")]
+texture = ExtResource("5_h83ow")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Attacks"]
+libraries = {
+"": SubResource("AnimationLibrary_fvxpe")
+}
+
+[node name="Skills" type="Node2D" parent="Options"]
+z_index = 1
+position = Vector2(0, 28)
 script = ExtResource("2_oq70d")
 
-[node name="Menu" type="Node2D" parent="Skills"]
+[node name="Menu" type="Node2D" parent="Options/Skills"]
+visible = false
 script = ExtResource("1_ty52u")
 
-[node name="Background" type="Sprite2D" parent="Skills"]
+[node name="Options" type="Node2D" parent="Options/Skills/Menu"]
 
-[node name="Label" type="Label" parent="Skills"]
+[node name="Chain Frost" type="Node2D" parent="Options/Skills/Menu/Options"]
+position = Vector2(110, 20)
+script = ExtResource("3_af8un")
+
+[node name="Name" type="Label" parent="Options/Skills/Menu/Options/Chain Frost"]
+z_index = 1
 texture_filter = 1
 offset_right = 40.0
 offset_bottom = 23.0
 theme = ExtResource("3_ui3bp")
-text = "Skills"
+text = "CHAIN FROST"
+metadata/_edit_use_anchors_ = true
 
-[node name="CursorPosition" type="Node2D" parent="Skills"]
-position = Vector2(-16, 8)
+[node name="Cost" type="Label" parent="Options/Skills/Menu/Options/Chain Frost"]
+z_index = 1
+texture_filter = 1
+offset_left = 83.0
+offset_right = 125.0
+offset_bottom = 23.0
+theme = ExtResource("3_ui3bp")
+text = " 15"
+horizontal_alignment = 2
+metadata/_edit_use_anchors_ = true
 
-[node name="Items" type="Node2D" parent="."]
-position = Vector2(0, 32)
+[node name="CursorPosition" type="Node2D" parent="Options/Skills/Menu/Options/Chain Frost"]
+position = Vector2(-12, 8)
+
+[node name="OptionBackground" type="NinePatchRect" parent="Options/Skills/Menu/Options/Chain Frost"]
+offset_left = -8.0
+offset_top = -4.0
+offset_right = 133.0
+offset_bottom = 20.0
+texture = ExtResource("5_h83ow")
+patch_margin_left = 7
+patch_margin_top = 4
+patch_margin_right = 7
+patch_margin_bottom = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Skills/Menu/Options/Chain Frost"]
+libraries = {
+"": SubResource("AnimationLibrary_fvxpe")
+}
+
+[node name="Focus" type="Node2D" parent="Options/Skills/Menu/Options"]
+position = Vector2(110, 44)
+script = ExtResource("3_af8un")
+
+[node name="Name" type="Label" parent="Options/Skills/Menu/Options/Focus"]
+z_index = 1
+texture_filter = 1
+offset_right = 45.0
+offset_bottom = 23.0
+theme = ExtResource("3_ui3bp")
+text = "FOCUS"
+
+[node name="Cost" type="Label" parent="Options/Skills/Menu/Options/Focus"]
+z_index = 1
+texture_filter = 1
+offset_left = 85.0
+offset_right = 125.0
+offset_bottom = 23.0
+theme = ExtResource("3_ui3bp")
+text = "3"
+horizontal_alignment = 2
+
+[node name="CursorPosition" type="Node2D" parent="Options/Skills/Menu/Options/Focus"]
+position = Vector2(-12, 8)
+
+[node name="OptionBackground" type="NinePatchRect" parent="Options/Skills/Menu/Options/Focus"]
+offset_left = -8.0
+offset_top = -4.0
+offset_right = 133.0
+offset_bottom = 20.0
+patch_margin_left = 7
+patch_margin_top = 4
+patch_margin_right = 7
+patch_margin_bottom = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Skills/Menu/Options/Focus"]
+libraries = {
+"": SubResource("AnimationLibrary_fvxpe")
+}
+
+[node name="Background" type="NinePatchRect" parent="Options/Skills/Menu"]
+z_index = -1
+offset_left = 95.0
+offset_top = -15.0
+offset_right = 250.0
+offset_bottom = 75.0
+texture = ExtResource("5_jp8la")
+patch_margin_left = 8
+patch_margin_top = 32
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="Title" type="Sprite2D" parent="Options/Skills/Menu"]
+z_index = 1
+position = Vector2(147, -1)
+texture = ExtResource("9_otcfm")
+centered = false
+
+[node name="Label" type="Label" parent="Options/Skills"]
+z_index = 1
+texture_filter = 1
+offset_right = 40.0
+offset_bottom = 23.0
+theme = ExtResource("3_ui3bp")
+text = "SKILLS"
+
+[node name="CursorPosition" type="Node2D" parent="Options/Skills"]
+position = Vector2(-12, 8)
+
+[node name="OptionBackground" parent="Options/Skills" instance=ExtResource("12_q1s6e")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Skills"]
+libraries = {
+"": SubResource("AnimationLibrary_fvxpe")
+}
+
+[node name="Items" type="Node2D" parent="Options"]
+z_index = 1
+position = Vector2(0, 52)
 script = ExtResource("2_oq70d")
 
-[node name="Menu" type="Node2D" parent="Items"]
+[node name="Menu" type="Node2D" parent="Options/Items"]
 script = ExtResource("1_ty52u")
 
-[node name="Background" type="Sprite2D" parent="Items"]
+[node name="Options" type="Node2D" parent="Options/Items/Menu"]
 
-[node name="Label" type="Label" parent="Items"]
+[node name="Phoenix Burger" type="Node2D" parent="Options/Items/Menu/Options"]
+position = Vector2(110, 20)
+script = ExtResource("10_t50w4")
+
+[node name="Name" type="Label" parent="Options/Items/Menu/Options/Phoenix Burger"]
+z_index = 1
+texture_filter = 1
+offset_right = 45.0
+offset_bottom = 23.0
+theme = ExtResource("3_ui3bp")
+text = "PHOENIX BURGER"
+
+[node name="Quantity" type="Label" parent="Options/Items/Menu/Options/Phoenix Burger"]
+z_index = 1
+texture_filter = 1
+offset_left = 111.0
+offset_right = 151.0
+offset_bottom = 23.0
+theme = ExtResource("3_ui3bp")
+text = "3"
+horizontal_alignment = 2
+
+[node name="CursorPosition" type="Node2D" parent="Options/Items/Menu/Options/Phoenix Burger"]
+position = Vector2(-12, 8)
+
+[node name="OptionBackground" type="NinePatchRect" parent="Options/Items/Menu/Options/Phoenix Burger"]
+offset_left = -8.0
+offset_top = -4.0
+offset_right = 159.0
+offset_bottom = 20.0
+texture = ExtResource("5_h83ow")
+patch_margin_left = 7
+patch_margin_top = 4
+patch_margin_right = 7
+patch_margin_bottom = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Items/Menu/Options/Phoenix Burger"]
+libraries = {
+"": SubResource("AnimationLibrary_fvxpe")
+}
+
+[node name="Background" type="NinePatchRect" parent="Options/Items/Menu"]
+z_index = -1
+offset_left = 95.0
+offset_top = -15.0
+offset_right = 276.0
+offset_bottom = 75.0
+texture = ExtResource("5_jp8la")
+patch_margin_left = 8
+patch_margin_top = 32
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="Title" type="Sprite2D" parent="Options/Items/Menu"]
+z_index = 1
+position = Vector2(164, -1)
+texture = ExtResource("10_mdg65")
+centered = false
+
+[node name="Label" type="Label" parent="Options/Items"]
+z_index = 1
 texture_filter = 1
 offset_right = 40.0
 offset_bottom = 23.0
 theme = ExtResource("3_ui3bp")
-text = "Items"
+text = "ITEMS"
+metadata/_edit_use_anchors_ = true
 
-[node name="CursorPosition" type="Node2D" parent="Items"]
-position = Vector2(-16, 8)
+[node name="CursorPosition" type="Node2D" parent="Options/Items"]
+position = Vector2(-12, 8)
 
-[node name="Escape" type="Node2D" parent="."]
-position = Vector2(0, 48)
+[node name="OptionBackground" parent="Options/Items" instance=ExtResource("12_q1s6e")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Items"]
+libraries = {
+"": SubResource("AnimationLibrary_fvxpe")
+}
+
+[node name="Escape" type="Node2D" parent="Options"]
+z_index = 1
+position = Vector2(0, 76)
 script = ExtResource("2_oq70d")
 
-[node name="Menu" type="Node2D" parent="Escape"]
+[node name="Menu" type="Node2D" parent="Options/Escape"]
+visible = false
 script = ExtResource("1_ty52u")
 
-[node name="Background" type="Sprite2D" parent="Escape"]
+[node name="Options" type="Node2D" parent="Options/Escape/Menu"]
 
-[node name="Label" type="Label" parent="Escape"]
+[node name="Background" type="NinePatchRect" parent="Options/Escape/Menu"]
+z_index = -1
+offset_left = 95.0
+offset_top = -15.0
+offset_right = 189.0
+offset_bottom = 75.0
+texture = ExtResource("5_jp8la")
+patch_margin_left = 8
+patch_margin_top = 32
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="Title" type="Sprite2D" parent="Options/Escape/Menu"]
+visible = false
+z_index = 1
+position = Vector2(112, -1)
+texture = ExtResource("6_bd7sd")
+centered = false
+
+[node name="Label" type="Label" parent="Options/Escape"]
+z_index = 1
 texture_filter = 1
 offset_right = 40.0
 offset_bottom = 23.0
 theme = ExtResource("3_ui3bp")
-text = "Escape"
+text = "ESCAPE "
 
-[node name="CursorPosition" type="Node2D" parent="Escape"]
-position = Vector2(-16, 8)
+[node name="CursorPosition" type="Node2D" parent="Options/Escape"]
+position = Vector2(-12, 8)
+
+[node name="OptionBackground" parent="Options/Escape" instance=ExtResource("12_q1s6e")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Escape"]
+libraries = {
+"": SubResource("AnimationLibrary_fvxpe")
+}
+
+[node name="Background" parent="." instance=ExtResource("12_21wyt")]

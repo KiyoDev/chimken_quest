@@ -22,6 +22,7 @@ var focused_opt : OptionBase;
 
 func _ready():
 	add_child(Cursor);
+	Cursor.z_index = 20;
 	Cursor.visible = false;
 #	curr_menu = Menu;
 #	print("ctrl - Menu %s" % [Menu]);
@@ -66,19 +67,10 @@ func _input(event):
 		
 		if(next_option == null): return;
 		
-#		next_option._selected(); # TODO: i believe this can be called from the menu itself
 		change_focus(next_option);
 	elif(event.is_action_pressed(&"ui_cancel")):
 		print("cancel on '%s'" % [curr_menu]);
-		if(!menu_stack.is_empty()):
-			print("!menu_stack.is_empty() '%s'" % [curr_menu]);
-			curr_menu._cancel();
-			curr_menu = menu_stack.pop_back();
-			curr_menu._focus();
-			print("after - '%s'" % [curr_menu]);
-			change_focus(curr_menu._get_current_option());
-		else:
-			curr_menu._try_exit(); # Try to exit menu if escapeable
+		cancel_option();
 
 
 func change_focus(next):
@@ -93,28 +85,33 @@ func change_focus(next):
 
 func open():
 	menu_open = true;
-	curr_menu._open();
-	if(!Cursor.visible): Cursor.visible = true;
+	focused_opt = curr_menu._open();
 	add_child(Cursor);
-	focused_opt = curr_menu.get_child(0);
+	Cursor.show();
 	Cursor._menu();
 	Cursor._on_navigate(focused_opt); # TODO: maybe instead of moving a cursor, could have animated cursor on each element that changes from selected/unselected, etc...
 	menu_opened.emit();
 
 
 func close():
+	menu_open = false;
 	curr_menu._exit();
 	while(!menu_stack.is_empty()):
 		menu_stack.pop_back()._exit();
 	Cursor.visible = false;
-	menu_open = false;
 	menu_closed.emit();
 
 
-func swap_menu(new_menu):
-#	Menu = new_menu;
-	pass;
-
+func cancel_option():
+	if(!menu_stack.is_empty()):
+		print("!menu_stack.is_empty() '%s'" % [curr_menu]);
+		curr_menu._cancel();
+		curr_menu = menu_stack.pop_back();
+		curr_menu._focus();
+		print("after - '%s'" % [curr_menu]);
+		change_focus(curr_menu._get_current_option());
+	else:
+		curr_menu._try_exit(); # Try to exit menu if escapeable
 # Signal functions
 
 #func on_option_selected(option):

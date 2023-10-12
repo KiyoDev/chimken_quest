@@ -2,8 +2,12 @@ class_name OptionBase extends Node2D
 # Interface for menu children; 
 
 
+@export var selectable := true;
+
+
 func _ready():
-	get_parent().menu_closed.connect(on_menu_closed);
+	# ./Menu/Options/<option_base>
+	get_parent().get_parent().menu_closed.connect(on_menu_closed);
 
 
 ## Return designated cursor position
