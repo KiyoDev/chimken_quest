@@ -1,10 +1,9 @@
-class_name SubmenuOption extends OptionBase
+class_name SeparatedSubmenuOption extends OptionBase
 # MenuController element that contains a label, sprite, and a submenu
 
 signal menu_selected;
 
 @onready var NameLabel := $Layout/Container/Name;
-@onready var Menu := $Menu;
 
 # reference to Menu scene / or use $Menu? 
 
@@ -12,6 +11,7 @@ signal menu_selected;
 @export var focused_unselectable : Sprite2D;
 @export var unfocused_selectable : Sprite2D;
 @export var unfocused_unselectable : Sprite2D;
+@export var Menu : Menu;
 
 
 func _ready():
@@ -51,5 +51,4 @@ func _on_menu_opened():
 
 func _on_menu_closed():
 	super._on_menu_closed();
-	Menu._exit();
 	print("closing '%s'" % [name]);

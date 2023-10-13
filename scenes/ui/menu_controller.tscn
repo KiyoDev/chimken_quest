@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://crfprmuni5pt6"]
 
-[ext_resource type="Script" path="res://scripts/ui/menus/menu_controller.gd" id="1_te4b7"]
+[ext_resource type="Script" path="res://scripts/ui/menus/old/menu_controller.gd" id="1_u7p1a"]
 [ext_resource type="PackedScene" uid="uid://dwtg21se41jpm" path="res://scenes/ui/cursor.tscn" id="2_88bpt"]
 
 [node name="MenuController" type="Node"]
-script = ExtResource("1_te4b7")
+script = ExtResource("1_u7p1a")
 
 [node name="Cursor" parent="." instance=ExtResource("2_88bpt")]
 unique_name_in_owner = true

@@ -20,11 +20,11 @@ script = ExtResource("2_jgbtj")
 
 [node name="BattleUI" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
-visible = false
 follow_viewport_enabled = true
 script = ExtResource("2_7g0n2")
 
-[node name="StyleControl" type="Control" parent="BattleUI"]
+[node name="StyleControl" type="Control" parent="."]
+visible = false
 texture_filter = 1
 layout_mode = 3
 anchors_preset = 0
@@ -35,17 +35,17 @@ offset_bottom = -123.0
 mouse_filter = 2
 theme = ExtResource("2_i8bjo")
 
-[node name="ActionCategoriesPanel" type="PanelContainer" parent="BattleUI/StyleControl"]
+[node name="ActionCategoriesPanel" type="PanelContainer" parent="StyleControl"]
 layout_mode = 0
 offset_right = 66.0
 offset_bottom = 136.0
 
-[node name="ActionCategories" type="VBoxContainer" parent="BattleUI/StyleControl/ActionCategoriesPanel"]
+[node name="ActionCategories" type="VBoxContainer" parent="StyleControl/ActionCategoriesPanel"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Attacks" type="Button" parent="BattleUI/StyleControl/ActionCategoriesPanel/ActionCategories"]
+[node name="Attacks" type="Button" parent="StyleControl/ActionCategoriesPanel/ActionCategories"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
@@ -57,7 +57,7 @@ button_mask = 0
 text = "Attacks"
 script = ExtResource("3_evtcr")
 
-[node name="Skills" type="Button" parent="BattleUI/StyleControl/ActionCategoriesPanel/ActionCategories"]
+[node name="Skills" type="Button" parent="StyleControl/ActionCategoriesPanel/ActionCategories"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
@@ -67,7 +67,7 @@ button_mask = 0
 text = "Skills"
 script = ExtResource("3_evtcr")
 
-[node name="Items" type="Button" parent="BattleUI/StyleControl/ActionCategoriesPanel/ActionCategories"]
+[node name="Items" type="Button" parent="StyleControl/ActionCategoriesPanel/ActionCategories"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
@@ -77,7 +77,7 @@ button_mask = 0
 text = "Items"
 script = ExtResource("3_evtcr")
 
-[node name="Escape" type="Button" parent="BattleUI/StyleControl/ActionCategoriesPanel/ActionCategories"]
+[node name="Escape" type="Button" parent="StyleControl/ActionCategoriesPanel/ActionCategories"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
@@ -89,7 +89,7 @@ button_mask = 0
 text = "Escape "
 script = ExtResource("3_evtcr")
 
-[node name="AttackListPanel" type="PanelContainer" parent="BattleUI/StyleControl"]
+[node name="AttackListPanel" type="PanelContainer" parent="StyleControl"]
 visible = false
 layout_mode = 0
 offset_left = 92.0
@@ -97,11 +97,11 @@ offset_top = 16.0
 offset_right = 142.0
 offset_bottom = 56.0
 
-[node name="AttackList" type="VBoxContainer" parent="BattleUI/StyleControl/AttackListPanel"]
+[node name="AttackList" type="VBoxContainer" parent="StyleControl/AttackListPanel"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="slash" type="Button" parent="BattleUI/StyleControl/AttackListPanel/AttackList"]
+[node name="slash" type="Button" parent="StyleControl/AttackListPanel/AttackList"]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_right = NodePath(".")
@@ -110,7 +110,7 @@ text = "Slash
 "
 script = ExtResource("3_evtcr")
 
-[node name="peck" type="Button" parent="BattleUI/StyleControl/AttackListPanel/AttackList"]
+[node name="peck" type="Button" parent="StyleControl/AttackListPanel/AttackList"]
 layout_mode = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_right = NodePath(".")
@@ -119,7 +119,7 @@ text = "Peck
 "
 script = ExtResource("3_evtcr")
 
-[node name="SkillListPanel" type="PanelContainer" parent="BattleUI/StyleControl"]
+[node name="SkillListPanel" type="PanelContainer" parent="StyleControl"]
 visible = false
 layout_mode = 0
 offset_left = 92.0
@@ -127,35 +127,35 @@ offset_top = 15.0
 offset_right = 192.0
 offset_bottom = 55.0
 
-[node name="SkillList" type="VBoxContainer" parent="BattleUI/StyleControl/SkillListPanel"]
+[node name="SkillList" type="VBoxContainer" parent="StyleControl/SkillListPanel"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="chain_frost" type="Button" parent="BattleUI/StyleControl/SkillListPanel/SkillList"]
+[node name="chain_frost" type="Button" parent="StyleControl/SkillListPanel/SkillList"]
 layout_mode = 2
 mouse_filter = 2
 text = "Chain Frost"
 script = ExtResource("3_evtcr")
 
-[node name="focus" type="Button" parent="BattleUI/StyleControl/SkillListPanel/SkillList"]
+[node name="focus" type="Button" parent="StyleControl/SkillListPanel/SkillList"]
 layout_mode = 2
 mouse_filter = 2
 text = "Focus"
 script = ExtResource("3_evtcr")
 
-[node name="avalanche" type="Button" parent="BattleUI/StyleControl/SkillListPanel/SkillList"]
+[node name="avalanche" type="Button" parent="StyleControl/SkillListPanel/SkillList"]
 layout_mode = 2
 mouse_filter = 2
 text = "Avalanche"
 script = ExtResource("3_evtcr")
 
-[node name="mass_heal" type="Button" parent="BattleUI/StyleControl/SkillListPanel/SkillList"]
+[node name="mass_heal" type="Button" parent="StyleControl/SkillListPanel/SkillList"]
 layout_mode = 2
 mouse_filter = 2
 text = "Mass Heal"
 script = ExtResource("3_evtcr")
 
-[node name="ItemListPanel" type="PanelContainer" parent="BattleUI/StyleControl"]
+[node name="ItemListPanel" type="PanelContainer" parent="StyleControl"]
 visible = false
 layout_mode = 0
 offset_left = 93.0
@@ -163,18 +163,18 @@ offset_top = 15.0
 offset_right = 151.0
 offset_bottom = 55.0
 
-[node name="ItemList" type="VBoxContainer" parent="BattleUI/StyleControl/ItemListPanel"]
+[node name="ItemList" type="VBoxContainer" parent="StyleControl/ItemListPanel"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="potion" type="Button" parent="BattleUI/StyleControl/ItemListPanel/ItemList"]
+[node name="potion" type="Button" parent="StyleControl/ItemListPanel/ItemList"]
 layout_mode = 2
 mouse_filter = 2
 text = "Potion
 "
 script = ExtResource("3_evtcr")
 
-[node name="EscapePanel" type="PanelContainer" parent="BattleUI/StyleControl"]
+[node name="EscapePanel" type="PanelContainer" parent="StyleControl"]
 visible = false
 layout_mode = 0
 offset_left = 92.0
@@ -182,24 +182,24 @@ offset_top = 15.0
 offset_right = 132.0
 offset_bottom = 73.0
 
-[node name="EscapeList" type="VBoxContainer" parent="BattleUI/StyleControl/EscapePanel"]
+[node name="EscapeList" type="VBoxContainer" parent="StyleControl/EscapePanel"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="confirm" type="Button" parent="BattleUI/StyleControl/EscapePanel/EscapeList"]
+[node name="confirm" type="Button" parent="StyleControl/EscapePanel/EscapeList"]
 layout_mode = 2
 mouse_filter = 2
 text = "Yes"
 script = ExtResource("3_evtcr")
 
-[node name="cancel" type="Button" parent="BattleUI/StyleControl/EscapePanel/EscapeList"]
+[node name="cancel" type="Button" parent="StyleControl/EscapePanel/EscapeList"]
 layout_mode = 2
 mouse_filter = 2
 text = "No
 "
 script = ExtResource("3_evtcr")
 
-[node name="DummyContainer" type="PanelContainer" parent="BattleUI/StyleControl"]
+[node name="DummyContainer" type="PanelContainer" parent="StyleControl"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 0
@@ -208,19 +208,19 @@ offset_top = 78.0
 offset_right = 166.0
 offset_bottom = 118.0
 
-[node name="Dummy Button" type="Button" parent="BattleUI/StyleControl/DummyContainer"]
+[node name="Dummy Button" type="Button" parent="StyleControl/DummyContainer"]
 layout_mode = 2
 text = "dummy"
 script = ExtResource("3_evtcr")
 
-[node name="TargetList" type="Control" parent="BattleUI/StyleControl"]
+[node name="TargetList" type="Control" parent="StyleControl"]
 unique_name_in_owner = true
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Allies" type="Node2D" parent="BattleUI/StyleControl/TargetList"]
+[node name="Allies" type="Node2D" parent="StyleControl/TargetList"]
 unique_name_in_owner = true
 
-[node name="Enemies" type="Node2D" parent="BattleUI/StyleControl/TargetList"]
+[node name="Enemies" type="Node2D" parent="StyleControl/TargetList"]
 unique_name_in_owner = true

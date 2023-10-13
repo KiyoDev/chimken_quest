@@ -1,9 +1,8 @@
-class_name ActionOption extends OptionBase
+class_name ConfirmOption extends OptionBase
 
 
 #@onready var Sprite : Sprite2D = $Sprite2D;
 @onready var NameLabel := $Layout/Container/Name;
-@onready var CostLabel := $Layout/Container/Cost;
 
 @export var action : ActionDefinition:
 	set(act):

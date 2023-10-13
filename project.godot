@@ -20,7 +20,7 @@ ExperienceTable="*res://scripts/autoload/experience_table.gd"
 ActionDatabase="*res://scripts/autoload/action_database.tscn"
 Rng="*res://scripts/autoload/rng.gd"
 BattleSystem="*res://scenes/battle/battle_system.tscn"
-MenuController="*res://scenes/ui/menu_controller.tscn"
+MenuController="res://scenes/ui/menu_controller.tscn"
 
 [display]
 

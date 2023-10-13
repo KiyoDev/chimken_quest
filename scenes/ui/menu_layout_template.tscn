@@ -1,0 +1,835 @@
+[gd_scene load_steps=26 format=3 uid="uid://ciqi2cj4k3cdf"]
+
+[ext_resource type="Texture2D" uid="uid://tmecff3vjw6" path="res://assets/battle/ui/chimken_battle_skills_title.png" id="1_wbm18"]
+[ext_resource type="PackedScene" uid="uid://d4fcp74bnegbd" path="res://scenes/ui/ui_menu_option_background.tscn" id="2_20xam"]
+[ext_resource type="Texture2D" uid="uid://bgfifx7n7sr7q" path="res://assets/battle/ui/chimken_battle_label_background_selectable.png" id="3_mfs8l"]
+[ext_resource type="Theme" uid="uid://1qeq3n04pcoe" path="res://assets/fonts/battle_ui.theme" id="4_rj06k"]
+[ext_resource type="Texture2D" uid="uid://bkfp7mvsvqofw" path="res://assets/battle/ui/chimken_battle_label_background_unselectable.png" id="5_cyy4q"]
+[ext_resource type="PackedScene" uid="uid://b0chtymgiamjd" path="res://scenes/ui/ui_menu_background.tscn" id="6_83kng"]
+[ext_resource type="Texture2D" uid="uid://cveehm54xofd1" path="res://assets/battle/ui/chimken_battle_attacks_title.png" id="7_g84rp"]
+[ext_resource type="Texture2D" uid="uid://f8myetpspf7i" path="res://assets/battle/ui/chimken_battle_items_title.png" id="8_ae70d"]
+[ext_resource type="Texture2D" uid="uid://c2qsnq8uhw7yn" path="res://assets/battle/ui/chimken_items_phoenix_burger.png" id="9_1r6l1"]
+
+[sub_resource type="Animation" id="Animation_1sfn4"]
+resource_name = "focused_selectable"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OptionBackground:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("3_mfs8l")]
+}
+
+[sub_resource type="Animation" id="Animation_8rsf4"]
+resource_name = "focused_unselectable"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OptionBackground:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("5_cyy4q")]
+}
+
+[sub_resource type="Animation" id="Animation_fe33o"]
+resource_name = "unfocused"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OptionBackground:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fvxpe"]
+_data = {
+"focused_selectable": SubResource("Animation_1sfn4"),
+"focused_unselectable": SubResource("Animation_8rsf4"),
+"unfocused": SubResource("Animation_fe33o")
+}
+
+[sub_resource type="Animation" id="Animation_2kpvs"]
+resource_name = "focused_selectable"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OptionBackground:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("3_mfs8l")]
+}
+
+[sub_resource type="Animation" id="Animation_y4dmw"]
+resource_name = "focused_unselectable"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OptionBackground:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("5_cyy4q")]
+}
+
+[sub_resource type="Animation" id="Animation_v8hfr"]
+resource_name = "unfocused"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OptionBackground:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bxwqx"]
+_data = {
+"focused_selectable": SubResource("Animation_2kpvs"),
+"focused_unselectable": SubResource("Animation_y4dmw"),
+"unfocused": SubResource("Animation_v8hfr")
+}
+
+[sub_resource type="Animation" id="Animation_x14ir"]
+resource_name = "focused_selectable"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OptionBackground:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("3_mfs8l")]
+}
+
+[sub_resource type="Animation" id="Animation_sc1tn"]
+resource_name = "focused_unselectable"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OptionBackground:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("5_cyy4q")]
+}
+
+[sub_resource type="Animation" id="Animation_yj6r2"]
+resource_name = "unfocused"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OptionBackground:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_drnes"]
+_data = {
+"focused_selectable": SubResource("Animation_x14ir"),
+"focused_unselectable": SubResource("Animation_sc1tn"),
+"unfocused": SubResource("Animation_yj6r2")
+}
+
+[sub_resource type="Animation" id="Animation_we0ws"]
+resource_name = "focused_selectable"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OptionBackground:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("3_mfs8l")]
+}
+
+[sub_resource type="Animation" id="Animation_gvh4s"]
+resource_name = "focused_unselectable"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OptionBackground:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("5_cyy4q")]
+}
+
+[sub_resource type="Animation" id="Animation_rlhea"]
+resource_name = "unfocused"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OptionBackground:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nnm0c"]
+_data = {
+"focused_selectable": SubResource("Animation_we0ws"),
+"focused_unselectable": SubResource("Animation_gvh4s"),
+"unfocused": SubResource("Animation_rlhea")
+}
+
+[node name="MenuLayout" type="VBoxContainer"]
+texture_filter = 1
+
+[node name="Spacer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="Title" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("1_wbm18")
+stretch_mode = 3
+
+[node name="Options" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Container" type="VBoxContainer" parent="Options"]
+layout_mode = 2
+alignment = 1
+
+[node name="Attacks" type="MarginContainer" parent="Options/Container"]
+texture_filter = 1
+layout_mode = 2
+
+[node name="OptionBackground" parent="Options/Container/Attacks" instance=ExtResource("2_20xam")]
+layout_mode = 2
+texture = ExtResource("3_mfs8l")
+patch_margin_left = 8
+patch_margin_right = 8
+patch_margin_bottom = 4
+
+[node name="Layout" type="MarginContainer" parent="Options/Container/Attacks"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = -2
+
+[node name="Container" type="HBoxContainer" parent="Options/Container/Attacks/Layout"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Options/Container/Attacks/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_rj06k")
+text = "ATTACKS"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Container/Attacks"]
+libraries = {
+"": SubResource("AnimationLibrary_fvxpe")
+}
+
+[node name="CursorPosition" type="Node2D" parent="Options/Container/Attacks"]
+position = Vector2(-12, 8)
+
+[node name="Menu" type="MarginContainer" parent="Options/Container/Attacks"]
+visible = false
+layout_mode = 2
+
+[node name="Background" parent="Options/Container/Attacks/Menu" instance=ExtResource("6_83kng")]
+texture_filter = 1
+layout_mode = 2
+
+[node name="MenuLayout" type="VBoxContainer" parent="Options/Container/Attacks/Menu"]
+layout_mode = 2
+
+[node name="Spacer" type="MarginContainer" parent="Options/Container/Attacks/Menu/MenuLayout"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="Title" type="TextureRect" parent="Options/Container/Attacks/Menu/MenuLayout"]
+layout_mode = 2
+texture = ExtResource("7_g84rp")
+stretch_mode = 3
+
+[node name="Options" type="MarginContainer" parent="Options/Container/Attacks/Menu/MenuLayout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Container" type="VBoxContainer" parent="Options/Container/Attacks/Menu/MenuLayout/Options"]
+layout_mode = 2
+alignment = 1
+
+[node name="Slash" type="MarginContainer" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container"]
+texture_filter = 1
+layout_mode = 2
+
+[node name="OptionBackground" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container/Slash" instance=ExtResource("2_20xam")]
+layout_mode = 2
+texture = ExtResource("3_mfs8l")
+patch_margin_left = 8
+patch_margin_right = 8
+patch_margin_bottom = 4
+
+[node name="Layout" type="MarginContainer" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container/Slash"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = -2
+
+[node name="Container" type="HBoxContainer" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container/Slash/Layout"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container/Slash/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_rj06k")
+text = "SLASH"
+
+[node name="Spacer" type="MarginContainer" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container/Slash/Layout/Container"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="Cost" type="Label" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container/Slash/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_rj06k")
+horizontal_alignment = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container/Slash"]
+libraries = {
+"": SubResource("AnimationLibrary_fvxpe")
+}
+
+[node name="CursorPosition" type="Node2D" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container/Slash"]
+position = Vector2(-12, 8)
+
+[node name="Peck" type="MarginContainer" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container"]
+texture_filter = 1
+layout_mode = 2
+
+[node name="OptionBackground" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container/Peck" instance=ExtResource("2_20xam")]
+layout_mode = 2
+texture = ExtResource("3_mfs8l")
+patch_margin_left = 8
+patch_margin_right = 8
+patch_margin_bottom = 4
+
+[node name="Layout" type="MarginContainer" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container/Peck"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = -2
+
+[node name="Container" type="HBoxContainer" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container/Peck/Layout"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container/Peck/Layout/Container"]
+layout_mode = 2
+theme = ExtResource("4_rj06k")
+text = "PECK"
+
+[node name="Spacer" type="MarginContainer" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container/Peck/Layout/Container"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="Cost" type="Label" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container/Peck/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_rj06k")
+horizontal_alignment = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container/Peck"]
+libraries = {
+"": SubResource("AnimationLibrary_bxwqx")
+}
+
+[node name="CursorPosition" type="Node2D" parent="Options/Container/Attacks/Menu/MenuLayout/Options/Container/Peck"]
+position = Vector2(-12, 8)
+
+[node name="Skills" type="MarginContainer" parent="Options/Container"]
+texture_filter = 1
+layout_mode = 2
+
+[node name="OptionBackground" parent="Options/Container/Skills" instance=ExtResource("2_20xam")]
+layout_mode = 2
+texture = ExtResource("3_mfs8l")
+patch_margin_left = 8
+patch_margin_right = 8
+patch_margin_bottom = 4
+
+[node name="Layout" type="MarginContainer" parent="Options/Container/Skills"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = -2
+
+[node name="Container" type="HBoxContainer" parent="Options/Container/Skills/Layout"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Options/Container/Skills/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_rj06k")
+text = "SKILLS"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Container/Skills"]
+libraries = {
+"": SubResource("AnimationLibrary_drnes")
+}
+
+[node name="CursorPosition" type="Node2D" parent="Options/Container/Skills"]
+position = Vector2(-12, 8)
+
+[node name="Menu" type="MarginContainer" parent="Options/Container/Skills"]
+visible = false
+layout_mode = 2
+
+[node name="Background" parent="Options/Container/Skills/Menu" instance=ExtResource("6_83kng")]
+texture_filter = 1
+layout_mode = 2
+
+[node name="MenuLayout" type="VBoxContainer" parent="Options/Container/Skills/Menu"]
+layout_mode = 2
+
+[node name="Spacer" type="MarginContainer" parent="Options/Container/Skills/Menu/MenuLayout"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="Title" type="TextureRect" parent="Options/Container/Skills/Menu/MenuLayout"]
+layout_mode = 2
+texture = ExtResource("1_wbm18")
+stretch_mode = 3
+
+[node name="Options" type="MarginContainer" parent="Options/Container/Skills/Menu/MenuLayout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Container" type="VBoxContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options"]
+layout_mode = 2
+alignment = 1
+
+[node name="Chain Frost" type="MarginContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container"]
+texture_filter = 1
+layout_mode = 2
+
+[node name="OptionBackground" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Frost" instance=ExtResource("2_20xam")]
+layout_mode = 2
+texture = ExtResource("3_mfs8l")
+patch_margin_left = 8
+patch_margin_right = 8
+patch_margin_bottom = 4
+
+[node name="Layout" type="MarginContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Frost"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = -2
+
+[node name="Container" type="HBoxContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Frost/Layout"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Frost/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_rj06k")
+text = "CHAIN FROST
+"
+
+[node name="Spacer" type="MarginContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Frost/Layout/Container"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="Cost" type="Label" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Frost/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_rj06k")
+text = "20"
+horizontal_alignment = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Frost"]
+libraries = {
+"": SubResource("AnimationLibrary_drnes")
+}
+
+[node name="CursorPosition" type="Node2D" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Frost"]
+position = Vector2(-12, 8)
+
+[node name="Chain Lightning" type="MarginContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container"]
+texture_filter = 1
+layout_mode = 2
+
+[node name="OptionBackground" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Lightning" instance=ExtResource("2_20xam")]
+layout_mode = 2
+texture = ExtResource("3_mfs8l")
+patch_margin_left = 8
+patch_margin_right = 8
+patch_margin_bottom = 4
+
+[node name="Layout" type="MarginContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Lightning"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = -2
+
+[node name="Container" type="HBoxContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Lightning/Layout"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Lightning/Layout/Container"]
+layout_mode = 2
+theme = ExtResource("4_rj06k")
+text = "CHAIN LIGHTNING"
+
+[node name="Spacer" type="MarginContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Lightning/Layout/Container"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="Cost" type="Label" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Lightning/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_rj06k")
+text = "20"
+horizontal_alignment = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Lightning"]
+libraries = {
+"": SubResource("AnimationLibrary_nnm0c")
+}
+
+[node name="CursorPosition" type="Node2D" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Lightning"]
+position = Vector2(-12, 8)
+
+[node name="Chain Inferno" type="MarginContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container"]
+texture_filter = 1
+layout_mode = 2
+
+[node name="OptionBackground" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Inferno" instance=ExtResource("2_20xam")]
+layout_mode = 2
+texture = ExtResource("3_mfs8l")
+patch_margin_left = 8
+patch_margin_right = 8
+patch_margin_bottom = 4
+
+[node name="Layout" type="MarginContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Inferno"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = -2
+
+[node name="Container" type="HBoxContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Inferno/Layout"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Inferno/Layout/Container"]
+layout_mode = 2
+theme = ExtResource("4_rj06k")
+text = "CHAIN INFERNO"
+
+[node name="Spacer" type="MarginContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Inferno/Layout/Container"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="Cost" type="Label" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Inferno/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_rj06k")
+text = "20"
+horizontal_alignment = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Inferno"]
+libraries = {
+"": SubResource("AnimationLibrary_nnm0c")
+}
+
+[node name="CursorPosition" type="Node2D" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Chain Inferno"]
+position = Vector2(-12, 8)
+
+[node name="Focus" type="MarginContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container"]
+texture_filter = 1
+layout_mode = 2
+
+[node name="OptionBackground" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Focus" instance=ExtResource("2_20xam")]
+layout_mode = 2
+texture = ExtResource("3_mfs8l")
+patch_margin_left = 8
+patch_margin_right = 8
+patch_margin_bottom = 4
+
+[node name="Layout" type="MarginContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Focus"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = -2
+
+[node name="Container" type="HBoxContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Focus/Layout"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Focus/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_rj06k")
+text = "FOCUS"
+
+[node name="Spacer" type="MarginContainer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Focus/Layout/Container"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="Cost" type="Label" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Focus/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_rj06k")
+text = "5
+"
+horizontal_alignment = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Focus"]
+libraries = {
+"": SubResource("AnimationLibrary_nnm0c")
+}
+
+[node name="CursorPosition" type="Node2D" parent="Options/Container/Skills/Menu/MenuLayout/Options/Container/Focus"]
+position = Vector2(-12, 8)
+
+[node name="Items" type="MarginContainer" parent="Options/Container"]
+texture_filter = 1
+layout_mode = 2
+
+[node name="OptionBackground" parent="Options/Container/Items" instance=ExtResource("2_20xam")]
+layout_mode = 2
+texture = ExtResource("3_mfs8l")
+patch_margin_left = 8
+patch_margin_right = 8
+patch_margin_bottom = 4
+
+[node name="Layout" type="MarginContainer" parent="Options/Container/Items"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = -2
+
+[node name="Container" type="HBoxContainer" parent="Options/Container/Items/Layout"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Options/Container/Items/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_rj06k")
+text = "ITEMS"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Container/Items"]
+libraries = {
+"": SubResource("AnimationLibrary_drnes")
+}
+
+[node name="CursorPosition" type="Node2D" parent="Options/Container/Items"]
+position = Vector2(-12, 8)
+
+[node name="Menu" type="MarginContainer" parent="Options/Container/Items"]
+visible = false
+layout_mode = 2
+
+[node name="Background" parent="Options/Container/Items/Menu" instance=ExtResource("6_83kng")]
+texture_filter = 1
+layout_mode = 2
+
+[node name="MenuLayout" type="VBoxContainer" parent="Options/Container/Items/Menu"]
+layout_mode = 2
+
+[node name="Spacer" type="MarginContainer" parent="Options/Container/Items/Menu/MenuLayout"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="Title" type="TextureRect" parent="Options/Container/Items/Menu/MenuLayout"]
+layout_mode = 2
+texture = ExtResource("8_ae70d")
+stretch_mode = 3
+
+[node name="Options" type="MarginContainer" parent="Options/Container/Items/Menu/MenuLayout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Container" type="VBoxContainer" parent="Options/Container/Items/Menu/MenuLayout/Options"]
+layout_mode = 2
+alignment = 1
+
+[node name="Phoenix Burger" type="MarginContainer" parent="Options/Container/Items/Menu/MenuLayout/Options/Container"]
+texture_filter = 1
+layout_mode = 2
+
+[node name="OptionBackground" parent="Options/Container/Items/Menu/MenuLayout/Options/Container/Phoenix Burger" instance=ExtResource("2_20xam")]
+layout_mode = 2
+texture = ExtResource("3_mfs8l")
+patch_margin_left = 8
+patch_margin_right = 8
+patch_margin_bottom = 4
+
+[node name="Layout" type="MarginContainer" parent="Options/Container/Items/Menu/MenuLayout/Options/Container/Phoenix Burger"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = -2
+
+[node name="Container" type="HBoxContainer" parent="Options/Container/Items/Menu/MenuLayout/Options/Container/Phoenix Burger/Layout"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Options/Container/Items/Menu/MenuLayout/Options/Container/Phoenix Burger/Layout/Container"]
+layout_mode = 2
+texture = ExtResource("9_1r6l1")
+stretch_mode = 2
+
+[node name="Name" type="Label" parent="Options/Container/Items/Menu/MenuLayout/Options/Container/Phoenix Burger/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_rj06k")
+text = "PHOENIX BURGER"
+
+[node name="Spacer" type="MarginContainer" parent="Options/Container/Items/Menu/MenuLayout/Options/Container/Phoenix Burger/Layout/Container"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="Quantity" type="Label" parent="Options/Container/Items/Menu/MenuLayout/Options/Container/Phoenix Burger/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_rj06k")
+text = "3"
+horizontal_alignment = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Container/Items/Menu/MenuLayout/Options/Container/Phoenix Burger"]
+libraries = {
+"": SubResource("AnimationLibrary_drnes")
+}
+
+[node name="CursorPosition" type="Node2D" parent="Options/Container/Items/Menu/MenuLayout/Options/Container/Phoenix Burger"]
+position = Vector2(-12, 8)
+
+[node name="ESCAPE" type="MarginContainer" parent="Options/Container"]
+texture_filter = 1
+layout_mode = 2
+
+[node name="OptionBackground" parent="Options/Container/ESCAPE" instance=ExtResource("2_20xam")]
+layout_mode = 2
+texture = ExtResource("3_mfs8l")
+patch_margin_left = 8
+patch_margin_right = 8
+patch_margin_bottom = 4
+
+[node name="Layout" type="MarginContainer" parent="Options/Container/ESCAPE"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = -2
+
+[node name="Container" type="HBoxContainer" parent="Options/Container/ESCAPE/Layout"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Options/Container/ESCAPE/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_rj06k")
+text = "ESCAPE"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Options/Container/ESCAPE"]
+libraries = {
+"": SubResource("AnimationLibrary_drnes")
+}
+
+[node name="CursorPosition" type="Node2D" parent="Options/Container/ESCAPE"]
+position = Vector2(-12, 8)
+
+[node name="Menu" type="MarginContainer" parent="Options/Container/ESCAPE"]
+visible = false
+layout_mode = 2
+
+[node name="Background" parent="Options/Container/ESCAPE/Menu" instance=ExtResource("6_83kng")]
+texture_filter = 1
+layout_mode = 2
+
+[node name="MenuLayout" type="VBoxContainer" parent="Options/Container/ESCAPE/Menu"]
+layout_mode = 2
+
+[node name="Spacer" type="MarginContainer" parent="Options/Container/ESCAPE/Menu/MenuLayout"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="Title" type="TextureRect" parent="Options/Container/ESCAPE/Menu/MenuLayout"]
+layout_mode = 2
+texture = ExtResource("1_wbm18")
+stretch_mode = 3
+
+[node name="Options" type="MarginContainer" parent="Options/Container/ESCAPE/Menu/MenuLayout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Container" type="VBoxContainer" parent="Options/Container/ESCAPE/Menu/MenuLayout/Options"]
+layout_mode = 2
+alignment = 1

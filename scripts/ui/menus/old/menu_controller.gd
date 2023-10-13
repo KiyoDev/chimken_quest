@@ -20,16 +20,16 @@ var curr_menu : MenuBase;
 var focused_opt : OptionBase;
 
 
-func _ready():
-	add_child(Cursor);
-	Cursor.z_index = 20;
-	Cursor.visible = false;
+#func _ready():
+#	add_child(Cursor);
+#	Cursor.z_index = 20;
+#	Cursor.visible = false;
 #	curr_menu = Menu;
 #	print("ctrl - Menu %s" % [Menu]);
-	print("ctrl - BattleMenu %s" % [BattleMenu]);
+#	print("ctrl - BattleMenu %s" % [BattleMenu]);
 
 
-@onready var BattleMenu := preload("res://scenes/ui/battle_menu.tscn").instantiate();
+#@onready var BattleMenu := preload("res://scenes/ui/battle_menu.tscn").instantiate();
 
 func test(event : InputEvent):
 	if(event is InputEventKey):
@@ -38,8 +38,8 @@ func test(event : InputEvent):
 			if(!menu_open):
 	#			Menu = BattleMenu;
 				remove_child(get_node("Menu"));
-				add_child(BattleMenu);
-				curr_menu = BattleMenu;
+#				add_child(BattleMenu);
+#				curr_menu = BattleMenu;
 	#			print("ctrl - Menu %s" % [get_node("Menu")]);
 				print("curr_menu %s" % [curr_menu]);
 				open();
@@ -51,26 +51,27 @@ func test(event : InputEvent):
 
 
 func _input(event):
-	test(event);
-	
-	if(!menu_open): return; # do nothing if menu isn't open
-	if(event.is_action_pressed(&"ui_left") || event.is_action_pressed(&"ui_right") ||
-	   event.is_action_pressed(&"ui_up") || event.is_action_pressed(&"ui_down")):
-		var next_option = curr_menu._navigate(Input.get_vector(&"ui_left", &"ui_right", &"ui_up", &"ui_down"));
-		
-		if(next_option == null || next_option == focused_opt): return;
-		
-		change_focus(next_option);
-	elif(event.is_action_pressed(&"ui_accept")):
-		var next_option = curr_menu._select_option();
-		print("accept option - '%s'" % [next_option]);
-		
-		if(next_option == null): return;
-		
-		change_focus(next_option);
-	elif(event.is_action_pressed(&"ui_cancel")):
-		print("cancel on '%s'" % [curr_menu]);
-		cancel_option();
+	pass;
+#	test(event);
+#
+#	if(!menu_open): return; # do nothing if menu isn't open
+#	if(event.is_action_pressed(&"ui_left") || event.is_action_pressed(&"ui_right") ||
+#	   event.is_action_pressed(&"ui_up") || event.is_action_pressed(&"ui_down")):
+#		var next_option = curr_menu._navigate(Input.get_vector(&"ui_left", &"ui_right", &"ui_up", &"ui_down"));
+#
+#		if(next_option == null || next_option == focused_opt): return;
+#
+#		change_focus(next_option);
+#	elif(event.is_action_pressed(&"ui_accept")):
+#		var next_option = curr_menu._select_option();
+#		print("accept option - '%s'" % [next_option]);
+#
+#		if(next_option == null): return;
+#
+#		change_focus(next_option);
+#	elif(event.is_action_pressed(&"ui_cancel")):
+#		print("cancel on '%s'" % [curr_menu]);
+#		cancel_option();
 
 
 func change_focus(next):

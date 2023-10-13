@@ -2,6 +2,8 @@ extends Node
 
 
 @onready var BattleUI = %BattleUI;
+@onready var MenuContainer = %BattleUI/Container/MainMenu;
+@onready var SubMenuContainer = %BattleUI/Container/SubMenu;
 @onready var AllyContainer := $AllyContainer;
 @onready var EnemyContainer := $EnemyContainer;
 
@@ -16,13 +18,22 @@ var round := 0;
 var in_battle := false;
 
 
+@onready var Cursor : Cursor = preload("res://scenes/ui/cursor.tscn").instantiate();
+#@onready var BattleMenuTest = preload("res://scenes/ui/battle_menu_control.tscn").instantiate();
+@onready var BattleMenuTest = preload("res://scenes/ui/battle_menu.tscn").instantiate();
+
+
 func _ready():
+	BattleUI.show();
+	BattleUI.add_child(BattleMenuTest);
+	BattleUI.add_child(Cursor);
 	pass
 
 
 func _input(event):
 	_test(event);
 	
+
 
 func _test(event):
 	if(event.is_action_pressed(&"test_battle_start")):
@@ -49,13 +60,41 @@ func _test(event):
 #		EnemyContainer.add_child(e2);
 		
 		init_battle(AllyContainer.get_children(), EnemyContainer.get_children());
-		BattleUI.on_battle_start(AllyContainer.get_children(), EnemyContainer.get_children());
-		pass;
+#		BattleUI.on_battle_start(AllyContainer.get_children(), EnemyContainer.get_children());
+
+		if(!Cursor.menu_open):
+#			Menu = BattleMenu;
+#				remove_child(get_node("Menu"));
+#				add_child(BattleMenu);
+#				curr_menu = BattleMenu;
+#			print("ctrl - Menu %s" % [get_node("Menu")]);
+			Cursor.open(BattleMenuTest.get_node("%BattleMenu"));
 	elif(event.is_action_pressed(&"test_battle_end")):
 		end_battle();
+		
+		if(Cursor.menu_open):
+			print("force exit menu");
+			Cursor.close();
 	elif(event.is_action_pressed(&"test_battle_print")):
 		test_print();
-
+	
+	if(event is InputEventKey):
+		if((event as InputEventKey).keycode == KEY_O):
+			print("MenuController - O");
+			if(!Cursor.menu_open):
+	#			Menu = BattleMenu;
+#				remove_child(get_node("Menu"));
+#				add_child(BattleMenu);
+#				curr_menu = BattleMenu;
+	#			print("ctrl - Menu %s" % [get_node("Menu")]);
+	
+#				Cursor.open(BattleMenuTest);
+				Cursor.open(BattleMenuTest.get_child(0).get_child(0));
+		elif((event as InputEventKey).keycode == KEY_Q):
+			if(Cursor.menu_open):
+				print("force exit menu");
+				Cursor.close();
+	pass;
 
 @onready var test_chimken = preload("res://scenes/characters/test_character.tscn").instantiate();
 @onready var test_enemy = preload("res://scenes/characters/test_enemy.tscn").instantiate();

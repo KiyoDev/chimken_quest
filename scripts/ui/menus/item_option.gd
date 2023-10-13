@@ -1,11 +1,9 @@
 class_name ItemOption extends OptionBase
 
 
-@onready var Background : NinePatchRect = $OptionBackground; #
-@onready var Sprite : Sprite2D = $Sprite2D;
-@onready var NameLabel := $Name;
-@onready var QuantityLabel := $Quantity;
-@onready var CursorPosition := $CursorPosition;
+@onready var Icon : TextureRect = $Layout/Container/TextureRect;
+@onready var NameLabel := $Layout/Container/Name;
+@onready var QuantityLabel := $Layout/Container/Quantity;
 
 @export var item : ItemDefinition:
 	set(itm):
@@ -18,13 +16,10 @@ func _ready():
 	super._ready();
 
 
-func _cursor_position():
-	return CursorPosition.position;
-
-
-func _cursor_global_position():
-	return CursorPosition.global_position;
-	
-
 func _selected():
 	pass;
+
+
+func _on_menu_closed():
+	super._on_menu_closed();
+	print("closing '%s'" % [name]);

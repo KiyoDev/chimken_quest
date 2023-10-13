@@ -66,48 +66,48 @@ var targetable_type : TargetableType;
 # ActionCategories -> Attacks, Skills, Items, Escape
 #		bring up another window to show attacks, skills, items
 # Called when the node enters the scene tree for the first time.
-func _ready():
-	print(Cursor);
-#	print(skill_list.get_children()[0].get_children());
-
-#	print(ActionCategories);
-#	get_viewport().connect(&"gui_focus_changed", _on_focus_changed);
-#	var default_foc : Control = ActionCategories.get_child(0);
-#	default_foc.grab_focus();
-#	focused_ele = default_foc;
-#	curr_menu = ActionCategories;
-#	select_state = SelectState.Categories;
-	pass;
+#func _ready():
+#	print(Cursor);
+##	print(skill_list.get_children()[0].get_children());
+#
+##	print(ActionCategories);
+##	get_viewport().connect(&"gui_focus_changed", _on_focus_changed);
+##	var default_foc : Control = ActionCategories.get_child(0);
+##	default_foc.grab_focus();
+##	focused_ele = default_foc;
+##	curr_menu = ActionCategories;
+##	select_state = SelectState.Categories;
+#	pass;
 
 
 func _input(event):
 	if(!BattleSystem.in_battle): return;
 	
-	if(focused_ele == null): return;
-	
-	if(event.is_action_pressed(&"ui_select")):
-		# open menu corresponding to focused action category and change focus
-		match(select_state):
-			SelectState.Categories:
-				print("category - selected '%s'" % [focused_ele]);
-				select_category();
-			SelectState.Action:
-				if(state_stack.back() == SelectState.Action): return;
-				print("action - selected '%s'" % [focused_ele]);
-				# TODO: move on to target select if selecting an action or item
-				select_action(curr_action);
-			SelectState.Target:
-				print("target - using '%s' against '%s'" % [focus_stack.back().name, focused_ele.character.info.character_name])
-				(focused_ele as Control).focus
-#				print("focus - %s" % [focused_ele.focus_next]);
-			
-	elif(!menu_stack.is_empty() && event.is_action_pressed(&"ui_cancel")):
-		cancel_select();
-	
-	if(select_state == SelectState.Target && 
-	  (event.is_action_pressed(&"ui_up") || event.is_action_pressed(&"ui_down") ||
-	   event.is_action_pressed(&"ui_left") || event.is_action_pressed(&"ui_right"))):
-		change_target();
+#	if(focused_ele == null): return;
+#
+#	if(event.is_action_pressed(&"ui_select")):
+#		# open menu corresponding to focused action category and change focus
+#		match(select_state):
+#			SelectState.Categories:
+#				print("category - selected '%s'" % [focused_ele]);
+#				select_category();
+#			SelectState.Action:
+#				if(state_stack.back() == SelectState.Action): return;
+#				print("action - selected '%s'" % [focused_ele]);
+#				# TODO: move on to target select if selecting an action or item
+#				select_action(curr_action);
+#			SelectState.Target:
+#				print("target - using '%s' against '%s'" % [focus_stack.back().name, focused_ele.character.info.character_name])
+#				(focused_ele as Control).focus
+##				print("focus - %s" % [focused_ele.focus_next]);
+#
+#	elif(!menu_stack.is_empty() && event.is_action_pressed(&"ui_cancel")):
+#		cancel_select();
+#
+#	if(select_state == SelectState.Target && 
+#	  (event.is_action_pressed(&"ui_up") || event.is_action_pressed(&"ui_down") ||
+#	   event.is_action_pressed(&"ui_left") || event.is_action_pressed(&"ui_right"))):
+#		change_target();
 
 
 func change_target():
@@ -138,7 +138,7 @@ func _on_focus_changed(control : Control):
 func on_battle_start(allies, enemies):
 	visible = true;
 	
-	add_child(Cursor);
+#	add_child(Cursor);
 	get_viewport().connect(&"gui_focus_changed", _on_focus_changed);
 	ActionCategories.visible = true;
 	var default_foc : Control = ActionCategories.get_child(0);
