@@ -3,7 +3,7 @@ class_name OptionBase extends MarginContainer
 
 
 @onready var Background : NinePatchRect = $OptionBackground; # background to show when option is selected
-@onready var Animator := $AnimationPlayer;
+@onready var Animator := $OptionBackground/AnimationPlayer;
 
 
 @export var selectable := true;
@@ -11,6 +11,7 @@ class_name OptionBase extends MarginContainer
 
 func _ready():
 	Animator.play(&"unfocused");
+	Background.show();
 	# ./Menu/Options/<option_base>
 #	var parent_menu = get_parent().get_parent().get_parent().get_parent();
 #	print(parent_menu.name);

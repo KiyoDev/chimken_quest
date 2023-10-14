@@ -5,6 +5,15 @@ signal focus_changed;
 signal menu_closed;
 
 
+enum Direction {
+	NONE,
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT
+}
+
+
 @onready var Sprite = $Sprite2D;
 @onready var Animator = $AnimationPlayer;
 
@@ -22,45 +31,35 @@ func _ready():
 	hide();
 
 
-#func test(event : InputEvent):
-#	if(event is InputEventKey):
-#		if((event as InputEventKey).keycode == KEY_O):
-#			print("MenuController - O");
-#			if(!menu_open):
-#	#			Menu = BattleMenu;
-##				remove_child(get_node("Menu"));
-##				add_child(BattleMenu);
-##				curr_menu = BattleMenu;
-#	#			print("ctrl - Menu %s" % [get_node("Menu")]);
-#				print("curr_menu %s" % [curr_menu]);
-##				open();
-#		elif((event as InputEventKey).keycode == KEY_Q):
-#			if(menu_open):
-#				print("force exit menu");
-##				close();
-#	pass;
-
+func horizontal(event) -> bool:
+	if(event.is_action_pressed(&"ui_left") || event.is_action_pressed(&"ui_right")):
+		return true;
+	elif(event.is_action_pressed(&"ui_up") || event.is_action_pressed(&"ui_down")):
+		return false
+	return false;
+	
 
 func _input(event):
 	if(!menu_open): return; # do nothing if menu isn't open
 	if(event.is_action_pressed(&"ui_left") || event.is_action_pressed(&"ui_right") ||
 	   event.is_action_pressed(&"ui_up") || event.is_action_pressed(&"ui_down")):
-		var direction := Input.get_vector(&"ui_left", &"ui_right", &"ui_up", &"ui_down");
-		navigate_manu(direction.sign());
+		var move := Input.get_vector(&"ui_left", &"ui_right", &"ui_up", &"ui_down");
+		var horizontal := horizontal(event);
+		navigate_manu(move.sign(), horizontal);
 	elif(event.is_action_pressed(&"ui_accept")):
 		var next_option = curr_menu._select_option();
 		print("accept option - '%s'" % [next_option]);
 		
 		if(next_option == null): return;
 		
-#		change_focus(next_option);
+		change_focus(next_option);
 	elif(event.is_action_pressed(&"ui_cancel")):
 		print("cancel on '%s'" % [curr_menu]);
 		cancel_option();
 
 
-func navigate_manu(direction):
-	var option = curr_menu._navigate(direction);
+func navigate_manu(move, horizontal):
+	var option = curr_menu._navigate(move, horizontal);
 	if(option == null || option == focused_opt): 
 		return;
 	change_focus(option);
@@ -70,6 +69,7 @@ func navigate_manu(direction):
 #	Cursor._menu();
 #	Cursor._on_navigate(focused_opt); # TODO: maybe instead of moving a cursor, could have animated cursor on each element that changes from selected/unselected, etc...
 #	menu_opened.emit();
+
 
 
 func change_focus(next):
@@ -89,6 +89,8 @@ func update_pos(option : OptionBase):
 	
 
 func open(menu):
+	if(menu_open): return;
+	
 	menu_open = true;
 	curr_menu = menu;
 	_menu();
@@ -99,6 +101,8 @@ func open(menu):
 		
 
 func close():
+	if(!menu_open): return;
+	
 	menu_open = false;
 	curr_menu._exit();
 	while(!menu_stack.is_empty()):
@@ -125,8 +129,13 @@ func on_menu_open(next):
 	await get_tree().create_timer(0.001).timeout
 	change_focus(next);
 
-# Signal functions
 
+func _menu():
+#	print("menu - %s" % [Animator]);
+	Animator.play(&"menu_cursor");
+
+
+# Signal functions
 
 func on_menu_selected(menu):
 	print("menu[%s] selected" % [menu]);
@@ -136,14 +145,9 @@ func on_menu_selected(menu):
 	on_menu_open(next);
 
 
-func _menu():
-#	print("menu - %s" % [Animator]);
-	Animator.play(&"menu_cursor");
-	
-
-func _target_selected():
-	Animator.play(&"target_cursor_selected");
-	
-
-func _target_unselected():
-	Animator.play(&"target_cursor_unselected");
+#func _target_selected():
+#	Animator.play(&"target_cursor_selected");
+#
+#
+#func _target_unselected():
+#	Animator.play(&"target_cursor_unselected");

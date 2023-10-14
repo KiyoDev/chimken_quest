@@ -72,6 +72,10 @@ enum Type {
 @export var void_resist := 0.0;
 
 
+@export var attacks : Array[ActionDefinition] = [];
+@export var skills : Array[ActionDefinition] = [];
+
+
 func _init():
 	if(level == 99):
 		return;

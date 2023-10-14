@@ -43,6 +43,8 @@ wind_resist = 0.0
 light_resist = 0.0
 dark_resist = 0.0
 void_resist = 0.0
+attacks = Array[Resource("res://scripts/battle/resources/actions/action_definition.gd")]([])
+skills = Array[Resource("res://scripts/battle/resources/actions/action_definition.gd")]([])
 
 [node name="CanvasLayer" type="CanvasLayer"]
 

@@ -1,5 +1,10 @@
-[gd_scene format=3 uid="uid://cuqxh7x3jol5b"]
+[gd_scene load_steps=2 format=3 uid="uid://cuqxh7x3jol5b"]
+
+[ext_resource type="PackedScene" uid="uid://bngn13q3fumrm" path="res://scenes/characters/chimken_overworld.tscn" id="1_rjj5t"]
 
 [node name="world" type="Node2D"]
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(1, 0)
+
+[node name="Chimken" parent="." instance=ExtResource("1_rjj5t")]

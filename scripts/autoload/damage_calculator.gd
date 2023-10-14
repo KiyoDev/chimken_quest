@@ -18,7 +18,7 @@ static func standard(
 	
 	var defense := target.info.defense if damage_action.type == "physical" else target.info.magic_resist;
 	
-	var defense_multiplier := player_defense_multiplier if target.info.type == "Ally" else enemy_defense_multiplier;
+	var defense_multiplier := player_defense_multiplier if target.info.type == CharacterDefinition.Type.Ally else enemy_defense_multiplier;
 	
 	# multipliers
 	var pierce := 0.0 # TODO: implement
@@ -50,7 +50,7 @@ static func elemental_resist(
 ) -> float:
 	var elemental_resistances = target.attributes.elemental_resistances
 	var value := 1.0
-	for element in Elements.from_flags(attack.elements):
-		value -= elemental_resistances[element]
+#	for element in Elements.from_flags(attack.elements):
+#		value -= elemental_resistances[element]
 	
 	return value

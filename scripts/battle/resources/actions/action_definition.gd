@@ -22,11 +22,14 @@ enum TargetingType {
 
 @export_multiline var description := "";
 
+@export var cost := 0;
+
 @export_enum("Attack:1", "Skill:2") var category := Category.Attack as int;
 
 @export_flags("Ally:1", "Enemy:2", "Self:4") var target := 2;
 
 @export_enum("Single:1", "AoE:2") var targeting_type := 1;
+
 
 
 func act(actor : Character, targets):

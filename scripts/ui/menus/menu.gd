@@ -27,30 +27,46 @@ func ping():
 	print("ping");
 
 
-func _navigate(direction):
+func _navigate(move, horizontal):
 	if(!is_focused || Options.get_child_count() == 0): 
 		print("trying to navigate an unfocused menu....");
 		return;
 	var option : OptionBase;
 	if(Options is VBoxContainer):
+		if(horizontal): return option;
 		if(select_wrap):
-			option = navigate_wrap(direction.y);
+			option = navigate_wrap(move.y);
 		else:
-			option = get_option(clampi(focused_index + direction.y, 0, Options.get_child_count() - 1));
+			option = get_option(clampi(focused_index + move.y, 0, Options.get_child_count() - 1));
 	elif(Options is HBoxContainer):
+		if(!horizontal): return option;
 		if(select_wrap):
-			option = navigate_wrap(direction.x);
+			option = navigate_wrap(move.x);
 		else:
-			option = get_option(clampi(focused_index + direction.x, 0, Options.get_child_count() - 1));
+			option = get_option(clampi(focused_index + move.x, 0, Options.get_child_count() - 1));
 	elif(Options is GridContainer):
 		if(select_wrap):
-			pass;
-		else:
-			option = get_option(focused_index + direction.x + direction.y * Options.columns);
+			var index := focused_index;
+			var columns : int = Options.columns;
+			var size := Options.get_child_count();
 			
-	if(option):
-		option._focus();
+			if(move.x > 0): # right
+				index = (focused_index + 1) % columns + ((focused_index / columns) * columns);
+			elif(move.x < 0): # left
+				index = focused_index + columns - 1 if (focused_index % columns == 0) else focused_index - 1;
+			elif(move.y > 0): # down
+				# (focused_index + colums) % (size)
+				index = (focused_index + columns) % size;
+			elif(move.y < 0): # up
+				# (focused_index - columns + (size)) % (size)
+				index = (focused_index - columns + size) % size;
+				
+			option = get_option(index);
+		else:
+			option = get_option(focused_index + move.x + move.y * Options.columns);
+			
 	return option;
+
 
 func navigate_wrap(direction_value):
 	if(direction_value > 0):
@@ -64,34 +80,8 @@ func get_option(index):
 	
 	focused_index = index;
 	return Options.get_child(index);
-#			var size = (rows * Options.columns);
-#			if(direction.x > 0): # right
-#				focused_index = (focused_index + 1) % columns + ((focused_index / columns) * columns);
-#			elif(direction.x < 0): # left
-#				focused_index = focused_index + columns - 1 if (focused_index % columns == 0) else focused_index - 1;
-#			elif(direction.y > 0): # down
-#				# (focused_index + colums) % (size)
-#				focused_index = (focused_index + columns) % size;
-#			elif(direction.y < 0): # up
-#				# (focused_index - columns + (size)) % (size)
-#				focused_index = (focused_index - columns + size) % size;
-#			return get_child(focused_index);
-#		else:
-#			if(direction.x > 0): # right
-#				focused_index = min((focused_index / columns + 1) * columns - 1, focused_index + 1);
-#			elif(direction.x < 0): # left
-#				focused_index = max((focused_index / columns) * columns, focused_index - 1);
-#			elif(direction.y > 0): # down
-#				# curr - ((curr / columns) * columns) = column index
-#				# (r * c) - c = last row
-#				focused_index = min((focused_index - (focused_index / columns) * columns) + ((rows * columns) - columns), focused_index + columns);
-#				pass;
-#			elif(direction.y < 0): # up
-#				# (curr - colums + (r*c)) % (r*c)
-#				focused_index = max((focused_index - (focused_index / columns) * columns), focused_index - columns);
-
-
-
+	
+	
 func connect_cursor_to_menu(cursor : Cursor):
 	for opt in Options.get_children():
 		if(opt.has_method("connect_to_menu_selected")):

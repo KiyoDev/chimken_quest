@@ -5,12 +5,7 @@ signal menu_selected;
 
 @onready var NameLabel := $Layout/Container/Name;
 
-# reference to Menu scene / or use $Menu? 
 
-@export var focused_selectable : Sprite2D;
-@export var focused_unselectable : Sprite2D;
-@export var unfocused_selectable : Sprite2D;
-@export var unfocused_unselectable : Sprite2D;
 @export var Menu : Menu;
 
 

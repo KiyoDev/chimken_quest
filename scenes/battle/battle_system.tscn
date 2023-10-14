@@ -10,7 +10,7 @@
 script = ExtResource("1_3ul8d")
 metadata/_edit_vertical_guides_ = []
 
-[node name="dummy" type="Node2D" parent="."]
+[node name="dummy" type="CharacterBody2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_jgbtj")
 

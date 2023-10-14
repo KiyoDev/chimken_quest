@@ -1,14 +1,13 @@
 class_name ConfirmOption extends OptionBase
 
 
+signal option_confirmed;
+
+
 #@onready var Sprite : Sprite2D = $Sprite2D;
 @onready var NameLabel := $Layout/Container/Name;
 
-@export var action : ActionDefinition:
-	set(act):
-		action = act;
-	get:
-		return action;
+@export var accept := true;
 
 
 func _ready():
@@ -16,7 +15,7 @@ func _ready():
 
 
 func _selected():
-	pass;
+	option_confirmed.emit(accept);
 
 
 func _focus():

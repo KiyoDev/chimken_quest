@@ -1,0 +1,17 @@
+[remap]
+
+importer="dt.abfi"
+type="FontFile"
+uid="uid://dkd16xl6tpv0l"
+path="res://.godot/imported/white_font_small_filled.png-1e4ace6ff4bedf1d518f0dae8a4e1413.fontdata"
+
+[deps]
+
+source_file="res://assets/fonts/white_font_small_filled.png"
+dest_files=["res://.godot/imported/white_font_small_filled.png-1e4ace6ff4bedf1d518f0dae8a4e1413.fontdata"]
+
+[params]
+
+ranges=PackedStringArray(" -~")
+letter_spacing=0
+mipmaps=false

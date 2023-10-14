@@ -1,134 +1,30 @@
-[gd_scene load_steps=25 format=3 uid="uid://ca8xdo7didik8"]
+[gd_scene load_steps=14 format=3 uid="uid://ca8xdo7didik8"]
 
 [ext_resource type="Script" path="res://scripts/ui/menus/menu.gd" id="1_2mc5k"]
 [ext_resource type="Script" path="res://scripts/ui/menus/action_option.gd" id="3_af8un"]
+[ext_resource type="FontFile" uid="uid://dkd16xl6tpv0l" path="res://assets/fonts/white_font_small_filled.png" id="3_m72eg"]
 [ext_resource type="Theme" uid="uid://1qeq3n04pcoe" path="res://assets/fonts/battle_ui.theme" id="3_ui3bp"]
 [ext_resource type="Texture2D" uid="uid://b17a46f72xa3s" path="res://assets/battle/ui/chimken_battle_actions_title.png" id="3_x4ljg"]
 [ext_resource type="Script" path="res://scripts/ui/menus/separated_submenu_option.gd" id="4_opylm"]
 [ext_resource type="Texture2D" uid="uid://bgfifx7n7sr7q" path="res://assets/battle/ui/chimken_battle_label_background_selectable.png" id="5_h83ow"]
-[ext_resource type="Texture2D" uid="uid://bkfp7mvsvqofw" path="res://assets/battle/ui/chimken_battle_label_background_unselectable.png" id="6_8iq7s"]
-[ext_resource type="Texture2D" uid="uid://cveehm54xofd1" path="res://assets/battle/ui/chimken_battle_attacks_title.png" id="6_bd7sd"]
-[ext_resource type="Texture2D" uid="uid://tmecff3vjw6" path="res://assets/battle/ui/chimken_battle_skills_title.png" id="9_otcfm"]
-[ext_resource type="Texture2D" uid="uid://f8myetpspf7i" path="res://assets/battle/ui/chimken_battle_items_title.png" id="10_mdg65"]
 [ext_resource type="Script" path="res://scripts/ui/menus/item_option.gd" id="10_t50w4"]
 [ext_resource type="PackedScene" uid="uid://b0chtymgiamjd" path="res://scenes/ui/ui_menu_background.tscn" id="12_21wyt"]
 [ext_resource type="PackedScene" uid="uid://d4fcp74bnegbd" path="res://scenes/ui/ui_menu_option_background.tscn" id="12_q1s6e"]
-[ext_resource type="Texture2D" uid="uid://c2qsnq8uhw7yn" path="res://assets/battle/ui/chimken_items_phoenix_burger.png" id="15_2bi4t"]
-[ext_resource type="Texture2D" uid="uid://beh61i7s778os" path="res://assets/battle/ui/chimken_battle_escape_title.png" id="15_2ioqc"]
+[ext_resource type="Texture2D" uid="uid://d2w1dryhgxhl8" path="res://assets/battle/ui/chimken_items_phoenix_burger_8x8.png" id="13_fh7n2"]
 [ext_resource type="Script" path="res://scripts/ui/menus/confirm_option.gd" id="16_7syk2"]
 
-[sub_resource type="Animation" id="Animation_1sfn4"]
-resource_name = "focused_selectable"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("OptionBackground:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("5_h83ow")]
-}
-
-[sub_resource type="Animation" id="Animation_8rsf4"]
-resource_name = "focused_unselectable"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("OptionBackground:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("6_8iq7s")]
-}
-
-[sub_resource type="Animation" id="Animation_fe33o"]
-resource_name = "unfocused"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("OptionBackground:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [null]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_fvxpe"]
-_data = {
-"focused_selectable": SubResource("Animation_1sfn4"),
-"focused_unselectable": SubResource("Animation_8rsf4"),
-"unfocused": SubResource("Animation_fe33o")
-}
-
-[sub_resource type="Animation" id="Animation_2kpvs"]
-resource_name = "focused_selectable"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("OptionBackground:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("5_h83ow")]
-}
-
-[sub_resource type="Animation" id="Animation_y4dmw"]
-resource_name = "focused_unselectable"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("OptionBackground:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("6_8iq7s")]
-}
-
-[sub_resource type="Animation" id="Animation_v8hfr"]
-resource_name = "unfocused"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("OptionBackground:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [null]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_bxwqx"]
-_data = {
-"focused_selectable": SubResource("Animation_2kpvs"),
-"focused_unselectable": SubResource("Animation_y4dmw"),
-"unfocused": SubResource("Animation_v8hfr")
-}
+[sub_resource type="Theme" id="Theme_idwei"]
+default_font = ExtResource("3_m72eg")
 
 [node name="Container" type="Node2D"]
 texture_filter = 1
 
 [node name="MainMenu" type="MarginContainer" parent="."]
-offset_right = 95.0
-offset_bottom = 147.0
+offset_right = 65.0
+offset_bottom = 93.0
 
 [node name="BattleMenu" type="MarginContainer" parent="MainMenu"]
+unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("1_2mc5k")
@@ -136,20 +32,23 @@ select_wrap = true
 escapeable = false
 
 [node name="Background" parent="MainMenu/BattleMenu" instance=ExtResource("12_21wyt")]
-texture_filter = 1
 layout_mode = 2
 
 [node name="MenuLayout" type="VBoxContainer" parent="MainMenu/BattleMenu"]
 layout_mode = 2
+theme_override_constants/separation = 0
 
 [node name="Spacer" type="MarginContainer" parent="MainMenu/BattleMenu/MenuLayout"]
 layout_mode = 2
-theme_override_constants/margin_top = 10
+theme_override_constants/margin_top = 15
 
-[node name="Title" type="TextureRect" parent="MainMenu/BattleMenu/MenuLayout"]
+[node name="Title" type="Label" parent="MainMenu/BattleMenu/MenuLayout"]
 layout_mode = 2
-texture = ExtResource("3_x4ljg")
-stretch_mode = 3
+size_flags_vertical = 1
+theme = SubResource("Theme_idwei")
+text = "  ACTIONS "
+horizontal_alignment = 1
+uppercase = true
 
 [node name="Options" type="MarginContainer" parent="MainMenu/BattleMenu/MenuLayout"]
 layout_mode = 2
@@ -161,13 +60,15 @@ theme_override_constants/margin_bottom = 8
 
 [node name="Container" type="VBoxContainer" parent="MainMenu/BattleMenu/MenuLayout/Options"]
 layout_mode = 2
+theme_override_constants/separation = 0
 alignment = 1
 
 [node name="Attacks" type="MarginContainer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container" node_paths=PackedStringArray("Menu")]
+unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("4_opylm")
-Menu = NodePath("../../../../../../SubMenu/AttacksMenu")
+Menu = NodePath("../../../../../../SubMenus/AttacksMenu")
 
 [node name="OptionBackground" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Attacks" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
@@ -192,16 +93,12 @@ size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "ATTACKS"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Attacks"]
-libraries = {
-"": SubResource("AnimationLibrary_fvxpe")
-}
-
 [node name="Skills" type="MarginContainer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container" node_paths=PackedStringArray("Menu")]
+unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("4_opylm")
-Menu = NodePath("../../../../../../SubMenu/SkillsMenu")
+Menu = NodePath("../../../../../../SubMenus/SkillsMenu")
 
 [node name="OptionBackground" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Skills" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
@@ -226,16 +123,12 @@ size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "SKILLS"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Skills"]
-libraries = {
-"": SubResource("AnimationLibrary_fvxpe")
-}
-
 [node name="Items" type="MarginContainer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container" node_paths=PackedStringArray("Menu")]
+unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("4_opylm")
-Menu = NodePath("../../../../../../SubMenu/ItemsMenu")
+Menu = NodePath("../../../../../../SubMenus/ItemsMenu")
 
 [node name="OptionBackground" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Items" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
@@ -260,16 +153,12 @@ size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "ITEMS"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Items"]
-libraries = {
-"": SubResource("AnimationLibrary_fvxpe")
-}
-
 [node name="Escape" type="MarginContainer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container" node_paths=PackedStringArray("Menu")]
+unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("4_opylm")
-Menu = NodePath("../../../../../../SubMenu/EscapeMenu")
+Menu = NodePath("../../../../../../SubMenus/EscapeMenu")
 
 [node name="OptionBackground" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Escape" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
@@ -294,160 +183,162 @@ size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "ESCAPE"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Escape"]
-libraries = {
-"": SubResource("AnimationLibrary_fvxpe")
-}
+[node name="TitleOld" type="TextureRect" parent="MainMenu/BattleMenu/MenuLayout"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_x4ljg")
+stretch_mode = 3
 
-[node name="SubMenu" type="Node2D" parent="."]
+[node name="SubMenus" type="Node2D" parent="."]
 position = Vector2(103, 0)
 
-[node name="AttacksMenu" type="MarginContainer" parent="SubMenu"]
-offset_right = 94.0
-offset_bottom = 91.0
+[node name="AttacksMenu" type="MarginContainer" parent="SubMenus"]
+visible = false
+offset_left = -30.0
+offset_right = 44.0
+offset_bottom = 69.0
+theme_override_constants/margin_bottom = 0
 script = ExtResource("1_2mc5k")
 select_wrap = true
 
-[node name="Background" parent="SubMenu/AttacksMenu" instance=ExtResource("12_21wyt")]
-texture_filter = 1
+[node name="Background" parent="SubMenus/AttacksMenu" instance=ExtResource("12_21wyt")]
 layout_mode = 2
 
-[node name="MenuLayout" type="VBoxContainer" parent="SubMenu/AttacksMenu"]
+[node name="MenuLayout" type="VBoxContainer" parent="SubMenus/AttacksMenu"]
 layout_mode = 2
+theme_override_constants/separation = 0
 
-[node name="Spacer" type="MarginContainer" parent="SubMenu/AttacksMenu/MenuLayout"]
+[node name="Spacer" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout"]
 layout_mode = 2
-theme_override_constants/margin_top = 10
+theme_override_constants/margin_top = 15
 
-[node name="Title" type="TextureRect" parent="SubMenu/AttacksMenu/MenuLayout"]
+[node name="Title" type="Label" parent="SubMenus/AttacksMenu/MenuLayout"]
 layout_mode = 2
-texture = ExtResource("6_bd7sd")
-stretch_mode = 3
+size_flags_vertical = 1
+theme = SubResource("Theme_idwei")
+text = "  ATTACKS "
+horizontal_alignment = 1
+uppercase = true
 
-[node name="Options" type="MarginContainer" parent="SubMenu/AttacksMenu/MenuLayout"]
+[node name="Options" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout"]
 layout_mode = 2
-size_flags_vertical = 3
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="Container" type="VBoxContainer" parent="SubMenu/AttacksMenu/MenuLayout/Options"]
+[node name="Container" type="VBoxContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options"]
 layout_mode = 2
+theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Slash" type="MarginContainer" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container"]
+[node name="Slash" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container"]
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("3_af8un")
 
-[node name="OptionBackground" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container/Slash" instance=ExtResource("12_q1s6e")]
+[node name="OptionBackground" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Slash" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
 texture = ExtResource("5_h83ow")
 patch_margin_left = 8
 patch_margin_right = 8
 patch_margin_bottom = 4
 
-[node name="Layout" type="MarginContainer" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container/Slash"]
+[node name="Layout" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Slash"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = -2
 
-[node name="Container" type="HBoxContainer" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container/Slash/Layout"]
+[node name="Container" type="HBoxContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Slash/Layout"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container/Slash/Layout/Container"]
+[node name="Name" type="Label" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Slash/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "SLASH"
+uppercase = true
 
-[node name="Spacer" type="MarginContainer" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container/Slash/Layout/Container"]
+[node name="Spacer" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Slash/Layout/Container"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 
-[node name="Cost" type="Label" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container/Slash/Layout/Container"]
+[node name="Cost" type="Label" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Slash/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 horizontal_alignment = 2
+uppercase = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container/Slash"]
-libraries = {
-"": SubResource("AnimationLibrary_fvxpe")
-}
-
-[node name="Peck" type="MarginContainer" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container"]
+[node name="Peck" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container"]
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("3_af8un")
 
-[node name="OptionBackground" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container/Peck" instance=ExtResource("12_q1s6e")]
+[node name="OptionBackground" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Peck" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
 texture = ExtResource("5_h83ow")
 patch_margin_left = 8
 patch_margin_right = 8
 patch_margin_bottom = 4
 
-[node name="Layout" type="MarginContainer" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container/Peck"]
+[node name="Layout" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Peck"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = -2
 
-[node name="Container" type="HBoxContainer" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container/Peck/Layout"]
+[node name="Container" type="HBoxContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Peck/Layout"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container/Peck/Layout/Container"]
+[node name="Name" type="Label" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Peck/Layout/Container"]
 layout_mode = 2
 theme = ExtResource("3_ui3bp")
 text = "PECK"
+uppercase = true
 
-[node name="Spacer" type="MarginContainer" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container/Peck/Layout/Container"]
+[node name="Spacer" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Peck/Layout/Container"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 
-[node name="Cost" type="Label" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container/Peck/Layout/Container"]
+[node name="Cost" type="Label" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Peck/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 horizontal_alignment = 2
+uppercase = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container/Peck"]
-libraries = {
-"": SubResource("AnimationLibrary_bxwqx")
-}
-
-[node name="CursorPosition" type="Node2D" parent="SubMenu/AttacksMenu/MenuLayout/Options/Container/Peck"]
-position = Vector2(-12, 8)
-
-[node name="SkillsMenu" type="MarginContainer" parent="SubMenu"]
+[node name="SkillsMenu" type="MarginContainer" parent="SubMenus"]
 visible = false
-offset_right = 204.0
-offset_bottom = 147.0
+offset_left = -30.0
+offset_right = 104.0
+offset_bottom = 101.0
 script = ExtResource("1_2mc5k")
 select_wrap = true
 
-[node name="Background" parent="SubMenu/SkillsMenu" instance=ExtResource("12_21wyt")]
-texture_filter = 1
+[node name="Background" parent="SubMenus/SkillsMenu" instance=ExtResource("12_21wyt")]
 layout_mode = 2
 
-[node name="MenuLayout" type="VBoxContainer" parent="SubMenu/SkillsMenu"]
+[node name="MenuLayout" type="VBoxContainer" parent="SubMenus/SkillsMenu"]
 layout_mode = 2
+theme_override_constants/separation = 0
 
-[node name="Spacer" type="MarginContainer" parent="SubMenu/SkillsMenu/MenuLayout"]
+[node name="Spacer" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout"]
 layout_mode = 2
-theme_override_constants/margin_top = 10
+theme_override_constants/margin_top = 15
 
-[node name="Title" type="TextureRect" parent="SubMenu/SkillsMenu/MenuLayout"]
+[node name="Title" type="Label" parent="SubMenus/SkillsMenu/MenuLayout"]
 layout_mode = 2
-texture = ExtResource("9_otcfm")
-stretch_mode = 3
+size_flags_vertical = 1
+theme = SubResource("Theme_idwei")
+text = "  SKILLS "
+horizontal_alignment = 1
+uppercase = true
 
-[node name="Options" type="MarginContainer" parent="SubMenu/SkillsMenu/MenuLayout"]
+[node name="Options" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 8
@@ -455,219 +346,204 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="Container" type="VBoxContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options"]
+[node name="Container" type="VBoxContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options"]
 layout_mode = 2
+theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Chain Frost" type="MarginContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container"]
+[node name="Chain Frost" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container"]
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("3_af8un")
 
-[node name="OptionBackground" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Frost" instance=ExtResource("12_q1s6e")]
+[node name="OptionBackground" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Frost" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
 texture = ExtResource("5_h83ow")
 patch_margin_left = 8
 patch_margin_right = 8
 patch_margin_bottom = 4
 
-[node name="Layout" type="MarginContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Frost"]
+[node name="Layout" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Frost"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = -2
 
-[node name="Container" type="HBoxContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Frost/Layout"]
+[node name="Container" type="HBoxContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Frost/Layout"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Frost/Layout/Container"]
+[node name="Name" type="Label" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Frost/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "CHAIN FROST
 "
+uppercase = true
 
-[node name="Spacer" type="MarginContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Frost/Layout/Container"]
+[node name="Spacer" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Frost/Layout/Container"]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 
-[node name="Cost" type="Label" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Frost/Layout/Container"]
+[node name="Cost" type="Label" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Frost/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "20"
 horizontal_alignment = 2
+uppercase = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Frost"]
-libraries = {
-"": SubResource("AnimationLibrary_fvxpe")
-}
-
-[node name="Chain Lightning" type="MarginContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container"]
+[node name="Chain Lightning" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container"]
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("3_af8un")
 
-[node name="OptionBackground" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Lightning" instance=ExtResource("12_q1s6e")]
+[node name="OptionBackground" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Lightning" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
 texture = ExtResource("5_h83ow")
 patch_margin_left = 8
 patch_margin_right = 8
 patch_margin_bottom = 4
 
-[node name="Layout" type="MarginContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Lightning"]
+[node name="Layout" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Lightning"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = -2
 
-[node name="Container" type="HBoxContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Lightning/Layout"]
+[node name="Container" type="HBoxContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Lightning/Layout"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Lightning/Layout/Container"]
+[node name="Name" type="Label" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Lightning/Layout/Container"]
 layout_mode = 2
 theme = ExtResource("3_ui3bp")
 text = "CHAIN LIGHTNING"
+uppercase = true
 
-[node name="Spacer" type="MarginContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Lightning/Layout/Container"]
+[node name="Spacer" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Lightning/Layout/Container"]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 
-[node name="Cost" type="Label" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Lightning/Layout/Container"]
+[node name="Cost" type="Label" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Lightning/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "20"
 horizontal_alignment = 2
+uppercase = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Lightning"]
-libraries = {
-"": SubResource("AnimationLibrary_bxwqx")
-}
-
-[node name="CursorPosition" type="Node2D" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Lightning"]
-position = Vector2(-12, 8)
-
-[node name="Chain Inferno" type="MarginContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container"]
+[node name="Chain Inferno" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container"]
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("3_af8un")
 
-[node name="OptionBackground" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Inferno" instance=ExtResource("12_q1s6e")]
+[node name="OptionBackground" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Inferno" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
 texture = ExtResource("5_h83ow")
 patch_margin_left = 8
 patch_margin_right = 8
 patch_margin_bottom = 4
 
-[node name="Layout" type="MarginContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Inferno"]
+[node name="Layout" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Inferno"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = -2
 
-[node name="Container" type="HBoxContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Inferno/Layout"]
+[node name="Container" type="HBoxContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Inferno/Layout"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Inferno/Layout/Container"]
+[node name="Name" type="Label" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Inferno/Layout/Container"]
 layout_mode = 2
 theme = ExtResource("3_ui3bp")
 text = "CHAIN INFERNO"
+uppercase = true
 
-[node name="Spacer" type="MarginContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Inferno/Layout/Container"]
+[node name="Spacer" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Inferno/Layout/Container"]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 
-[node name="Cost" type="Label" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Inferno/Layout/Container"]
+[node name="Cost" type="Label" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Chain Inferno/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "20"
 horizontal_alignment = 2
+uppercase = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Inferno"]
-libraries = {
-"": SubResource("AnimationLibrary_bxwqx")
-}
-
-[node name="CursorPosition" type="Node2D" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Chain Inferno"]
-position = Vector2(-12, 8)
-
-[node name="Focus" type="MarginContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container"]
+[node name="Focus" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container"]
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("3_af8un")
 
-[node name="OptionBackground" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Focus" instance=ExtResource("12_q1s6e")]
+[node name="OptionBackground" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Focus" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
 texture = ExtResource("5_h83ow")
 patch_margin_left = 8
 patch_margin_right = 8
 patch_margin_bottom = 4
 
-[node name="Layout" type="MarginContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Focus"]
+[node name="Layout" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Focus"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = -2
 
-[node name="Container" type="HBoxContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Focus/Layout"]
+[node name="Container" type="HBoxContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Focus/Layout"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Focus/Layout/Container"]
+[node name="Name" type="Label" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Focus/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "FOCUS"
+uppercase = true
 
-[node name="Spacer" type="MarginContainer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Focus/Layout/Container"]
+[node name="Spacer" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Focus/Layout/Container"]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 
-[node name="Cost" type="Label" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Focus/Layout/Container"]
+[node name="Cost" type="Label" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/Focus/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "5
 "
 horizontal_alignment = 2
+uppercase = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Focus"]
-libraries = {
-"": SubResource("AnimationLibrary_bxwqx")
-}
-
-[node name="CursorPosition" type="Node2D" parent="SubMenu/SkillsMenu/MenuLayout/Options/Container/Focus"]
-position = Vector2(-12, 8)
-
-[node name="ItemsMenu" type="MarginContainer" parent="SubMenu"]
+[node name="ItemsMenu" type="MarginContainer" parent="SubMenus"]
 visible = false
-offset_right = 203.0
-offset_bottom = 63.0
+offset_left = -30.0
+offset_right = 109.0
+offset_bottom = 53.0
 script = ExtResource("1_2mc5k")
 select_wrap = true
 
-[node name="Background" parent="SubMenu/ItemsMenu" instance=ExtResource("12_21wyt")]
-texture_filter = 1
+[node name="Background" parent="SubMenus/ItemsMenu" instance=ExtResource("12_21wyt")]
 layout_mode = 2
 
-[node name="MenuLayout" type="VBoxContainer" parent="SubMenu/ItemsMenu"]
+[node name="MenuLayout" type="VBoxContainer" parent="SubMenus/ItemsMenu"]
 layout_mode = 2
+theme_override_constants/separation = 0
 
-[node name="Spacer" type="MarginContainer" parent="SubMenu/ItemsMenu/MenuLayout"]
+[node name="Spacer" type="MarginContainer" parent="SubMenus/ItemsMenu/MenuLayout"]
 layout_mode = 2
-theme_override_constants/margin_top = 10
+theme_override_constants/margin_top = 15
 
-[node name="Title" type="TextureRect" parent="SubMenu/ItemsMenu/MenuLayout"]
+[node name="Title" type="Label" parent="SubMenus/ItemsMenu/MenuLayout"]
 layout_mode = 2
-texture = ExtResource("10_mdg65")
-stretch_mode = 3
+size_flags_vertical = 1
+theme = SubResource("Theme_idwei")
+text = "  ITEMS 
+"
+horizontal_alignment = 1
+uppercase = true
 
-[node name="Options" type="MarginContainer" parent="SubMenu/ItemsMenu/MenuLayout"]
+[node name="Options" type="MarginContainer" parent="SubMenus/ItemsMenu/MenuLayout"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 8
@@ -675,84 +551,85 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="Container" type="VBoxContainer" parent="SubMenu/ItemsMenu/MenuLayout/Options"]
+[node name="Container" type="VBoxContainer" parent="SubMenus/ItemsMenu/MenuLayout/Options"]
 layout_mode = 2
 alignment = 1
 
-[node name="Phoenix Burger" type="MarginContainer" parent="SubMenu/ItemsMenu/MenuLayout/Options/Container"]
+[node name="Phoenix Burger" type="MarginContainer" parent="SubMenus/ItemsMenu/MenuLayout/Options/Container"]
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("10_t50w4")
 
-[node name="OptionBackground" parent="SubMenu/ItemsMenu/MenuLayout/Options/Container/Phoenix Burger" instance=ExtResource("12_q1s6e")]
+[node name="OptionBackground" parent="SubMenus/ItemsMenu/MenuLayout/Options/Container/Phoenix Burger" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
 texture = ExtResource("5_h83ow")
 patch_margin_left = 8
 patch_margin_right = 8
 patch_margin_bottom = 4
 
-[node name="Layout" type="MarginContainer" parent="SubMenu/ItemsMenu/MenuLayout/Options/Container/Phoenix Burger"]
+[node name="Layout" type="MarginContainer" parent="SubMenus/ItemsMenu/MenuLayout/Options/Container/Phoenix Burger"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = -2
 
-[node name="Container" type="HBoxContainer" parent="SubMenu/ItemsMenu/MenuLayout/Options/Container/Phoenix Burger/Layout"]
+[node name="Container" type="HBoxContainer" parent="SubMenus/ItemsMenu/MenuLayout/Options/Container/Phoenix Burger/Layout"]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="SubMenu/ItemsMenu/MenuLayout/Options/Container/Phoenix Burger/Layout/Container"]
+[node name="TextureRect" type="TextureRect" parent="SubMenus/ItemsMenu/MenuLayout/Options/Container/Phoenix Burger/Layout/Container"]
 layout_mode = 2
-texture = ExtResource("15_2bi4t")
+texture = ExtResource("13_fh7n2")
 stretch_mode = 2
 
-[node name="Name" type="Label" parent="SubMenu/ItemsMenu/MenuLayout/Options/Container/Phoenix Burger/Layout/Container"]
+[node name="Name" type="Label" parent="SubMenus/ItemsMenu/MenuLayout/Options/Container/Phoenix Burger/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "PHOENIX BURGER"
+uppercase = true
 
-[node name="Spacer" type="MarginContainer" parent="SubMenu/ItemsMenu/MenuLayout/Options/Container/Phoenix Burger/Layout/Container"]
+[node name="Spacer" type="MarginContainer" parent="SubMenus/ItemsMenu/MenuLayout/Options/Container/Phoenix Burger/Layout/Container"]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 
-[node name="Quantity" type="Label" parent="SubMenu/ItemsMenu/MenuLayout/Options/Container/Phoenix Burger/Layout/Container"]
+[node name="Quantity" type="Label" parent="SubMenus/ItemsMenu/MenuLayout/Options/Container/Phoenix Burger/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "3"
 horizontal_alignment = 2
+uppercase = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="SubMenu/ItemsMenu/MenuLayout/Options/Container/Phoenix Burger"]
-libraries = {
-"": SubResource("AnimationLibrary_fvxpe")
-}
-
-[node name="EscapeMenu" type="MarginContainer" parent="SubMenu"]
+[node name="EscapeMenu" type="MarginContainer" parent="SubMenus"]
 visible = false
-offset_right = 94.0
-offset_bottom = 40.0
+offset_left = -30.0
+offset_right = 64.0
+offset_bottom = 53.0
 size_flags_horizontal = 3
 script = ExtResource("1_2mc5k")
 select_wrap = true
 
-[node name="Background" parent="SubMenu/EscapeMenu" instance=ExtResource("12_21wyt")]
-texture_filter = 1
+[node name="Background" parent="SubMenus/EscapeMenu" instance=ExtResource("12_21wyt")]
 layout_mode = 2
 
-[node name="MenuLayout" type="VBoxContainer" parent="SubMenu/EscapeMenu"]
+[node name="MenuLayout" type="VBoxContainer" parent="SubMenus/EscapeMenu"]
 layout_mode = 2
+theme_override_constants/separation = 0
 
-[node name="Spacer" type="MarginContainer" parent="SubMenu/EscapeMenu/MenuLayout"]
+[node name="Spacer" type="MarginContainer" parent="SubMenus/EscapeMenu/MenuLayout"]
 layout_mode = 2
-theme_override_constants/margin_top = 10
+theme_override_constants/margin_top = 15
 
-[node name="Title" type="TextureRect" parent="SubMenu/EscapeMenu/MenuLayout"]
+[node name="Title" type="Label" parent="SubMenus/EscapeMenu/MenuLayout"]
 layout_mode = 2
-texture = ExtResource("15_2ioqc")
-stretch_mode = 3
+size_flags_vertical = 1
+theme = SubResource("Theme_idwei")
+text = "  Escape? "
+horizontal_alignment = 1
+uppercase = true
 
-[node name="Options" type="MarginContainer" parent="SubMenu/EscapeMenu/MenuLayout"]
+[node name="Options" type="MarginContainer" parent="SubMenus/EscapeMenu/MenuLayout"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 8
@@ -760,73 +637,67 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="Container" type="HBoxContainer" parent="SubMenu/EscapeMenu/MenuLayout/Options"]
+[node name="Container" type="HBoxContainer" parent="SubMenus/EscapeMenu/MenuLayout/Options"]
 layout_mode = 2
 alignment = 1
 
-[node name="Yes" type="MarginContainer" parent="SubMenu/EscapeMenu/MenuLayout/Options/Container"]
+[node name="Yes" type="MarginContainer" parent="SubMenus/EscapeMenu/MenuLayout/Options/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("16_7syk2")
 
-[node name="OptionBackground" parent="SubMenu/EscapeMenu/MenuLayout/Options/Container/Yes" instance=ExtResource("12_q1s6e")]
+[node name="OptionBackground" parent="SubMenus/EscapeMenu/MenuLayout/Options/Container/Yes" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
 texture = ExtResource("5_h83ow")
 patch_margin_left = 8
 patch_margin_right = 8
 patch_margin_bottom = 4
 
-[node name="Layout" type="MarginContainer" parent="SubMenu/EscapeMenu/MenuLayout/Options/Container/Yes"]
+[node name="Layout" type="MarginContainer" parent="SubMenus/EscapeMenu/MenuLayout/Options/Container/Yes"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = -2
 
-[node name="Container" type="HBoxContainer" parent="SubMenu/EscapeMenu/MenuLayout/Options/Container/Yes/Layout"]
+[node name="Container" type="HBoxContainer" parent="SubMenus/EscapeMenu/MenuLayout/Options/Container/Yes/Layout"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="SubMenu/EscapeMenu/MenuLayout/Options/Container/Yes/Layout/Container"]
+[node name="Name" type="Label" parent="SubMenus/EscapeMenu/MenuLayout/Options/Container/Yes/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "YES"
+horizontal_alignment = 1
+uppercase = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="SubMenu/EscapeMenu/MenuLayout/Options/Container/Yes"]
-libraries = {
-"": SubResource("AnimationLibrary_fvxpe")
-}
-
-[node name="No" type="MarginContainer" parent="SubMenu/EscapeMenu/MenuLayout/Options/Container"]
+[node name="No" type="MarginContainer" parent="SubMenus/EscapeMenu/MenuLayout/Options/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("16_7syk2")
+accept = false
 
-[node name="OptionBackground" parent="SubMenu/EscapeMenu/MenuLayout/Options/Container/No" instance=ExtResource("12_q1s6e")]
+[node name="OptionBackground" parent="SubMenus/EscapeMenu/MenuLayout/Options/Container/No" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
 texture = ExtResource("5_h83ow")
 patch_margin_left = 8
 patch_margin_right = 8
 patch_margin_bottom = 4
 
-[node name="Layout" type="MarginContainer" parent="SubMenu/EscapeMenu/MenuLayout/Options/Container/No"]
+[node name="Layout" type="MarginContainer" parent="SubMenus/EscapeMenu/MenuLayout/Options/Container/No"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = -2
 
-[node name="Container" type="HBoxContainer" parent="SubMenu/EscapeMenu/MenuLayout/Options/Container/No/Layout"]
+[node name="Container" type="HBoxContainer" parent="SubMenus/EscapeMenu/MenuLayout/Options/Container/No/Layout"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="SubMenu/EscapeMenu/MenuLayout/Options/Container/No/Layout/Container"]
+[node name="Name" type="Label" parent="SubMenus/EscapeMenu/MenuLayout/Options/Container/No/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = " NO "
 horizontal_alignment = 1
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="SubMenu/EscapeMenu/MenuLayout/Options/Container/No"]
-libraries = {
-"": SubResource("AnimationLibrary_fvxpe")
-}
+uppercase = true

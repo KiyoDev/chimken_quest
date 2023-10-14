@@ -24,12 +24,17 @@ MenuController="res://scenes/ui/menu_controller.tscn"
 
 [display]
 
-window/size/viewport_width=960
-window/size/viewport_height=540
+window/size/viewport_width=320
+window/size/viewport_height=180
+window/stretch/mode="viewport"
 
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/Todo_Manager/plugin.cfg", "res://addons/abfi/plugin.cfg", "res://addons/gut/plugin.cfg")
+
+[gui]
+
+theme/default_font_subpixel_positioning=0
 
 [input]
 

@@ -1,0 +1,132 @@
+[gd_scene load_steps=11 format=3 uid="uid://bngn13q3fumrm"]
+
+[ext_resource type="Script" path="res://scripts/chimken/player.gd" id="1_bpt30"]
+[ext_resource type="Texture2D" uid="uid://bqmc5kate6lp8" path="res://assets/characters/chimken_sheet.png" id="3_x8jgi"]
+
+[sub_resource type="Animation" id="Animation_e14g4"]
+resource_name = "idle_down"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [13]
+}
+
+[sub_resource type="Animation" id="Animation_san7q"]
+resource_name = "idle_horizontal"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [45]
+}
+
+[sub_resource type="Animation" id="Animation_auu6v"]
+resource_name = "idle_up"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [29]
+}
+
+[sub_resource type="Animation" id="Animation_oyfes"]
+resource_name = "walk_down"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [14, 13, 15, 13]
+}
+
+[sub_resource type="Animation" id="Animation_vyroo"]
+resource_name = "walk_horizontal"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [46, 45, 47, 45]
+}
+
+[sub_resource type="Animation" id="Animation_vugki"]
+resource_name = "walk_up"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [30, 29, 31, 29]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jx7h6"]
+_data = {
+"idle_down": SubResource("Animation_e14g4"),
+"idle_horizontal": SubResource("Animation_san7q"),
+"idle_up": SubResource("Animation_auu6v"),
+"walk_down": SubResource("Animation_oyfes"),
+"walk_horizontal": SubResource("Animation_vyroo"),
+"walk_up": SubResource("Animation_vugki")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s5tcc"]
+size = Vector2(16, 8)
+
+[node name="Chimken" type="CharacterBody2D"]
+texture_filter = 1
+script = ExtResource("1_bpt30")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_x8jgi")
+hframes = 16
+vframes = 8
+frame = 29
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_jx7h6")
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 12)
+shape = SubResource("RectangleShape2D_s5tcc")

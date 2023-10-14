@@ -1,4 +1,4 @@
-class_name Character extends Node2D
+class_name Character extends CharacterBody2D
 
 
 @onready var n_sprite := $Sprite2D;

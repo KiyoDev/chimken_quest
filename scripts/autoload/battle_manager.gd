@@ -1,9 +1,13 @@
 extends Node
 
 
+signal battle_started;
+signal battle_ended;
+
+
 @onready var BattleUI = %BattleUI;
-@onready var MenuContainer = %BattleUI/Container/MainMenu;
-@onready var SubMenuContainer = %BattleUI/Container/SubMenu;
+#@onready var MenuContainer = %BattleUI/Container/MainMenu;
+#@onready var SubMenuContainer = %BattleUI/Container/SubMenu;
 @onready var AllyContainer := $AllyContainer;
 @onready var EnemyContainer := $EnemyContainer;
 
@@ -13,6 +17,8 @@ extends Node
 @export var enemy_turns : Array[EnemyTurn] = []
 
 @export var current_actor : Character;
+
+var battle_menu_manager : BattleMenuManager;
 
 var round := 0;
 var in_battle := false;
@@ -24,15 +30,22 @@ var in_battle := false;
 
 
 func _ready():
-	BattleUI.show();
-	BattleUI.add_child(BattleMenuTest);
-	BattleUI.add_child(Cursor);
-	pass
+	get_viewport();
+	battle_menu_manager = BattleMenuManager.new();
+	battle_menu_manager.show();
+	add_child(battle_menu_manager);
+	DisplayServer.window_set_min_size(Vector2i(960, 540))
+#	Window.min_size = Vector2i(960, 540);
+#	BattleUI.show();
+#	BattleUI.add_child(BattleMenuTest);
+#	BattleUI.add_child(Cursor);
 
 
 func _input(event):
 	_test(event);
 	
+
+signal test_mp_change;
 
 
 func _test(event):
@@ -62,38 +75,35 @@ func _test(event):
 		init_battle(AllyContainer.get_children(), EnemyContainer.get_children());
 #		BattleUI.on_battle_start(AllyContainer.get_children(), EnemyContainer.get_children());
 
-		if(!Cursor.menu_open):
-#			Menu = BattleMenu;
-#				remove_child(get_node("Menu"));
-#				add_child(BattleMenu);
-#				curr_menu = BattleMenu;
-#			print("ctrl - Menu %s" % [get_node("Menu")]);
-			Cursor.open(BattleMenuTest.get_node("%BattleMenu"));
+#		if(!Cursor.menu_open):
+#			Cursor.open(BattleMenuTest.get_node("%BattleMenu"));
 	elif(event.is_action_pressed(&"test_battle_end")):
 		end_battle();
 		
-		if(Cursor.menu_open):
-			print("force exit menu");
-			Cursor.close();
+#		if(Cursor.menu_open):
+#			print("force exit menu");
+#			Cursor.close();
 	elif(event.is_action_pressed(&"test_battle_print")):
 		test_print();
 	
 	if(event is InputEventKey):
 		if((event as InputEventKey).keycode == KEY_O):
 			print("MenuController - O");
-			if(!Cursor.menu_open):
-	#			Menu = BattleMenu;
-#				remove_child(get_node("Menu"));
-#				add_child(BattleMenu);
-#				curr_menu = BattleMenu;
-	#			print("ctrl - Menu %s" % [get_node("Menu")]);
-	
-#				Cursor.open(BattleMenuTest);
-				Cursor.open(BattleMenuTest.get_child(0).get_child(0));
+			battle_menu_manager.on_battle_started();
+#			if(!Cursor.menu_open):
+#	#			Menu = BattleMenu;
+##				remove_child(get_node("Menu"));
+##				add_child(BattleMenu);
+##				curr_menu = BattleMenu;
+#	#			print("ctrl - Menu %s" % [get_node("Menu")]);
+#
+##				Cursor.open(BattleMenuTest);
+#				Cursor.open(BattleMenuTest.get_child(0).get_child(0));
 		elif((event as InputEventKey).keycode == KEY_Q):
-			if(Cursor.menu_open):
-				print("force exit menu");
-				Cursor.close();
+			battle_menu_manager.on_battle_ended();
+#			if(Cursor.menu_open):
+#				print("force exit menu");
+#				Cursor.close();
 	pass;
 
 @onready var test_chimken = preload("res://scenes/characters/test_character.tscn").instantiate();
@@ -135,6 +145,8 @@ func init_battle(allies, enemies):
 	# TODO: populate lists of actions for each character that can swap out when turns change
 	print("initializing battle...");
 	round = 0;
+	
+	# TODO: init character action label dictionary in BattleMenuManager;
 	
 	for a in allies:
 		ally_turns.append(AllyTurn.new(a as Character));

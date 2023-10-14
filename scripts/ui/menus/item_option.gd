@@ -1,6 +1,9 @@
 class_name ItemOption extends OptionBase
 
 
+signal item_selected;
+
+
 @onready var Icon : TextureRect = $Layout/Container/TextureRect;
 @onready var NameLabel := $Layout/Container/Name;
 @onready var QuantityLabel := $Layout/Container/Quantity;
@@ -17,7 +20,7 @@ func _ready():
 
 
 func _selected():
-	pass;
+	item_selected.emit(self);
 
 
 func _on_menu_closed():
