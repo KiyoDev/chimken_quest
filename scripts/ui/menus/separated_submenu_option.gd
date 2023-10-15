@@ -1,7 +1,6 @@
 class_name SeparatedSubmenuOption extends OptionBase
 # MenuController element that contains a label, sprite, and a submenu
 
-signal menu_selected;
 
 @onready var NameLabel := $Layout/Container/Name;
 
@@ -17,18 +16,21 @@ func _ready():
 #	print("CursorPosition %s" % [CursorPosition]);
 
 
-func connect_to_menu_selected(cursor : Cursor):
-#	if(obj.has_method("on_menu_selected")):
-#	if(obj.has_signal("menu_closed")):
-
-	menu_selected.connect(cursor.on_menu_selected);
-	cursor.menu_closed.connect(_on_menu_closed);
-	Menu.connect_cursor_to_menu(cursor);
-
-
+## Connect callable to this option's option_selected signal, as well as the menu's options' signals;
+func _connect_option_selected(callable):
+	option_selected.connect(callable);
+	Menu._connect_option_selected(callable);
+	
+	
+func _disconnect_option_selected(callable):
+	option_selected.disconnect(callable);
+	Menu._disconnect_option_selected(callable);
+	
+	
 func _selected():
-#	show();
-	menu_selected.emit(Menu);
+	print("_selected sep submenu '%s'" % [name]);
+	super._selected();
+#	menu_selected.emit(Menu);
 	return Menu._open();
 
 

@@ -23,10 +23,6 @@ func _ready():
 	_hide();
 
 
-func ping():
-	print("ping");
-
-
 func _navigate(move, horizontal):
 	if(!is_focused || Options.get_child_count() == 0): 
 		print("trying to navigate an unfocused menu....");
@@ -82,11 +78,18 @@ func get_option(index):
 	return Options.get_child(index);
 	
 	
-func connect_cursor_to_menu(cursor : Cursor):
+## Connect callable to all menu's options' signals
+func _connect_option_selected(callable):
 	for opt in Options.get_children():
-		if(opt.has_method("connect_to_menu_selected")):
-			opt.connect_to_menu_selected(cursor);
+#		print("connecting '%s' to '%s'" % [callable, opt]);
+		opt._connect_option_selected(callable);
 		
+		
+## Disconnect callable to all menu's options' signals
+func _disconnect_option_selected(callable):
+	for opt in Options.get_children():
+		opt._disconnect_option_selected(callable);
+
 
 func _focus():
 	is_focused = true;
@@ -138,13 +141,20 @@ func _hide():
 
 func _select_option():
 	if(Options.get_child_count() == 0): return;
+	var curr := _get_current_option();
+	print("opt - %s" % [curr]);
 	
+	var option = curr._selected();
+	print("option '%s'" % [option]);
+	if(option == null):
+		return null;
+		
 	_unfocus();
 	print("selecting option on '%s'[children=%s, i=%s]" % [name, Options.get_child_count(), focused_index]);
-	return _get_current_option()._selected();
+	return option;
 
 
-func _get_current_option():
+func _get_current_option() -> OptionBase:
 	return Options.get_child(focused_index);
 
 

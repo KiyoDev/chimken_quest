@@ -15,7 +15,9 @@ func _ready():
 
 
 func _selected():
+	super._selected();
 	option_confirmed.emit(accept);
+	return null; # TODO: implement
 
 
 func _focus():

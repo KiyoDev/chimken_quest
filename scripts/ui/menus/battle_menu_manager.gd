@@ -2,7 +2,8 @@ class_name BattleMenuManager extends CanvasLayer
 
 
 @onready var Cursor : Cursor = preload("res://scenes/ui/cursor.tscn").instantiate();
-@onready var BattleMenu := preload("res://scenes/ui/battle_menu.tscn").instantiate();
+@onready var BattleMenuContainer := preload("res://scenes/ui/battle_menu.tscn").instantiate();
+@onready var BattleMenu : Menu = BattleMenuContainer.get_node("%BattleMenu");
 #@onready var LabelBackground = preload("res://scenes/ui/ui_menu_option_background.tscn").instantiate();
 
 @onready var ActionOptionTemplate : ActionOption = preload("res://scenes/ui/menu_options/action_option_template.tscn").instantiate();
@@ -16,11 +17,11 @@ var character_actions := {};
 
 func _ready():
 	show();
-	add_child(BattleMenu);
+	add_child(BattleMenuContainer);
 	add_child(Cursor);
 	BattleSystem.battle_started.connect(on_battle_started);
 	BattleSystem.battle_ended.connect(on_battle_ended);
-	BattleMenu.global_position = Vector2(100, 0);
+	BattleMenuContainer.global_position = Vector2(100, 0);
 	
 # TODO: used for when using same menu and changing out the submenu options for actions
 func init_labels(characters : Array[Character]):
@@ -44,11 +45,30 @@ func setup_action_option(option : ActionOption, action : ActionDefinition) -> Ac
 	
 
 func on_battle_started():
-	Cursor.open(BattleMenu.get_node("%BattleMenu"));
+	print("Menu - %s" % [BattleMenu]);
+	BattleMenu._connect_option_selected(on_option_selected);
+	Cursor.open(BattleMenu);
+	Game.battle();
 
 
 func on_battle_ended():
+	BattleMenu._disconnect_option_selected(on_option_selected);
 	Cursor.close();
+	Game.overworld();
+
+
+# Signal Callables
+
+## 
+func on_option_selected(option : OptionBase, menu : Menu):
+	print("on_option_selected - %s from %s" % [option, menu]);
+	if(menu.name == "EscapeMenu"):
+		if(option.accept):
+			print("escape from battle");
+			on_battle_ended();
+		else:
+			print("cancelled escape");
+			Cursor.cancel_option();
 
 
 func on_action_selected(action_option : ActionOption):

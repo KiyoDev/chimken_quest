@@ -77,8 +77,12 @@ func _test(event):
 
 #		if(!Cursor.menu_open):
 #			Cursor.open(BattleMenuTest.get_node("%BattleMenu"));
+		battle_menu_manager.on_battle_started();
+		Game.battle();
 	elif(event.is_action_pressed(&"test_battle_end")):
 		end_battle();
+		battle_menu_manager.on_battle_ended();
+		Game.overworld();
 		
 #		if(Cursor.menu_open):
 #			print("force exit menu");
@@ -90,6 +94,7 @@ func _test(event):
 		if((event as InputEventKey).keycode == KEY_O):
 			print("MenuController - O");
 			battle_menu_manager.on_battle_started();
+			Game.battle();
 #			if(!Cursor.menu_open):
 #	#			Menu = BattleMenu;
 ##				remove_child(get_node("Menu"));
@@ -101,6 +106,7 @@ func _test(event):
 #				Cursor.open(BattleMenuTest.get_child(0).get_child(0));
 		elif((event as InputEventKey).keycode == KEY_Q):
 			battle_menu_manager.on_battle_ended();
+			Game.overworld();
 #			if(Cursor.menu_open):
 #				print("force exit menu");
 #				Cursor.close();

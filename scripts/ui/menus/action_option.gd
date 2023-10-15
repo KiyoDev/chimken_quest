@@ -20,7 +20,10 @@ func _ready():
 
 
 func _selected():
+	print("_selected action '%s'" % [name]);
+	super._selected();
 	action_selected.emit(self);
+	return null; # TODO: implement
 
 
 func _focus():

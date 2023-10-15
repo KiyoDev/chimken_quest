@@ -2,6 +2,7 @@ class_name Cursor extends Node2D
 
 
 signal focus_changed;
+signal option_selected;
 signal menu_closed;
 
 
@@ -85,7 +86,7 @@ func change_focus(next):
 
 func update_pos(option : OptionBase):
 #	print("updating cursor pos - [%s, %s]" % [global_position, option.global_position]);
-	global_position = Vector2(option.global_position.x - 4, option.global_position.y + (option.size.y / 2));
+	global_position = Vector2(option.global_position.x - 5, option.global_position.y + (option.size.y / 2));
 	
 
 func open(menu):
@@ -94,7 +95,10 @@ func open(menu):
 	menu_open = true;
 	curr_menu = menu;
 	_menu();
-	curr_menu.connect_cursor_to_menu(self);
+	curr_menu._connect_option_selected(on_option_selected);
+#	curr_menu.connect_cursor_to_menu(self);
+#	for opt in curr_menu.Options.get_children():
+#		pass;
 	var next = curr_menu._open();
 	on_menu_open(next);
 	show();
@@ -104,6 +108,7 @@ func close():
 	if(!menu_open): return;
 	
 	menu_open = false;
+	curr_menu._disconnect_option_selected(on_option_selected);
 	curr_menu._exit();
 	while(!menu_stack.is_empty()):
 		menu_stack.pop_back()._exit();
@@ -137,12 +142,22 @@ func _menu():
 
 # Signal functions
 
-func on_menu_selected(menu):
-	print("menu[%s] selected" % [menu]);
-	menu_stack.push_back(curr_menu);
-	curr_menu = menu;
-	var next = curr_menu._get_current_option();
-	on_menu_open(next);
+func on_option_selected(option : OptionBase, menu : Menu):
+	print("cursor_on_option_selected[%s]" % [option]);
+	if(option is SubmenuOption || option is SeparatedSubmenuOption):
+		print("menu[%s] selected" % [option]);
+		menu_stack.push_back(curr_menu);
+		curr_menu = option.Menu;
+		var next = curr_menu._get_current_option();
+		on_menu_open(next);
+
+
+#func on_menu_selected(menu):
+#	print("menu[%s] selected" % [menu]);
+#	menu_stack.push_back(curr_menu);
+#	curr_menu = menu;
+#	var next = curr_menu._get_current_option();
+#	on_menu_open(next);
 
 
 #func _target_selected():

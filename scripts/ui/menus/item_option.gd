@@ -20,7 +20,9 @@ func _ready():
 
 
 func _selected():
+	super._selected();
 	item_selected.emit(self);
+	return null; # TODO: implement
 
 
 func _on_menu_closed():
