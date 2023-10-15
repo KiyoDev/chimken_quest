@@ -40,6 +40,10 @@ func _selected():
 	return Menu._open();
 
 
+func _exit():
+	Menu._exit();
+
+
 func _focus():
 	super._focus();
 

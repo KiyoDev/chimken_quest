@@ -53,6 +53,7 @@ func on_battle_started():
 
 func on_battle_ended():
 	BattleMenu._disconnect_option_selected(on_option_selected);
+	BattleMenu._exit();
 	Cursor.close();
 	Game.overworld();
 

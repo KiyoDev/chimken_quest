@@ -33,6 +33,10 @@ func _selected():
 	option_selected.emit(self, parent_menu());
 
 
+func _exit():
+	pass;
+
+
 func _focus():
 	if(selectable):
 		Animator.play(&"focused_selectable") 

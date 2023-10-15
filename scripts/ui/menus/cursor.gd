@@ -109,7 +109,7 @@ func close():
 	
 	menu_open = false;
 	curr_menu._disconnect_option_selected(on_option_selected);
-	curr_menu._exit();
+#	curr_menu._exit();
 	while(!menu_stack.is_empty()):
 		menu_stack.pop_back()._exit();
 	hide();
