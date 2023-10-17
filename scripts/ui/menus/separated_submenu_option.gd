@@ -10,10 +10,6 @@ class_name SeparatedSubmenuOption extends OptionBase
 
 func _ready():
 	super._ready();
-#	menu_selected.connect(MenuController.on_menu_selected);
-#	MenuController.menu_closed.connect(_on_menu_closed);
-#	Background.texture = unfocused_selectable.texture if selectable else unfocused_unselectable.texture;
-#	print("CursorPosition %s" % [CursorPosition]);
 
 
 ## Connect callable to this option's option_selected signal, as well as the menu's options' signals;
@@ -30,7 +26,6 @@ func _disconnect_option_selected(callable):
 func _selected():
 	print("_selected sep submenu '%s'" % [name]);
 	super._selected();
-#	menu_selected.emit(Menu);
 	return Menu._open();
 
 

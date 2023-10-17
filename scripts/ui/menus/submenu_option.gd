@@ -1,12 +1,10 @@
 class_name SubmenuOption extends OptionBase
 # MenuController element that contains a label, sprite, and a submenu
 
-#signal menu_selected;
 
 @onready var NameLabel := $Layout/Container/Name;
 @onready var Menu := $Menu;
 
-# reference to Menu scene / or use $Menu? 
 
 @export var focused_selectable : Sprite2D;
 @export var focused_unselectable : Sprite2D;
@@ -16,11 +14,6 @@ class_name SubmenuOption extends OptionBase
 
 func _ready():
 	super._ready();
-#	menu_selected.connect(MenuController.on_menu_selected);
-#	MenuController.menu_closed.connect(_on_menu_closed);
-#	Background.texture = unfocused_selectable.texture if selectable else unfocused_unselectable.texture;
-#	print("CursorPosition %s" % [CursorPosition]);
-
 
 
 func _connect_option_selected(callable):
@@ -36,7 +29,6 @@ func _disconnect_option_selected(callable):
 func _selected():
 	print("_selected submenu '%s'" % [name]);
 	super._selected();
-#	menu_selected.emit(Menu);
 	return Menu._open();
 
 

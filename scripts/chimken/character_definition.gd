@@ -14,8 +14,13 @@ enum Type {
 }
 
 
+@export_group("Info")
 @export var character_name := "placeholder";
 @export_enum("Ally:1", "Enemy:2") var type := 1; 
+
+@export var attacks : Array[ActionDefinition] = [];
+@export var skills : Array[ActionDefinition] = [];
+
 
 @export_group("Level")
 @export var level := 1;
@@ -23,6 +28,7 @@ enum Type {
 @export var curr_exp := 0;
 
 @export var exp_needed := 0;
+
 
 @export_group("Stats")
 @export var max_hp := 10;
@@ -44,6 +50,7 @@ enum Type {
 @export var speed := 5;
 
 @export var luck := 5;
+
 
 @export_group("Multipliers")
 ## Bonus chance for attacks to be critical hits.
@@ -70,10 +77,6 @@ enum Type {
 @export var light_resist := 0.0;
 @export var dark_resist := 0.0;
 @export var void_resist := 0.0;
-
-
-@export var attacks : Array[ActionDefinition] = [];
-@export var skills : Array[ActionDefinition] = [];
 
 
 func _init():

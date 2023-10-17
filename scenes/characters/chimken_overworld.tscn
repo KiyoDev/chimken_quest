@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://bngn13q3fumrm"]
+[gd_scene load_steps=12 format=3 uid="uid://bngn13q3fumrm"]
 
 [ext_resource type="Script" path="res://scripts/chimken/player.gd" id="1_bpt30"]
+[ext_resource type="Resource" uid="uid://c118p1xygkkgl" path="res://scenes/characters/chimken_info.tres" id="2_i57je"]
 [ext_resource type="Texture2D" uid="uid://bqmc5kate6lp8" path="res://assets/characters/chimken_sheet.png" id="3_x8jgi"]
 
 [sub_resource type="Animation" id="Animation_e14g4"]
@@ -115,6 +116,7 @@ size = Vector2(16, 8)
 [node name="Chimken" type="CharacterBody2D"]
 texture_filter = 1
 script = ExtResource("1_bpt30")
+info = ExtResource("2_i57je")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("3_x8jgi")
@@ -134,4 +136,3 @@ shape = SubResource("RectangleShape2D_s5tcc")
 [node name="MainCamera" type="Camera2D" parent="."]
 unique_name_in_owner = true
 texture_filter = 1
-position = Vector2(1, 0)

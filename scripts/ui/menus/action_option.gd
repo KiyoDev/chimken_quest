@@ -4,15 +4,10 @@ class_name ActionOption extends OptionBase
 signal action_selected;
 
 
-#@onready var Sprite : Sprite2D = $Sprite2D;
 @onready var NameLabel : Label = $Layout/Container/Name;
 @onready var CostLabel : Label = $Layout/Container/Cost;
 
-@export var action : ActionDefinition:
-	set(act):
-		action = act;
-	get:
-		return action;
+@export var action : ActionDefinition;
 
 
 func _ready():
@@ -22,7 +17,7 @@ func _ready():
 func _selected():
 	print("_selected action '%s'" % [name]);
 	super._selected();
-	action_selected.emit(self);
+	action_selected.emit(self)
 	return null; # TODO: implement
 
 
@@ -57,3 +52,7 @@ func on_character_resources_changed(character : Character, resource : Dictionary
 			NameLabel.remove_theme_color_override(&"font_color");
 		if(CostLabel.has_theme_color_override(&"font_color")):
 			CostLabel.remove_theme_color_override(&"font_color");
+
+
+func _to_string():
+	return "'%s'['%s', '%s']" % [name, NameLabel.text, CostLabel.text];

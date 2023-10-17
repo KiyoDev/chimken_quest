@@ -14,7 +14,7 @@ enum Direction {
 
 
 @export_group("Info")
-@export var speed = 60.0
+@export var speed := 60
 @export var moving_direction : Direction = Direction.Down
 
 
@@ -48,7 +48,7 @@ func handle_input():
 	
 #	if(velocity.x != 0 || velocity.y != 0):
 	if(velocity):
-		print("vel=%s, [%s], [%s]" % [velocity, position, direction]);
+#		print("vel=%s, [%s], [%s]" % [velocity, position, direction]);
 #		print("velocity = %s" % velocity)
 		if(direction.x > 0): # right
 			if(!Animator.current_animation.begins_with(&"idle") && direction.y != 0 && moving_direction != Direction.Left):

@@ -10,6 +10,8 @@ signal battle_ended;
 #@onready var SubMenuContainer = %BattleUI/Container/SubMenu;
 @onready var AllyContainer := $AllyContainer;
 @onready var EnemyContainer := $EnemyContainer;
+@onready var BattleMenuTest = preload("res://scenes/ui/battle_menu.tscn").instantiate();
+
 
 @export var turn_queue : Array[Turn] = [];
 
@@ -24,21 +26,16 @@ var round := 0;
 var in_battle := false;
 
 
-@onready var Cursor : Cursor = preload("res://scenes/ui/cursor.tscn").instantiate();
-#@onready var BattleMenuTest = preload("res://scenes/ui/battle_menu_control.tscn").instantiate();
-@onready var BattleMenuTest = preload("res://scenes/ui/battle_menu.tscn").instantiate();
-
+@onready var test_chimken = preload("res://scenes/characters/chimken_overworld.tscn").instantiate();
+@onready var test_enemy = preload("res://scenes/characters/test_enemy.tscn").instantiate();
+#@onready var test_chimken = Image.load_from_file("res://assets/characters/test/test_chimken.png");
 
 func _ready():
 	get_viewport();
 	battle_menu_manager = BattleMenuManager.new();
 	battle_menu_manager.show();
 	add_child(battle_menu_manager);
-	DisplayServer.window_set_min_size(Vector2i(960, 540))
-#	Window.min_size = Vector2i(960, 540);
-#	BattleUI.show();
-#	BattleUI.add_child(BattleMenuTest);
-#	BattleUI.add_child(Cursor);
+#	DisplayServer.window_set_min_size(Vector2i(960, 540))
 
 
 func _input(event):
@@ -66,6 +63,9 @@ func _test(event):
 		
 		print("c1 - %s" % [c1.position]);
 		print("e2 - %s" % [e2.position]);
+		for  a in AllyContainer.get_children():
+			print("char - %s, %s, [%s, '%s']" % [a.info.character_name, a.get_instance_id(), a.info, a.info.resource_path])
+		print("battleele - %s, %s" % [AllyContainer.get_children(), EnemyContainer.get_children()]);
 #		AllyContainer.add_child(c1);
 #		AllyContainer.add_child(c2);
 #		# TODO: instantiate enemies from a list based on the area
@@ -75,69 +75,46 @@ func _test(event):
 		init_battle(AllyContainer.get_children(), EnemyContainer.get_children());
 #		BattleUI.on_battle_start(AllyContainer.get_children(), EnemyContainer.get_children());
 
-#		if(!Cursor.menu_open):
-#			Cursor.open(BattleMenuTest.get_node("%BattleMenu"));
-		battle_menu_manager.on_battle_started();
+		battle_menu_manager.on_battle_started(AllyContainer.get_children());
 		Game.battle();
 	elif(event.is_action_pressed(&"test_battle_end")):
 		end_battle();
-		battle_menu_manager.on_battle_ended();
-		Game.overworld();
-		
-#		if(Cursor.menu_open):
-#			print("force exit menu");
-#			Cursor.close();
 	elif(event.is_action_pressed(&"test_battle_print")):
-		test_print();
+		pass;
+#		test_print();
 	
-	if(event is InputEventKey):
-		if((event as InputEventKey).keycode == KEY_O):
-			print("MenuController - O");
-			battle_menu_manager.on_battle_started();
-			Game.battle();
-#			if(!Cursor.menu_open):
-#	#			Menu = BattleMenu;
-##				remove_child(get_node("Menu"));
-##				add_child(BattleMenu);
-##				curr_menu = BattleMenu;
-#	#			print("ctrl - Menu %s" % [get_node("Menu")]);
-#
-##				Cursor.open(BattleMenuTest);
-#				Cursor.open(BattleMenuTest.get_child(0).get_child(0));
-		elif((event as InputEventKey).keycode == KEY_Q):
-			battle_menu_manager.on_battle_ended();
-			Game.overworld();
-#			if(Cursor.menu_open):
-#				print("force exit menu");
-#				Cursor.close();
-	pass;
-
-@onready var test_chimken = preload("res://scenes/characters/test_character.tscn").instantiate();
-@onready var test_enemy = preload("res://scenes/characters/test_enemy.tscn").instantiate();
-#@onready var test_chimken = Image.load_from_file("res://assets/characters/test/test_chimken.png");
+#	if(event is InputEventKey):
+#		if((event as InputEventKey).keycode == KEY_O):
+#			print("MenuController - O");
+#			battle_menu_manager.on_battle_started(AllyContainer.get_children());
+#			Game.battle();
+#		elif((event as InputEventKey).keycode == KEY_Q):
+#			end_battle();
 
 
 func test_generate_character(name, speed, node : Node, type := "Ally"):
-	var char = test_chimken.duplicate() if type == "Ally" else test_enemy.duplicate();
+	var char : Character = test_chimken.duplicate() if type == "Ally" else test_enemy.duplicate();
+	char.info = char.info.duplicate();
+#	test_chimken
 	node.add_child(char);
-#	if(char.n_sprite == null): char.n_sprite = Sprite2D.new();
 	char.info.character_name = name;
 	char.info.speed = speed;
 	
 #	var texture : ImageTexture = ImageTexture.create_from_image(test_chimken);
 #	char.n_sprite.texture = texture;
 #	char.n_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST;
-	print("char - %s, %s" % [char.info.character_name, char.n_sprite.name]);
+#	print("char - %s, %s, %s, [%s, '%s']" % [char.info.character_name, char.n_sprite, char.get_instance_id(), char.info, char.info.resource_path]);
+#	print("cont - %s" % [node.get_children()]);
 	return char;
 
 
-func test_print():
+#func test_print():
 #	print("allies - %s" % [AllyContainer.get_children()]);
 #	print("enemies - %s" % [EnemyContainer.get_children()]);
 #	print("turn_queue %s" % [turn_queue]);
 #	print("turn queue - %s"  % turn_queue);
 #	print(ActionDefinition.target_type("All"));
-	BattleUI.test_print();
+#	BattleUI.test_print();
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -170,8 +147,8 @@ func end_battle():
 	if(!in_battle): return;
 	in_battle = false;
 	print("End battle");
-	BattleUI.on_battle_end();
 	
+	battle_menu_manager.on_battle_ended();
 	for n in AllyContainer.get_children():
 		AllyContainer.remove_child(n);
 		
@@ -179,6 +156,7 @@ func end_battle():
 		EnemyContainer.remove_child(n);
 		
 	turn_queue.clear();
+	Game.overworld();
 
 
 func start_turn():

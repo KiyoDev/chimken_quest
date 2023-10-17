@@ -25,10 +25,11 @@ var menu_open := false;
 var curr_menu : Menu;
 var focused_opt : OptionBase;
 
+# TODO: move focus indices here for menus?
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print("Animator - %s" % [Animator]);
+#	print("Animator - %s" % [Animator]);
 	hide();
 
 
@@ -64,13 +65,6 @@ func navigate_manu(move, horizontal):
 	if(option == null || option == focused_opt): 
 		return;
 	change_focus(option);
-
-#	add_child(Cursor);
-#	Cursor.show();
-#	Cursor._menu();
-#	Cursor._on_navigate(focused_opt); # TODO: maybe instead of moving a cursor, could have animated cursor on each element that changes from selected/unselected, etc...
-#	menu_opened.emit();
-
 
 
 func change_focus(next):

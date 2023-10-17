@@ -60,3 +60,4 @@ test_battle_print={
 [rendering]
 
 2d/snap/snap_2d_transforms_to_pixel=true
+2d/size/resizable=true

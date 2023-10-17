@@ -1,0 +1,105 @@
+[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=9 format=3 uid="uid://c118p1xygkkgl"]
+
+[ext_resource type="Script" path="res://scripts/battle/resources/actions/damage_action.gd" id="1_3x7o3"]
+[ext_resource type="Script" path="res://scripts/chimken/character_definition.gd" id="2_q2qbr"]
+[ext_resource type="Script" path="res://scripts/battle/resources/actions/status_effect_action.gd" id="3_qxvli"]
+
+[sub_resource type="Resource" id="Resource_j12db"]
+script = ExtResource("1_3x7o3")
+type = "physical"
+scaling_stat = "attack"
+value = 0.8
+attack_modifiers = Array[Resource("res://scripts/battle/resources/actions/attack_modifier.gd")]([])
+name = "Peck"
+description = ""
+cost = 0
+category = 1
+target = 2
+targeting_type = 1
+
+[sub_resource type="Resource" id="Resource_ej3y1"]
+script = ExtResource("1_3x7o3")
+type = "physical"
+scaling_stat = "attack"
+value = 1.0
+attack_modifiers = Array[Resource("res://scripts/battle/resources/actions/attack_modifier.gd")]([])
+name = "Slash"
+description = ""
+cost = 0
+category = 1
+target = 2
+targeting_type = 1
+
+[sub_resource type="Resource" id="Resource_sx1x1"]
+script = ExtResource("3_qxvli")
+name = "Focus"
+description = ""
+cost = 5
+category = 1
+target = 4
+targeting_type = 1
+
+[sub_resource type="Resource" id="Resource_b566s"]
+script = ExtResource("1_3x7o3")
+type = "magic"
+scaling_stat = "magic"
+value = 0.8
+attack_modifiers = Array[Resource("res://scripts/battle/resources/actions/attack_modifier.gd")]([])
+name = "Whirlwind"
+description = "Minor Wind damage."
+cost = 0
+category = 1
+target = 2
+targeting_type = 1
+
+[sub_resource type="Resource" id="Resource_qevw0"]
+script = ExtResource("1_3x7o3")
+type = "physical"
+scaling_stat = "attack"
+value = 0.8
+attack_modifiers = Array[Resource("res://scripts/battle/resources/actions/attack_modifier.gd")]([])
+name = "Tornado"
+description = "Moderate Wind damage."
+cost = 0
+category = 1
+target = 2
+targeting_type = 2
+
+[resource]
+script = ExtResource("2_q2qbr")
+character_name = "Chimken"
+type = 1
+attacks = Array[Resource("res://scripts/battle/resources/actions/action_definition.gd")]([SubResource("Resource_j12db"), SubResource("Resource_ej3y1")])
+skills = Array[Resource("res://scripts/battle/resources/actions/action_definition.gd")]([SubResource("Resource_sx1x1"), SubResource("Resource_b566s"), SubResource("Resource_qevw0")])
+level = 1
+curr_exp = 0
+exp_needed = 0
+max_hp = 10
+max_mp = 10
+curr_hp = 10
+curr_mp = 10
+attack = 5
+magic = 5
+defense = 5
+magic_resist = 5
+speed = 5
+luck = 5
+crit_rate = 0.0
+crit_damage = 0.0
+pierce = 0.0
+fire_mastery = 0.0
+water_mastery = 0.0
+electric_mastery = 0.0
+earth_mastery = 0.0
+wind_mastery = 0.0
+light_mastery = 0.0
+dark_mastery = 0.0
+void_mastery = 0.0
+fire_resist = 0.0
+water_resist = 0.0
+electric_resist = 0.0
+earth_resist = 0.0
+wind_resist = 0.0
+light_resist = 0.0
+dark_resist = 0.0
+void_resist = 0.0

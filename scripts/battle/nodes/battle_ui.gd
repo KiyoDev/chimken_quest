@@ -34,7 +34,7 @@ enum TargetableType {
 
 @onready var DummyList := %DummyContainer;
 
-@onready var Cursor : Cursor = preload("res://scenes/ui/cursor.tscn").instantiate();
+#@onready var Cursor : Cursor = preload("res://scenes/ui/cursor.tscn").instantiate();
 @onready var TargetCursor : TargetCursor = preload("res://scenes/ui/target_cursor.tscn").instantiate();
 
 #@onready var ALLY_CONTAINER = $AllyContainer;
@@ -81,7 +81,8 @@ var targetable_type : TargetableType;
 
 
 func _input(event):
-	if(!BattleSystem.in_battle): return;
+	pass;
+#	if(!BattleSystem.in_battle): return;
 	
 #	if(focused_ele == null): return;
 #
@@ -129,7 +130,7 @@ func _on_focus_changed(control : Control):
 	else:
 		if(!Cursor.visible): Cursor.visible = true;
 		Cursor.position = Vector2(focused_ele.global_position.x - 12, focused_ele.global_position.y + (focused_ele.size.y / 2));
-		Cursor._menu();
+#		Cursor._menu();
 		
 		if(select_state == SelectState.Action):
 			_test_action(focused_ele.name);
@@ -147,7 +148,7 @@ func on_battle_start(allies, enemies):
 	curr_menu = ActionCategories;
 	select_state = SelectState.Categories;
 	
-	print("ciruir - %s, %s" % [Cursor, Cursor.n_sprite]);
+#	print("ciruir - %s, %s" % [Cursor, Cursor.n_sprite]);
 	Cursor.transform.origin = Vector2(focused_ele.global_position.x - 12, focused_ele.global_position.y + (focused_ele.size.y / 2));
 	init_target_cursors(allies, enemies);
 
@@ -199,7 +200,7 @@ func on_battle_end():
 			c._unselect();
 			n.remove_child(c);
 	TargetList.visible = true;
-	remove_child(Cursor);
+#	remove_child(Cursor);
 	get_viewport().disconnect(&"gui_focus_changed", _on_focus_changed);
 
 

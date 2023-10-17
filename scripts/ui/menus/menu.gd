@@ -115,7 +115,7 @@ func _open():
 
 
 func _exit():
-	print("Exiting MenuBase - '%s'" % [self]);
+	print("Exiting Menu - '%s'" % [self]);
 	_hide();
 	for opt in Options.get_children():
 		opt._exit();

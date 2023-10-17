@@ -9,6 +9,8 @@
 script = ExtResource("2_wtj1n")
 character_name = "Chimken"
 type = 1
+attacks = Array[Resource("res://scripts/battle/resources/actions/action_definition.gd")]([])
+skills = Array[Resource("res://scripts/battle/resources/actions/action_definition.gd")]([])
 level = 1
 curr_exp = 0
 exp_needed = 0
@@ -41,8 +43,6 @@ wind_resist = 0.0
 light_resist = 0.0
 dark_resist = 0.0
 void_resist = 0.0
-attacks = Array[Resource("res://scripts/battle/resources/actions/action_definition.gd")]([])
-skills = Array[Resource("res://scripts/battle/resources/actions/action_definition.gd")]([])
 
 [node name="Character" type="CharacterBody2D"]
 texture_filter = 1
