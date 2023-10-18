@@ -46,7 +46,8 @@ func _show():
 
 
 func _hide():
-	hide();
+	pass;
+#	hide();
 	
 
 func swap_action(action : ActionDefinition):

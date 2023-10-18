@@ -20,11 +20,11 @@ var focused_index := 0;
 func _ready():
 	for opt in Options.get_children():
 		menu_closed.connect(opt._on_menu_closed);
-	_hide();
+	hide();
 
 
 func _navigate(move, horizontal):
-	if(!is_focused || Options.get_child_count() == 0): 
+	if(!visible || !is_focused || Options.get_child_count() == 0): 
 		print("trying to navigate an unfocused menu....");
 		return;
 	var option : OptionBase;
@@ -142,9 +142,20 @@ func _show():
 	
 
 func _hide():
+	for opt in Options.get_children():
+		opt._hide();
 	var current_option = Options.get_child(focused_index);
 	if(current_option): current_option._unfocus();
 	hide();
+
+
+func _reset():
+	for opt in Options.get_children():
+		opt._reset();
+	var current_option = Options.get_child(focused_index);
+	if(current_option): 
+		current_option._unfocus();
+	focused_index = 0;
 
 
 func _select_option():

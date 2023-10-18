@@ -29,5 +29,11 @@ func _ready():
 #		if in list, ui should grab the names and get the proper info from the ActionDatabase
 
 
+func _clone(flags := 0b0111) -> Character:
+	var char := super.duplicate(flags);
+	char.info = info.duplicate();
+	return char;
+
+
 func _to_string():
 	return "%s" % [info];

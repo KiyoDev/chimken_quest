@@ -16,6 +16,7 @@ func _ready():
 func _connect_option_selected(callable):
 	option_selected.connect(callable);
 	Menu._connect_option_selected(callable);
+	Menu._unfocus();
 	
 	
 func _disconnect_option_selected(callable):
@@ -32,6 +33,15 @@ func _selected():
 func _exit():
 	Menu._exit();
 	
+	
+func _reset():
+	Menu._hide();
+	Menu._reset();
+
+
+func _hide():
+	Menu._hide();
+	
 
 func _focus():
 	super._focus();
@@ -47,4 +57,5 @@ func _on_menu_opened():
 
 func _on_menu_closed():
 	super._on_menu_closed();
+	Menu._exit();
 	print("closing '%s'" % [name]);

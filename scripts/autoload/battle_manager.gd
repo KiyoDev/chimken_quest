@@ -27,6 +27,7 @@ var in_battle := false;
 
 
 @onready var test_chimken = preload("res://scenes/characters/chimken_overworld.tscn").instantiate();
+@onready var test_chonken = preload("res://scenes/characters/chonken.tscn").instantiate();
 @onready var test_enemy = preload("res://scenes/characters/test_enemy.tscn").instantiate();
 #@onready var test_chimken = Image.load_from_file("res://assets/characters/test/test_chimken.png");
 
@@ -35,7 +36,10 @@ func _ready():
 	battle_menu_manager = BattleMenuManager.new();
 	battle_menu_manager.show();
 	add_child(battle_menu_manager);
+	
+	battle_menu_manager.battle_escaped.connect(on_battle_escaped);
 #	DisplayServer.window_set_min_size(Vector2i(960, 540))
+
 
 
 func _input(event):
@@ -51,10 +55,10 @@ func _test(event):
 		print("Start battle...");
 		in_battle = true;
 		# TODO: normally would get populated based on party list & encountered enemy
-		var c1 = test_generate_character("Chimken", 10, AllyContainer);
-		var c2 = test_generate_character("Chonken", 5, AllyContainer);
-		var e1 = test_generate_character("Bad Chimken", 6, EnemyContainer, "Enemy");
-		var e2 = test_generate_character("Bad Chimken 2", 4, EnemyContainer, "Enemy");
+		var c1 = test_generate_character("Chimken", 10, AllyContainer, test_chimken._clone());
+		var c2 = test_generate_character("Chonken", 5, AllyContainer, test_chonken._clone());
+		var e1 = test_generate_character("Bad Chimken", 6, EnemyContainer, test_enemy._clone());
+		var e2 = test_generate_character("Bad Chimken 2", 4, EnemyContainer, test_enemy._clone());
 		
 		c1.position = Vector2(0, 0);
 		c2.position = Vector2(c1.position.x, c1.position.y + 32);
@@ -84,29 +88,21 @@ func _test(event):
 #		test_print();
 	
 	if(event is InputEventKey):
-		if((event as InputEventKey).keycode == KEY_T):
-#			print("MenuController - O");
-#			battle_menu_manager.on_battle_started(AllyContainer.get_children());
-#			Game.battle();
-			start_turn();
-		elif((event as InputEventKey).keycode == KEY_Q):
-#			end_battle();
-			pass;
+		var just_pressed = event.is_pressed() && !event.is_echo();
+		if(just_pressed):
+			if(!in_battle): return;
+			if((event as InputEventKey).keycode == KEY_T):
+	#			Game.battle();
+				start_turn();
+#			elif((event as InputEventKey).keycode == KEY_Q):
+#	#			end_battle();
+#				pass;
 
 
-func test_generate_character(name, speed, node : Node, type := "Ally"):
-	var char : Character = test_chimken.duplicate() if type == "Ally" else test_enemy.duplicate();
-	char.info = char.info.duplicate();
-#	test_chimken
+func test_generate_character(name, speed, node : Node, char : Character):
 	node.add_child(char);
 	char.info.character_name = name;
 	char.info.speed = speed;
-	
-#	var texture : ImageTexture = ImageTexture.create_from_image(test_chimken);
-#	char.n_sprite.texture = texture;
-#	char.n_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST;
-#	print("char - %s, %s, %s, [%s, '%s']" % [char.info.character_name, char.n_sprite, char.get_instance_id(), char.info, char.info.resource_path]);
-#	print("cont - %s" % [node.get_children()]);
 	return char;
 
 
@@ -143,7 +139,7 @@ func init_battle(allies, enemies):
 #	print("ally  turns  -  %s" % [ally_turns]);
 #	print("enemy  turns  -  %s" % [enemy_turns]);
 	
-	new_round();
+	start_turn();
 
 
 func end_battle():
@@ -159,6 +155,7 @@ func end_battle():
 		EnemyContainer.remove_child(n);
 		
 	turn_queue.clear();
+	round = 0;
 	Game.overworld();
 
 
@@ -168,9 +165,7 @@ func new_round():
 #	print("before - %s" % [turn_queue]);
 	calc_turn_order();
 	round += 1;
-	print("Round(%s)" % [round]);
-	
-	start_turn();
+	print("Round(%s) - %s" % [round, turn_queue]);
 
 
 func start_turn():
@@ -178,6 +173,8 @@ func start_turn():
 	print("current_actor - %s" % [current_actor]);
 	if(current_actor.info.type == CharacterDefinition.Type.Ally):
 		battle_menu_manager.swap_actions(current_actor);
+	else:
+		battle_menu_manager._hide_menu();
 	# TODO: implement
 
 
@@ -199,6 +196,5 @@ func calc_turn_order():
 	);
 
 
-func on_attacks_focus_entered():
-	print("focus on attacks category");
-	pass # Replace with function body.
+func on_battle_escaped():
+	end_battle();

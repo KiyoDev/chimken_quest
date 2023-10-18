@@ -1,21 +1,8 @@
-[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=9 format=3 uid="uid://c118p1xygkkgl"]
+[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=8 format=3 uid="uid://c118p1xygkkgl"]
 
 [ext_resource type="Script" path="res://scripts/battle/resources/actions/damage_action.gd" id="1_3x7o3"]
 [ext_resource type="Script" path="res://scripts/chimken/character_definition.gd" id="2_q2qbr"]
 [ext_resource type="Script" path="res://scripts/battle/resources/actions/status_effect_action.gd" id="3_qxvli"]
-
-[sub_resource type="Resource" id="Resource_j12db"]
-script = ExtResource("1_3x7o3")
-type = "physical"
-scaling_stat = "attack"
-value = 0.8
-attack_modifiers = Array[Resource("res://scripts/battle/resources/actions/attack_modifier.gd")]([])
-name = "Peck"
-description = ""
-cost = 0
-category = 1
-target = 2
-targeting_type = 1
 
 [sub_resource type="Resource" id="Resource_ej3y1"]
 script = ExtResource("1_3x7o3")
@@ -41,12 +28,12 @@ targeting_type = 1
 
 [sub_resource type="Resource" id="Resource_b566s"]
 script = ExtResource("1_3x7o3")
-type = "magic"
-scaling_stat = "magic"
+type = "physical"
+scaling_stat = "attack"
 value = 0.8
 attack_modifiers = Array[Resource("res://scripts/battle/resources/actions/attack_modifier.gd")]([])
-name = "Whirlwind"
-description = "Minor Wind damage."
+name = "Double Slash"
+description = ""
 cost = 10
 category = 1
 target = 2
@@ -56,10 +43,10 @@ targeting_type = 1
 script = ExtResource("1_3x7o3")
 type = "physical"
 scaling_stat = "attack"
-value = 0.8
+value = 1.0
 attack_modifiers = Array[Resource("res://scripts/battle/resources/actions/attack_modifier.gd")]([])
-name = "Tornado"
-description = "Moderate Wind damage."
+name = "Whirling Blades"
+description = ""
 cost = 20
 category = 1
 target = 2
@@ -69,7 +56,7 @@ targeting_type = 2
 script = ExtResource("2_q2qbr")
 character_name = "Chimken"
 type = 1
-attacks = Array[Resource("res://scripts/battle/resources/actions/action_definition.gd")]([SubResource("Resource_j12db"), SubResource("Resource_ej3y1")])
+attacks = Array[Resource("res://scripts/battle/resources/actions/action_definition.gd")]([SubResource("Resource_ej3y1")])
 skills = Array[Resource("res://scripts/battle/resources/actions/action_definition.gd")]([SubResource("Resource_sx1x1"), SubResource("Resource_b566s"), SubResource("Resource_qevw0")])
 level = 1
 curr_exp = 0

@@ -37,6 +37,14 @@ func _exit():
 	pass;
 
 
+func _reset():
+	pass;
+
+
+func _hide():
+	pass;
+
+
 func _focus():
 	if(selectable):
 		Animator.play(&"focused_selectable") 

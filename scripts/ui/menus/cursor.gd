@@ -19,7 +19,7 @@ enum Direction {
 @onready var Animator = $AnimationPlayer;
 
 
-var menu_stack := [];
+var menu_stack : Array[Menu] = [];
 
 var menu_open := false;
 var curr_menu : Menu;
@@ -33,16 +33,32 @@ func _ready():
 	hide();
 
 
-func horizontal(event) -> bool:
-	if(event.is_action_pressed(&"ui_left") || event.is_action_pressed(&"ui_right")):
-		return true;
-	elif(event.is_action_pressed(&"ui_up") || event.is_action_pressed(&"ui_down")):
-		return false
-	return false;
+
+func _reset():
+	if(menu_stack.size() > 0):
+		curr_menu = menu_stack.pop_front();
+		menu_stack.clear();
+	change_focus(curr_menu._get_current_option());
+	curr_menu._focus();
+	
+
+func _menu():
+#	print("menu - %s" % [Animator]);
+	Animator.play(&"menu_cursor");
+
+
+func _show():
+	show();
+	menu_open = true;
+	
+	
+func _hide():
+	hide();
+	menu_open = false;
 	
 
 func _input(event):
-	if(!menu_open): return; # do nothing if menu isn't open
+	if(!visible || !menu_open): return; # do nothing if menu isn't open or cursor visible
 	if(event.is_action_pressed(&"ui_left") || event.is_action_pressed(&"ui_right") ||
 	   event.is_action_pressed(&"ui_up") || event.is_action_pressed(&"ui_down")):
 		var move := Input.get_vector(&"ui_left", &"ui_right", &"ui_up", &"ui_down");
@@ -59,28 +75,6 @@ func _input(event):
 		print("cancel on '%s'" % [curr_menu]);
 		cancel_option();
 
-
-func navigate_manu(move, horizontal):
-	var option = curr_menu._navigate(move, horizontal);
-	if(option == null || option == focused_opt): 
-		return;
-	change_focus(option);
-
-
-func change_focus(next):
-	if(next == null): return;
-	if(focused_opt != null): 
-		focused_opt._unfocus(); # unfocus previous option
-		
-	focused_opt = next;
-	focused_opt._focus(); # focus new option
-	focus_changed.emit(focused_opt);
-	update_pos(focused_opt);
-
-
-func update_pos(option : OptionBase):
-#	print("updating cursor pos - [%s, %s]" % [global_position, option.global_position]);
-	global_position = Vector2(option.global_position.x - 5, option.global_position.y + (option.size.y / 2));
 	
 
 func open(menu):
@@ -110,6 +104,29 @@ func close():
 	menu_closed.emit();
 
 
+func navigate_manu(move, horizontal):
+	var option = curr_menu._navigate(move, horizontal);
+	if(option == null || option == focused_opt): 
+		return;
+	change_focus(option);
+
+
+func change_focus(next):
+	if(next == null): return;
+	if(focused_opt != null): 
+		focused_opt._unfocus(); # unfocus previous option
+		
+	focused_opt = next;
+	focused_opt._focus(); # focus new option
+	focus_changed.emit(focused_opt);
+	update_pos(focused_opt);
+
+
+func update_pos(option : OptionBase):
+#	print("updating cursor pos - [%s, %s]" % [global_position, option.global_position]);
+	global_position = Vector2(option.global_position.x - 5, option.global_position.y + (option.size.y / 2));
+
+
 func cancel_option():
 	if(!menu_stack.is_empty()):
 		print("!menu_stack.is_empty() '%s'" % [curr_menu]);
@@ -129,10 +146,12 @@ func on_menu_open(next):
 	change_focus(next);
 
 
-func _menu():
-#	print("menu - %s" % [Animator]);
-	Animator.play(&"menu_cursor");
-
+func horizontal(event) -> bool:
+	if(event.is_action_pressed(&"ui_left") || event.is_action_pressed(&"ui_right")):
+		return true;
+	elif(event.is_action_pressed(&"ui_up") || event.is_action_pressed(&"ui_down")):
+		return false
+	return false;
 
 # Signal functions
 

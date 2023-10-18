@@ -1,18 +1,18 @@
-[gd_scene load_steps=19 format=3 uid="uid://bngn13q3fumrm"]
+[gd_scene load_steps=19 format=3 uid="uid://cqnncmc8434bw"]
 
-[ext_resource type="Script" path="res://scripts/chimken/player.gd" id="1_bpt30"]
-[ext_resource type="Script" path="res://scripts/battle/resources/actions/damage_action.gd" id="2_8mwfa"]
-[ext_resource type="Script" path="res://scripts/chimken/character_definition.gd" id="3_i654w"]
-[ext_resource type="Texture2D" uid="uid://bqmc5kate6lp8" path="res://assets/characters/chimken_sheet.png" id="3_x8jgi"]
-[ext_resource type="Script" path="res://scripts/battle/resources/actions/status_effect_action.gd" id="4_rp7d7"]
+[ext_resource type="Script" path="res://scripts/chimken/player.gd" id="1_6ql8c"]
+[ext_resource type="Script" path="res://scripts/battle/resources/actions/damage_action.gd" id="2_u3467"]
+[ext_resource type="Script" path="res://scripts/chimken/character_definition.gd" id="3_phm8l"]
+[ext_resource type="Script" path="res://scripts/battle/resources/actions/status_effect_action.gd" id="4_1c25j"]
+[ext_resource type="Texture2D" uid="uid://bqmc5kate6lp8" path="res://assets/characters/chimken_sheet.png" id="5_xqjbw"]
 
 [sub_resource type="Resource" id="Resource_ej3y1"]
-script = ExtResource("2_8mwfa")
+script = ExtResource("2_u3467")
 type = "physical"
 scaling_stat = "attack"
 value = 0.8
 attack_modifiers = Array[Resource("res://scripts/battle/resources/actions/attack_modifier.gd")]([])
-name = "Peck"
+name = "Slash"
 description = ""
 cost = 0
 category = 1
@@ -20,7 +20,7 @@ target = 2
 targeting_type = 1
 
 [sub_resource type="Resource" id="Resource_sx1x1"]
-script = ExtResource("4_rp7d7")
+script = ExtResource("4_1c25j")
 name = "Focus"
 description = ""
 cost = 5
@@ -29,12 +29,12 @@ target = 4
 targeting_type = 1
 
 [sub_resource type="Resource" id="Resource_b566s"]
-script = ExtResource("2_8mwfa")
-type = "magic"
-scaling_stat = "magic"
-value = 0.8
+script = ExtResource("2_u3467")
+type = "physical"
+scaling_stat = "attack"
+value = 1.2
 attack_modifiers = Array[Resource("res://scripts/battle/resources/actions/attack_modifier.gd")]([])
-name = "Whirlwind"
+name = "Double Slash"
 description = ""
 cost = 10
 category = 1
@@ -42,12 +42,12 @@ target = 2
 targeting_type = 1
 
 [sub_resource type="Resource" id="Resource_qevw0"]
-script = ExtResource("2_8mwfa")
-type = "magic"
-scaling_stat = "magic"
-value = 1.0
+script = ExtResource("2_u3467")
+type = "physical"
+scaling_stat = "attack"
+value = 1.2
 attack_modifiers = Array[Resource("res://scripts/battle/resources/actions/attack_modifier.gd")]([])
-name = "Tornado"
+name = "Whirling Blades"
 description = ""
 cost = 20
 category = 1
@@ -56,8 +56,8 @@ targeting_type = 2
 
 [sub_resource type="Resource" id="Resource_npdkl"]
 resource_local_to_scene = true
-script = ExtResource("3_i654w")
-character_name = "Chimken"
+script = ExtResource("3_phm8l")
+character_name = "Chonken"
 type = 1
 attacks = Array[Resource("res://scripts/battle/resources/actions/action_definition.gd")]([SubResource("Resource_ej3y1")])
 skills = Array[Resource("res://scripts/battle/resources/actions/action_definition.gd")]([SubResource("Resource_sx1x1"), SubResource("Resource_b566s"), SubResource("Resource_qevw0")])
@@ -203,13 +203,13 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s5tcc"]
 size = Vector2(16, 8)
 
-[node name="Chimken" type="CharacterBody2D"]
+[node name="Chonken" type="CharacterBody2D"]
 texture_filter = 1
-script = ExtResource("1_bpt30")
+script = ExtResource("1_6ql8c")
 info = SubResource("Resource_npdkl")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("3_x8jgi")
+texture = ExtResource("5_xqjbw")
 hframes = 16
 vframes = 8
 frame = 13
