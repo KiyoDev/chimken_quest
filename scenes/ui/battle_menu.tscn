@@ -233,79 +233,119 @@ layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Slash" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container"]
+[node name="attack" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container"]
+visible = false
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("3_af8un")
 
-[node name="OptionBackground" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Slash" instance=ExtResource("12_q1s6e")]
+[node name="OptionBackground" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
 texture = ExtResource("5_h83ow")
 patch_margin_left = 8
 patch_margin_right = 8
 patch_margin_bottom = 4
 
-[node name="Layout" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Slash"]
+[node name="Layout" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = -2
 
-[node name="Container" type="HBoxContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Slash/Layout"]
+[node name="Container" type="HBoxContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack/Layout"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Slash/Layout/Container"]
+[node name="Name" type="Label" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack/Layout/Container"]
 layout_mode = 2
-size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
-text = "SLASH"
 uppercase = true
 
-[node name="Spacer" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Slash/Layout/Container"]
+[node name="Spacer" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack/Layout/Container"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 
-[node name="Cost" type="Label" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Slash/Layout/Container"]
+[node name="Cost" type="Label" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 horizontal_alignment = 2
 uppercase = true
+script = ExtResource("10_n5g42")
 
-[node name="Peck" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container"]
+[node name="attack2" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container"]
+visible = false
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("3_af8un")
 
-[node name="OptionBackground" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Peck" instance=ExtResource("12_q1s6e")]
+[node name="OptionBackground" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack2" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
 texture = ExtResource("5_h83ow")
 patch_margin_left = 8
 patch_margin_right = 8
 patch_margin_bottom = 4
 
-[node name="Layout" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Peck"]
+[node name="Layout" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack2"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = -2
 
-[node name="Container" type="HBoxContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Peck/Layout"]
+[node name="Container" type="HBoxContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack2/Layout"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Peck/Layout/Container"]
+[node name="Name" type="Label" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack2/Layout/Container"]
 layout_mode = 2
 theme = ExtResource("3_ui3bp")
-text = "PECK"
 uppercase = true
 
-[node name="Spacer" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Peck/Layout/Container"]
+[node name="Spacer" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack2/Layout/Container"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 
-[node name="Cost" type="Label" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/Peck/Layout/Container"]
+[node name="Cost" type="Label" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack2/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_ui3bp")
+horizontal_alignment = 2
+uppercase = true
+script = ExtResource("10_n5g42")
+
+[node name="attack3" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container"]
+visible = false
+texture_filter = 1
+layout_mode = 2
+script = ExtResource("3_af8un")
+
+[node name="OptionBackground" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack3" instance=ExtResource("12_q1s6e")]
+layout_mode = 2
+texture = ExtResource("5_h83ow")
+patch_margin_left = 8
+patch_margin_right = 8
+patch_margin_bottom = 4
+
+[node name="Layout" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack3"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = -2
+
+[node name="Container" type="HBoxContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack3/Layout"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack3/Layout/Container"]
+layout_mode = 2
+theme = ExtResource("3_ui3bp")
+uppercase = true
+
+[node name="Spacer" type="MarginContainer" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack3/Layout/Container"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="Cost" type="Label" parent="SubMenus/AttacksMenu/MenuLayout/Options/Container/attack3/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
@@ -355,6 +395,7 @@ theme_override_constants/separation = 0
 alignment = 1
 
 [node name="Chain Frost" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container"]
+visible = false
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("3_af8un")
@@ -397,6 +438,7 @@ horizontal_alignment = 2
 uppercase = true
 
 [node name="Chain Lightning" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container"]
+visible = false
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("3_af8un")
@@ -437,6 +479,7 @@ horizontal_alignment = 2
 uppercase = true
 
 [node name="Chain Inferno" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container"]
+visible = false
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("3_af8un")
@@ -477,6 +520,7 @@ horizontal_alignment = 2
 uppercase = true
 
 [node name="Focus" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container"]
+visible = false
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("3_af8un")
@@ -517,6 +561,86 @@ text = "5
 "
 horizontal_alignment = 2
 uppercase = true
+
+[node name="attack" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container"]
+visible = false
+texture_filter = 1
+layout_mode = 2
+script = ExtResource("3_af8un")
+
+[node name="OptionBackground" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/attack" instance=ExtResource("12_q1s6e")]
+layout_mode = 2
+texture = ExtResource("5_h83ow")
+patch_margin_left = 8
+patch_margin_right = 8
+patch_margin_bottom = 4
+
+[node name="Layout" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/attack"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = -2
+
+[node name="Container" type="HBoxContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/attack/Layout"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/attack/Layout/Container"]
+layout_mode = 2
+theme = ExtResource("3_ui3bp")
+uppercase = true
+
+[node name="Spacer" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/attack/Layout/Container"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="Cost" type="Label" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/attack/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_ui3bp")
+horizontal_alignment = 2
+uppercase = true
+script = ExtResource("10_n5g42")
+
+[node name="attack2" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container"]
+visible = false
+texture_filter = 1
+layout_mode = 2
+script = ExtResource("3_af8un")
+
+[node name="OptionBackground" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/attack2" instance=ExtResource("12_q1s6e")]
+layout_mode = 2
+texture = ExtResource("5_h83ow")
+patch_margin_left = 8
+patch_margin_right = 8
+patch_margin_bottom = 4
+
+[node name="Layout" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/attack2"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = -2
+
+[node name="Container" type="HBoxContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/attack2/Layout"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/attack2/Layout/Container"]
+layout_mode = 2
+theme = ExtResource("3_ui3bp")
+uppercase = true
+
+[node name="Spacer" type="MarginContainer" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/attack2/Layout/Container"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="Cost" type="Label" parent="SubMenus/SkillsMenu/MenuLayout/Options/Container/attack2/Layout/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_ui3bp")
+horizontal_alignment = 2
+uppercase = true
+script = ExtResource("10_n5g42")
 
 [node name="ItemsMenu" type="MarginContainer" parent="SubMenus"]
 unique_name_in_owner = true

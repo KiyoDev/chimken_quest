@@ -6,6 +6,7 @@
 [ext_resource type="Theme" uid="uid://dr8myjijv74ug" path="res://assets/fonts/orange_font_small_ui.theme" id="4_v35ko"]
 
 [node name="Action Name" type="MarginContainer"]
+visible = false
 texture_filter = 1
 script = ExtResource("1_0vi32")
 
@@ -30,6 +31,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("4_v35ko")
 text = "SKILL ACTION"
+uppercase = true
 
 [node name="Spacer" type="MarginContainer" parent="Layout/Container"]
 layout_mode = 2
@@ -41,3 +43,4 @@ size_flags_horizontal = 3
 theme = ExtResource("4_v35ko")
 text = "99"
 horizontal_alignment = 2
+uppercase = true

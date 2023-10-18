@@ -72,24 +72,26 @@ func _test(event):
 #		EnemyContainer.add_child(e1);
 #		EnemyContainer.add_child(e2);
 		
+		battle_menu_manager.on_battle_started(AllyContainer.get_children());
+		
 		init_battle(AllyContainer.get_children(), EnemyContainer.get_children());
 #		BattleUI.on_battle_start(AllyContainer.get_children(), EnemyContainer.get_children());
 
-		battle_menu_manager.on_battle_started(AllyContainer.get_children());
-		Game.battle();
 	elif(event.is_action_pressed(&"test_battle_end")):
 		end_battle();
 	elif(event.is_action_pressed(&"test_battle_print")):
 		pass;
 #		test_print();
 	
-#	if(event is InputEventKey):
-#		if((event as InputEventKey).keycode == KEY_O):
+	if(event is InputEventKey):
+		if((event as InputEventKey).keycode == KEY_T):
 #			print("MenuController - O");
 #			battle_menu_manager.on_battle_started(AllyContainer.get_children());
 #			Game.battle();
-#		elif((event as InputEventKey).keycode == KEY_Q):
+			start_turn();
+		elif((event as InputEventKey).keycode == KEY_Q):
 #			end_battle();
+			pass;
 
 
 func test_generate_character(name, speed, node : Node, type := "Ally"):
@@ -123,6 +125,7 @@ func _process(delta):
 
 
 func init_battle(allies, enemies):
+	Game.battle();
 	# init battle, calculate turn order, create turns
 	# TODO: populate ally and enemy containers
 	# TODO: populate lists of actions for each character that can swap out when turns change
@@ -159,8 +162,22 @@ func end_battle():
 	Game.overworld();
 
 
+func new_round():
+	turn_queue.append_array(ally_turns);
+	turn_queue.append_array(enemy_turns);
+#	print("before - %s" % [turn_queue]);
+	calc_turn_order();
+	round += 1;
+	print("Round(%s)" % [round]);
+	
+	start_turn();
+
+
 func start_turn():
 	current_actor = get_next_turn().character;
+	print("current_actor - %s" % [current_actor]);
+	if(current_actor.info.type == CharacterDefinition.Type.Ally):
+		battle_menu_manager.swap_actions(current_actor);
 	# TODO: implement
 
 
@@ -173,26 +190,15 @@ func get_next_turn() -> Turn:
 		new_round();
 	
 	return turn_queue.pop_front();
-
-
-func new_round():
-	turn_queue.append_array(ally_turns);
-	turn_queue.append_array(enemy_turns);
-#	print("before - %s" % [turn_queue]);
-	calc_turn_order();
-	round += 1;
 	
-	start_turn();
-
 
 func calc_turn_order():
 	turn_queue.sort_custom(
 		func(a : Turn, b : Turn): 
-#			print("a=[%s] b=[%s]" % [a, b]);
 			return a.character.info.speed > b.character.info.speed
 	);
 
 
-func _on_attacks_focus_entered():
+func on_attacks_focus_entered():
 	print("focus on attacks category");
 	pass # Replace with function body.

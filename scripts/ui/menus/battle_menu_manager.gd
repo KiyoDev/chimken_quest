@@ -9,8 +9,12 @@ class_name BattleMenuManager extends CanvasLayer
 
 @onready var ActionOptionTemplate : ActionOption = preload("res://scenes/ui/menu_options/action_option_template.tscn").instantiate();
 
-var character_actions := {};
-# {"<name>": {"attacks": Array[ActionDefinition], "skills":  Array[ActionDefinition]} }
+
+# Cache submenus
+var attacks_menu : Menu;
+var skills_menu : Menu;
+var items_menu : Menu;
+
 
 # FIXME: currently, menu is its own fully built scene; need to change attack and skill submenus to be populated by the current ally's actions; items and escape stay constant
 # how to display whether or not a skill can be used?
@@ -24,38 +28,31 @@ func _ready():
 	BattleSystem.battle_ended.connect(on_battle_ended);
 	BattleMenuContainer.global_position = Vector2(100, 0);
 	
+	attacks_menu = BattleMenuContainer.get_node("%AttacksMenu");
+	skills_menu = BattleMenuContainer.get_node("%SkillsMenu");
+	items_menu = BattleMenuContainer.get_node("%ItemsMenu");
 	
-# TODO: used for when using same menu and changing out the submenu options for actions
-func init_labels(allies : Array):
-	for ally in allies:
-		var char_name : String = ally.info.character_name;
-#		print("actions for '%s'" % [char_name])
-		character_actions[char_name] = {"attacks": [], "skills": []};
-		
-		for attack in ally.info.attacks:
-			var attack_option := setup_action_option(ActionOptionTemplate.duplicate(), attack);
-			character_actions[char_name]["attacks"].push_back(attack_option);
-		for skill in ally.info.skills:
-			var skill_option := setup_action_option(ActionOptionTemplate.duplicate(), skill);
-			character_actions[char_name]["skills"].push_back(skill_option);
-			
+#	print("atks - %s" % [attacks_menu]);
+	
 
 
-func setup_action_option(option : ActionOption, action : ActionDefinition) -> ActionOption:
-#	print("new action - %s" % [option]);
+func setup_action_option(action : ActionDefinition) -> ActionOption:
+	var option := ActionOptionTemplate.clone();
+	print("\taction - %s" % [action]);
 	option.hide();
-	ActionHelper.add_child(option);
+#	container.add_child(option);
+#	ActionHelper.add_child(option);
+	option.name = action.name;
 	option.NameLabel.text = action.name;
 	option.CostLabel.text = str(action.cost) if action.cost > 0 else "";
+	option._connect_option_selected(on_option_selected);
 	return option;
 	
 
 func on_battle_started(allies : Array):
 	print("Menu - %s" % [BattleMenu]);
-	init_labels(allies);
-	print("init action labels - %s" % [character_actions]);
 	_open_menu();
-	Game.battle();
+	print("atks - %s" % [attacks_menu.get_options()]);
 
 
 func on_battle_ended():
@@ -72,6 +69,40 @@ func _close_menu():
 	BattleMenu._disconnect_option_selected(on_option_selected);
 	BattleMenu._exit();
 	Cursor.close();
+
+
+func swap_actions(character : Character):
+	var name = character.info.character_name;
+	
+	var attacks : Array[ActionDefinition] = character.info.attacks;
+	var skills : Array[ActionDefinition] = character.info.skills;
+	
+	print("swapping atks - %s, %s, %s" % [attacks_menu, attacks_menu.get_options(), skills_menu.get_options()]);
+	
+	swap(attacks, attacks_menu);
+	swap(skills, skills_menu);
+
+	adjust_options_count(attacks, attacks_menu);
+	adjust_options_count(skills, skills_menu);
+		
+	print("swapped atks - %s\n\t> %s\n\t> %s" % [attacks_menu, attacks_menu.get_options(), skills_menu.get_options()]);
+
+
+func swap(actions : Array[ActionDefinition], menu : Menu):
+	for i in actions.size():
+		var opt : ActionOption = menu.get_option(i);
+		opt.swap_action(actions[i]);
+		opt._show();
+
+# FIXME: options aren't being hidden
+func adjust_options_count(actions : Array[ActionDefinition], menu : Menu):
+	if(menu.option_count() < actions.size()):
+		for i in range(menu.option_count(), actions.size()):
+			menu._add_option(ActionOptionTemplate.clone());
+	elif(menu.option_count() > actions.size()):
+		for i in range(actions.size(), menu.option_count()):
+			menu.get_option(i)._hide();
+
 
 # Signal Callables
 

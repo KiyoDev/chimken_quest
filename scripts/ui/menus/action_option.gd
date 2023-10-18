@@ -14,6 +14,10 @@ func _ready():
 	super._ready();
 
 
+func clone() -> ActionOption:
+	return duplicate();
+
+
 func _selected():
 	print("_selected action '%s'" % [name]);
 	super._selected();
@@ -35,6 +39,20 @@ func _unfocus():
 func _on_menu_closed():
 	super._on_menu_closed();
 	print("closing '%s'" % [name]);
+
+
+func _show():
+	show();
+
+
+func _hide():
+	hide();
+	
+
+func swap_action(action : ActionDefinition):
+	name = action.name;
+	NameLabel.text = action.name;
+	CostLabel.text = str(action.cost) if action.cost > 0 else "";
 
 
 func on_character_resources_changed(character : Character, resource : Dictionary):

@@ -33,13 +33,13 @@ func _navigate(move, horizontal):
 		if(select_wrap):
 			option = navigate_wrap(move.y);
 		else:
-			option = get_option(clampi(focused_index + move.y, 0, Options.get_child_count() - 1));
+			option = try_get_option(clampi(focused_index + move.y, 0, Options.get_child_count() - 1));
 	elif(Options is HBoxContainer):
 		if(!horizontal): return option;
 		if(select_wrap):
 			option = navigate_wrap(move.x);
 		else:
-			option = get_option(clampi(focused_index + move.x, 0, Options.get_child_count() - 1));
+			option = try_get_option(clampi(focused_index + move.x, 0, Options.get_child_count() - 1));
 	elif(Options is GridContainer):
 		if(select_wrap):
 			var index := focused_index;
@@ -57,22 +57,28 @@ func _navigate(move, horizontal):
 				# (focused_index - columns + (size)) % (size)
 				index = (focused_index - columns + size) % size;
 				
-			option = get_option(index);
+			option = try_get_option(index);
 		else:
-			option = get_option(focused_index + move.x + move.y * Options.columns);
+			option = try_get_option(focused_index + move.x + move.y * Options.columns);
 			
 	return option;
 
 
-func navigate_wrap(direction_value):
+func navigate_wrap(direction_value) -> OptionBase:
 	if(direction_value > 0):
-		return get_option((focused_index + 1) % Options.get_child_count());
+		return try_get_option((focused_index + 1) % Options.get_child_count());
 	elif(direction_value < 0):
-		return get_option((focused_index - 1 + Options.get_child_count()) % Options.get_child_count());
+		return try_get_option((focused_index - 1 + Options.get_child_count()) % Options.get_child_count());
+	return null;
 
 
-func get_option(index):
-	if(index < 0 || index >= Options.get_child_count()): return null;
+func try_get_option(index) -> OptionBase:
+	if(index < 0 || index >= Options.get_child_count()): 
+		return null;
+	
+	# Only change index if option is visible to prevent navigating to invalid options
+	if(!Options.get_child(index).visible):
+		return null;
 	
 	focused_index = index;
 	return Options.get_child(index);
@@ -106,7 +112,7 @@ func _open():
 #	focused_index = 0;
 	if(Options.get_child_count() > 0):
 		for opt in Options.get_children():
-			opt.show();
+#			opt.show(); # will show all the sub children, don't want that
 			print("option '%s' - %s" % [opt.name, opt.global_position]);
 		var default_option : OptionBase = _get_current_option();
 		default_option._focus();
@@ -165,3 +171,21 @@ func _cancel():
 		_hide()
 	else:
 		_unfocus();
+
+
+func _add_option(option : OptionBase):
+	Options.add_child(option);
+
+
+func get_option(index : int) -> OptionBase:
+	if(index < 0 || index >= Options.get_child_count()): 
+		return null;
+	return Options.get_child(index);
+
+
+func get_options() -> Array[Node]:
+	return Options.get_children();
+
+
+func option_count() -> int:
+	return Options.get_child_count();
