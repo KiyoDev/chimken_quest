@@ -20,30 +20,27 @@ default_font = ExtResource("3_m72eg")
 [node name="Container" type="Node2D"]
 texture_filter = 1
 
-[node name="MainMenu" type="MarginContainer" parent="."]
-offset_right = 65.0
-offset_bottom = 93.0
-
-[node name="BattleMenu" type="MarginContainer" parent="MainMenu"]
+[node name="BattleMenu" type="MarginContainer" parent="."]
 unique_name_in_owner = true
 texture_filter = 1
-layout_mode = 2
+offset_right = 65.0
+offset_bottom = 101.0
 script = ExtResource("1_2mc5k")
 select_wrap = true
 escapeable = false
 
-[node name="Background" parent="MainMenu/BattleMenu" instance=ExtResource("12_21wyt")]
+[node name="Background" parent="BattleMenu" instance=ExtResource("12_21wyt")]
 layout_mode = 2
 
-[node name="MenuLayout" type="VBoxContainer" parent="MainMenu/BattleMenu"]
+[node name="MenuLayout" type="VBoxContainer" parent="BattleMenu"]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Spacer" type="MarginContainer" parent="MainMenu/BattleMenu/MenuLayout"]
+[node name="Spacer" type="MarginContainer" parent="BattleMenu/MenuLayout"]
 layout_mode = 2
 theme_override_constants/margin_top = 15
 
-[node name="Title" type="Label" parent="MainMenu/BattleMenu/MenuLayout"]
+[node name="Title" type="Label" parent="BattleMenu/MenuLayout"]
 layout_mode = 2
 size_flags_vertical = 1
 theme = SubResource("Theme_idwei")
@@ -51,7 +48,7 @@ text = "  ACTIONS "
 horizontal_alignment = 1
 uppercase = true
 
-[node name="Options" type="MarginContainer" parent="MainMenu/BattleMenu/MenuLayout"]
+[node name="Options" type="MarginContainer" parent="BattleMenu/MenuLayout"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 8
@@ -59,142 +56,147 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="Container" type="VBoxContainer" parent="MainMenu/BattleMenu/MenuLayout/Options"]
+[node name="Container" type="VBoxContainer" parent="BattleMenu/MenuLayout/Options"]
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Attacks" type="MarginContainer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container" node_paths=PackedStringArray("Menu")]
+[node name="Attacks" type="MarginContainer" parent="BattleMenu/MenuLayout/Options/Container" node_paths=PackedStringArray("Menu")]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("4_opylm")
-Menu = NodePath("../../../../../../SubMenus/AttacksMenu")
+Menu = NodePath("../../../../../SubMenus/AttacksMenu")
 
-[node name="OptionBackground" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Attacks" instance=ExtResource("12_q1s6e")]
+[node name="OptionBackground" parent="BattleMenu/MenuLayout/Options/Container/Attacks" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
 texture = ExtResource("5_h83ow")
 patch_margin_left = 8
 patch_margin_right = 8
 patch_margin_bottom = 4
 
-[node name="Layout" type="MarginContainer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Attacks"]
+[node name="Layout" type="MarginContainer" parent="BattleMenu/MenuLayout/Options/Container/Attacks"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = -2
 
-[node name="Container" type="HBoxContainer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Attacks/Layout"]
+[node name="Container" type="HBoxContainer" parent="BattleMenu/MenuLayout/Options/Container/Attacks/Layout"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Attacks/Layout/Container"]
+[node name="Name" type="Label" parent="BattleMenu/MenuLayout/Options/Container/Attacks/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "ATTACKS"
 
-[node name="Skills" type="MarginContainer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container" node_paths=PackedStringArray("Menu")]
+[node name="Skills" type="MarginContainer" parent="BattleMenu/MenuLayout/Options/Container" node_paths=PackedStringArray("Menu")]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("4_opylm")
-Menu = NodePath("../../../../../../SubMenus/SkillsMenu")
+Menu = NodePath("../../../../../SubMenus/SkillsMenu")
 
-[node name="OptionBackground" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Skills" instance=ExtResource("12_q1s6e")]
+[node name="OptionBackground" parent="BattleMenu/MenuLayout/Options/Container/Skills" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
 texture = ExtResource("5_h83ow")
 patch_margin_left = 8
 patch_margin_right = 8
 patch_margin_bottom = 4
 
-[node name="Layout" type="MarginContainer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Skills"]
+[node name="Layout" type="MarginContainer" parent="BattleMenu/MenuLayout/Options/Container/Skills"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = -2
 
-[node name="Container" type="HBoxContainer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Skills/Layout"]
+[node name="Container" type="HBoxContainer" parent="BattleMenu/MenuLayout/Options/Container/Skills/Layout"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Skills/Layout/Container"]
+[node name="Name" type="Label" parent="BattleMenu/MenuLayout/Options/Container/Skills/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "SKILLS"
 
-[node name="Items" type="MarginContainer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container" node_paths=PackedStringArray("Menu")]
+[node name="Items" type="MarginContainer" parent="BattleMenu/MenuLayout/Options/Container" node_paths=PackedStringArray("Menu")]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("4_opylm")
-Menu = NodePath("../../../../../../SubMenus/ItemsMenu")
+Menu = NodePath("../../../../../SubMenus/ItemsMenu")
 
-[node name="OptionBackground" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Items" instance=ExtResource("12_q1s6e")]
+[node name="OptionBackground" parent="BattleMenu/MenuLayout/Options/Container/Items" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
 texture = ExtResource("5_h83ow")
 patch_margin_left = 8
 patch_margin_right = 8
 patch_margin_bottom = 4
 
-[node name="Layout" type="MarginContainer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Items"]
+[node name="Layout" type="MarginContainer" parent="BattleMenu/MenuLayout/Options/Container/Items"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = -2
 
-[node name="Container" type="HBoxContainer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Items/Layout"]
+[node name="Container" type="HBoxContainer" parent="BattleMenu/MenuLayout/Options/Container/Items/Layout"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Items/Layout/Container"]
+[node name="Name" type="Label" parent="BattleMenu/MenuLayout/Options/Container/Items/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "ITEMS"
 
-[node name="Escape" type="MarginContainer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container" node_paths=PackedStringArray("Menu")]
+[node name="Escape" type="MarginContainer" parent="BattleMenu/MenuLayout/Options/Container" node_paths=PackedStringArray("Menu")]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
 script = ExtResource("4_opylm")
-Menu = NodePath("../../../../../../SubMenus/EscapeMenu")
+Menu = NodePath("../../../../../SubMenus/EscapeMenu")
 
-[node name="OptionBackground" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Escape" instance=ExtResource("12_q1s6e")]
+[node name="OptionBackground" parent="BattleMenu/MenuLayout/Options/Container/Escape" instance=ExtResource("12_q1s6e")]
 layout_mode = 2
 texture = ExtResource("5_h83ow")
 patch_margin_left = 8
 patch_margin_right = 8
 patch_margin_bottom = 4
 
-[node name="Layout" type="MarginContainer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Escape"]
+[node name="Layout" type="MarginContainer" parent="BattleMenu/MenuLayout/Options/Container/Escape"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = -2
 
-[node name="Container" type="HBoxContainer" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Escape/Layout"]
+[node name="Container" type="HBoxContainer" parent="BattleMenu/MenuLayout/Options/Container/Escape/Layout"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="MainMenu/BattleMenu/MenuLayout/Options/Container/Escape/Layout/Container"]
+[node name="Name" type="Label" parent="BattleMenu/MenuLayout/Options/Container/Escape/Layout/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_ui3bp")
 text = "ESCAPE"
 
-[node name="TitleOld" type="TextureRect" parent="MainMenu/BattleMenu/MenuLayout"]
+[node name="TitleOld" type="TextureRect" parent="BattleMenu/MenuLayout"]
 visible = false
 layout_mode = 2
 texture = ExtResource("3_x4ljg")
 stretch_mode = 3
 
-[node name="SubMenus" type="Node2D" parent="."]
-position = Vector2(103, 0)
+[node name="SubMenus" type="Control" parent="."]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 0
+offset_left = 103.0
+offset_right = 103.0
 
 [node name="AttacksMenu" type="MarginContainer" parent="SubMenus"]
 unique_name_in_owner = true
+layout_mode = 2
 offset_left = -30.0
 offset_right = 44.0
 offset_bottom = 40.0
@@ -356,6 +358,7 @@ script = ExtResource("10_n5g42")
 [node name="SkillsMenu" type="MarginContainer" parent="SubMenus"]
 unique_name_in_owner = true
 visible = false
+layout_mode = 2
 offset_left = -30.0
 offset_right = 104.0
 offset_bottom = 40.0
@@ -645,6 +648,7 @@ script = ExtResource("10_n5g42")
 [node name="ItemsMenu" type="MarginContainer" parent="SubMenus"]
 unique_name_in_owner = true
 visible = false
+layout_mode = 2
 offset_left = -30.0
 offset_right = 109.0
 offset_bottom = 40.0
@@ -732,6 +736,7 @@ uppercase = true
 [node name="EscapeMenu" type="MarginContainer" parent="SubMenus"]
 unique_name_in_owner = true
 visible = false
+layout_mode = 2
 offset_left = -30.0
 offset_right = 64.0
 offset_bottom = 40.0
@@ -830,5 +835,3 @@ theme = ExtResource("3_ui3bp")
 text = " NO "
 horizontal_alignment = 1
 uppercase = true
-
-[node name="ActionHelper" type="Node" parent="."]

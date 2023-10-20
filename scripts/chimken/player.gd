@@ -11,6 +11,7 @@ enum Direction {
 
 @onready var Sprite : Sprite2D = $Sprite2D
 @onready var Animator : AnimationPlayer = $AnimationPlayer
+@onready var Camera : ClampCamera = $MainCamera;
 
 
 @export_group("Info")
@@ -18,9 +19,16 @@ enum Direction {
 @export var moving_direction : Direction = Direction.Down
 
 
+
+
+func set_camera(cam : ClampCamera):
+	Camera = cam;
+
+
 func _ready():
 	moving_direction = Direction.Down
 	Animator.play(&"idle_down")
+	print("ccc - %s" % [Camera]);
 #	var cam : Camera2D = get_node("%MainCamera");
 #	add_child(cam);
 #	print("a-%s" % [get_children()]);

@@ -222,6 +222,7 @@ libraries = {
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 12)
 shape = SubResource("RectangleShape2D_s5tcc")
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="MainCamera" type="Camera2D" parent="."]
 unique_name_in_owner = true

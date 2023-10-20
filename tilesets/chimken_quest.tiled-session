@@ -1,0 +1,56 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "C:/Program Files/Tiled/examples/sticker-knight/map/objs.tsx": {
+            "dynamicWrapping": true
+        },
+        "C:/Program Files/Tiled/examples/sticker-knight/map/sandbox.tmx": {
+            "expandedObjectLayers": [
+                7
+            ],
+            "scale": 0.46823575949367086,
+            "selectedLayer": 8,
+            "viewCenter": {
+                "x": 1262.1846751710739,
+                "y": 719.7229027625244
+            }
+        },
+        "kfp_interior.tmx": {
+            "scale": 4,
+            "selectedLayer": 9,
+            "viewCenter": {
+                "x": 126.25,
+                "y": 141.25
+            }
+        },
+        "kfp_interior_tileset.tsx": {
+            "dynamicWrapping": false
+        }
+    },
+    "last.exportedFilePath": "B:/Dropbox/godot/chimken_quest/scenes",
+    "last.imagePath": "B:/Dropbox/kiyodev/art/pmp/chimken/tilesets",
+    "map.height": 32,
+    "map.lastUsedExportFilter": "Godot 4 Scene files (*.tscn)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 32,
+    "openFiles": [
+    ],
+    "project": "chimken_quest.tiled-project",
+    "property.type": "int",
+    "recentFiles": [
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 32,
+        "width": 16
+    }
+}

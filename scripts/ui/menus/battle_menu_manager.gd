@@ -75,7 +75,6 @@ func _open_menu():
 	
 	BattleMenu._connect_option_selected(on_option_selected);
 	curr_menu = BattleMenu;
-#	curr_menu._connect_option_selected(on_option_selected);
 	var next = curr_menu._open();
 	Cursor.open(next);
 
@@ -83,15 +82,14 @@ func _open_menu():
 func _close_menu():
 	BattleMenu._disconnect_option_selected(on_option_selected);
 	if(!menu_open): return;
+	menu_open = false;
 	BattleMenu._exit();
 	
-	menu_open = false;
-#	curr_menu._exit();
 	while(!menu_stack.is_empty()):
 		menu_stack.pop_back()._exit();
 	Cursor.close();
-	
-	
+
+
 func _show_menu():
 	BattleMenu._show();
 	Cursor._show();
@@ -116,7 +114,7 @@ func navigate_manu(move, horizontal):
 	if(option == null || option == Cursor.focused_opt): 
 		return;
 	Cursor.change_focus(option);
-	
+
 
 func cancel_option():
 	if(!menu_stack.is_empty()):
@@ -125,8 +123,7 @@ func cancel_option():
 		curr_menu = menu_stack.pop_back();
 		curr_menu._focus();
 		curr_menu._show();
-		var next = curr_menu._get_current_option();
-		Cursor.on_menu_open(next);
+		Cursor.on_menu_open(curr_menu._get_current_option());
 		print("after - '%s'" % [curr_menu]);
 #		change_focus(curr_menu._get_current_option());
 	else:
@@ -172,7 +169,7 @@ func swap(actions : Array[ActionDefinition], menu : Menu):
 		opt.swap_action(actions[i]);
 		opt._show();
 
-# FIXME: Options.get_child_count() doesn't take hidden children into acocunt, maybe do just remove excess labels during swap?
+
 func adjust_menu_size(menu : Menu, size : int):
 	if(menu.option_count() < size):
 		for i in range(menu.option_count(), size):

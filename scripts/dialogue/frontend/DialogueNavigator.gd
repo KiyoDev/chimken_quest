@@ -1,11 +1,18 @@
 extends Node
 
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+var curr_dialogue : Dialogue;
+
+# TODO: if curr.next is MultipleChoice, bring up multiple choice menu when curr dialogue finishes
+func _input(event):
+	pass;
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+func _start(dialogue_node):
+	pass;
+
+
+func go_next():
+	pass;
+
+

@@ -1,5 +1,6 @@
 class_name ItemTrigger extends DialogueTrigger
 
+
 @export var item : ItemDefinition;
 
 
