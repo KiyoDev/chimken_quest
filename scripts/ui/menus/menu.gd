@@ -24,27 +24,28 @@ func _ready():
 
 
 func _navigate(move, horizontal):
-	if(!visible || !is_focused || Options.get_child_count() == 0): 
-		print("trying to navigate an unfocused menu....");
+	if(!visible || !is_focused || option_count() == 0): 
+		print("trying to navigate an unfocused menu [%s]" % [name]);
 		return;
 	var option : OptionBase;
+	print("is h - %s, %s, (%s)" % [horizontal, select_wrap, move]);
 	if(Options is VBoxContainer):
 		if(horizontal): return option;
 		if(select_wrap):
 			option = navigate_wrap(move.y);
-		else:
-			option = try_get_option(clampi(focused_index + move.y, 0, Options.get_child_count() - 1));
+		else: # FIXME: Options.get_child_count() doesn't take hidden children into acocunt
+			option = try_get_option(clampi(focused_index + move.y, 0, option_count() - 1));
 	elif(Options is HBoxContainer):
 		if(!horizontal): return option;
 		if(select_wrap):
 			option = navigate_wrap(move.x);
 		else:
-			option = try_get_option(clampi(focused_index + move.x, 0, Options.get_child_count() - 1));
+			option = try_get_option(clampi(focused_index + move.x, 0, option_count() - 1));
 	elif(Options is GridContainer):
 		if(select_wrap):
 			var index := focused_index;
 			var columns : int = Options.columns;
-			var size := Options.get_child_count();
+			var size := option_count();
 			
 			if(move.x > 0): # right
 				index = (focused_index + 1) % columns + ((focused_index / columns) * columns);
@@ -66,14 +67,16 @@ func _navigate(move, horizontal):
 
 func navigate_wrap(direction_value) -> OptionBase:
 	if(direction_value > 0):
-		return try_get_option((focused_index + 1) % Options.get_child_count());
+		return try_get_option((focused_index + 1) % option_count());
 	elif(direction_value < 0):
-		return try_get_option((focused_index - 1 + Options.get_child_count()) % Options.get_child_count());
+		return try_get_option((focused_index - 1 + option_count()) % option_count());
 	return null;
 
 
 func try_get_option(index) -> OptionBase:
-	if(index < 0 || index >= Options.get_child_count()): 
+	print("try get - %s, ch-'%s'" % [index, option_count()]);
+	print(Options.get_children());
+	if(index < 0 || index >= option_count()): 
 		return null;
 	
 	# Only change index if option is visible to prevent navigating to invalid options
@@ -159,7 +162,8 @@ func _reset():
 
 
 func _select_option():
-	if(Options.get_child_count() == 0): return;
+	if(option_count() == 0): return;
+	_unfocus();
 	var curr := _get_current_option();
 	print("opt - %s" % [curr]);
 	
@@ -168,8 +172,7 @@ func _select_option():
 	if(option == null):
 		return null;
 		
-	_unfocus();
-	print("selecting option on '%s'[children=%s, i=%s]" % [name, Options.get_child_count(), focused_index]);
+	print("selecting option on '%s'[children=%s, i=%s]" % [name, option_count(), focused_index]);
 	return option;
 
 
@@ -188,8 +191,17 @@ func _add_option(option : OptionBase):
 	Options.add_child(option);
 
 
+func _remove_option_by_index(index : int):
+	Options.remove_child(get_option(index));
+
+
+func _remove_option(option : OptionBase):
+	Options.remove_child(option);
+
+
 func get_option(index : int) -> OptionBase:
-	if(index < 0 || index >= Options.get_child_count()): 
+	print("getting - [%s, %s]" % [index, option_count()])
+	if(index < 0 || index >= option_count()): 
 		return null;
 	return Options.get_child(index);
 

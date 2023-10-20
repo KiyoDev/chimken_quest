@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/battle/nodes/battle_ui.gd" id="2_7g0n2"]
 [ext_resource type="Theme" uid="uid://1qeq3n04pcoe" path="res://assets/fonts/battle_ui.theme" id="2_i8bjo"]
 [ext_resource type="Script" path="res://scripts/chimken/character.gd" id="2_jgbtj"]
-[ext_resource type="Script" path="res://scripts/ui/v_button.gd" id="3_evtcr"]
+[ext_resource type="Script" path="res://scripts/ui/menus/old/v_button.gd" id="5_g1l0n"]
 
 [node name="BattleSystem" type="Node"]
 script = ExtResource("1_3ul8d")
@@ -55,7 +55,7 @@ focus_previous = NodePath("../Escape")
 mouse_filter = 2
 button_mask = 0
 text = "Attacks"
-script = ExtResource("3_evtcr")
+script = ExtResource("5_g1l0n")
 
 [node name="Skills" type="Button" parent="StyleControl/ActionCategoriesPanel/ActionCategories"]
 unique_name_in_owner = true
@@ -65,7 +65,7 @@ focus_neighbor_right = NodePath(".")
 mouse_filter = 2
 button_mask = 0
 text = "Skills"
-script = ExtResource("3_evtcr")
+script = ExtResource("5_g1l0n")
 
 [node name="Items" type="Button" parent="StyleControl/ActionCategoriesPanel/ActionCategories"]
 unique_name_in_owner = true
@@ -75,7 +75,7 @@ focus_neighbor_right = NodePath(".")
 mouse_filter = 2
 button_mask = 0
 text = "Items"
-script = ExtResource("3_evtcr")
+script = ExtResource("5_g1l0n")
 
 [node name="Escape" type="Button" parent="StyleControl/ActionCategoriesPanel/ActionCategories"]
 unique_name_in_owner = true
@@ -87,7 +87,7 @@ focus_next = NodePath("../Attacks")
 mouse_filter = 2
 button_mask = 0
 text = "Escape "
-script = ExtResource("3_evtcr")
+script = ExtResource("5_g1l0n")
 
 [node name="AttackListPanel" type="PanelContainer" parent="StyleControl"]
 visible = false
@@ -108,7 +108,7 @@ focus_neighbor_right = NodePath(".")
 mouse_filter = 2
 text = "Slash
 "
-script = ExtResource("3_evtcr")
+script = ExtResource("5_g1l0n")
 
 [node name="peck" type="Button" parent="StyleControl/AttackListPanel/AttackList"]
 layout_mode = 2
@@ -117,7 +117,7 @@ focus_neighbor_right = NodePath(".")
 mouse_filter = 2
 text = "Peck
 "
-script = ExtResource("3_evtcr")
+script = ExtResource("5_g1l0n")
 
 [node name="SkillListPanel" type="PanelContainer" parent="StyleControl"]
 visible = false
@@ -135,25 +135,25 @@ layout_mode = 2
 layout_mode = 2
 mouse_filter = 2
 text = "Chain Frost"
-script = ExtResource("3_evtcr")
+script = ExtResource("5_g1l0n")
 
 [node name="focus" type="Button" parent="StyleControl/SkillListPanel/SkillList"]
 layout_mode = 2
 mouse_filter = 2
 text = "Focus"
-script = ExtResource("3_evtcr")
+script = ExtResource("5_g1l0n")
 
 [node name="avalanche" type="Button" parent="StyleControl/SkillListPanel/SkillList"]
 layout_mode = 2
 mouse_filter = 2
 text = "Avalanche"
-script = ExtResource("3_evtcr")
+script = ExtResource("5_g1l0n")
 
 [node name="mass_heal" type="Button" parent="StyleControl/SkillListPanel/SkillList"]
 layout_mode = 2
 mouse_filter = 2
 text = "Mass Heal"
-script = ExtResource("3_evtcr")
+script = ExtResource("5_g1l0n")
 
 [node name="ItemListPanel" type="PanelContainer" parent="StyleControl"]
 visible = false
@@ -172,7 +172,7 @@ layout_mode = 2
 mouse_filter = 2
 text = "Potion
 "
-script = ExtResource("3_evtcr")
+script = ExtResource("5_g1l0n")
 
 [node name="EscapePanel" type="PanelContainer" parent="StyleControl"]
 visible = false
@@ -190,14 +190,14 @@ layout_mode = 2
 layout_mode = 2
 mouse_filter = 2
 text = "Yes"
-script = ExtResource("3_evtcr")
+script = ExtResource("5_g1l0n")
 
 [node name="cancel" type="Button" parent="StyleControl/EscapePanel/EscapeList"]
 layout_mode = 2
 mouse_filter = 2
 text = "No
 "
-script = ExtResource("3_evtcr")
+script = ExtResource("5_g1l0n")
 
 [node name="DummyContainer" type="PanelContainer" parent="StyleControl"]
 unique_name_in_owner = true
@@ -211,7 +211,7 @@ offset_bottom = 118.0
 [node name="Dummy Button" type="Button" parent="StyleControl/DummyContainer"]
 layout_mode = 2
 text = "dummy"
-script = ExtResource("3_evtcr")
+script = ExtResource("5_g1l0n")
 
 [node name="TargetList" type="Control" parent="StyleControl"]
 unique_name_in_owner = true
