@@ -1,0 +1,46 @@
+[gd_scene load_steps=3 format=3 uid="uid://duio0ke3bpeoi"]
+
+[ext_resource type="Script" path="res://addons/chicken_scratch/dialogue_graph_editor.gd" id="1_b2x1w"]
+[ext_resource type="Script" path="res://scripts/dialogue/graph/DialogueGraph.gd" id="1_mbi1r"]
+
+[node name="ChickenScratch" type="VBoxContainer"]
+offset_right = 1584.0
+offset_bottom = 1040.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_b2x1w")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Add Node" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Add Node"
+
+[node name="Control" type="Control" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control2" type="Control" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control3" type="Control" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control4" type="Control" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Graph" type="GraphEdit" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+show_zoom_label = true
+script = ExtResource("1_mbi1r")
+
+[connection signal="pressed" from="HBoxContainer/Add Node" to="." method="_on_add_node_pressed"]
+[connection signal="connection_request" from="Graph" to="." method="_on_graph_connection_request"]
+[connection signal="disconnection_request" from="Graph" to="." method="_on_graph_disconnection_request"]

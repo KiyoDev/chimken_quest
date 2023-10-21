@@ -3,6 +3,9 @@ class_name Dialogue extends GraphElement
 ## Text to display in a dialogue box.
 @export var text : String;
 
+# if using dialogue icons, then need dict<name, icon>
+@export var speaker : String;
+
 @export var next_trigger : DialogueTrigger;
 
 @export var next : GraphElement;

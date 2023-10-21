@@ -85,7 +85,7 @@ category = 1
 target = 2
 targeting_type = 1
 
-[sub_resource type="Resource" id="Resource_5lyti"]
+[sub_resource type="Resource" id="Resource_yvhw1"]
 resource_local_to_scene = true
 script = ExtResource("3_vx2xv")
 character_name = "Chimken"
@@ -138,6 +138,6 @@ layer_0/tile_data = PackedInt32Array(-1, 131072, 2, 0, 131072, 2, 131071, 131072
 
 [node name="CharacterBody2D" parent="." groups=["Player"] instance=ExtResource("1_rjj5t")]
 position = Vector2(128, 232)
-info = SubResource("Resource_5lyti")
+info = SubResource("Resource_yvhw1")
 
 [node name="Area" parent="." instance=ExtResource("6_hvn4y")]

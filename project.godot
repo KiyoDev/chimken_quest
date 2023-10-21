@@ -20,7 +20,6 @@ ExperienceTable="*res://scripts/autoload/experience_table.gd"
 ActionDatabase="*res://scripts/autoload/action_database.tscn"
 Rng="*res://scripts/autoload/rng.gd"
 BattleSystem="*res://scenes/battle/battle_system.tscn"
-MenuController="res://scenes/ui/menu_controller.tscn"
 Game="*res://scripts/autoload/game.gd"
 
 [debug]
@@ -37,7 +36,7 @@ window/stretch/scale=4.0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/Todo_Manager/plugin.cfg", "res://addons/abfi/plugin.cfg", "res://addons/gut/plugin.cfg")
+enabled=PackedStringArray("res://addons/Todo_Manager/plugin.cfg", "res://addons/abfi/plugin.cfg", "res://addons/chicken_scratch/plugin.cfg", "res://addons/gut/plugin.cfg")
 
 [gui]
 
