@@ -25,7 +25,7 @@ static func is_power_of_2(n : int) -> bool:
 
 static func pixel_clamp(move : Vector2) -> Vector2:
 	var pixel = Vector2(roundi(move.x * 16), roundi(move.y * 16));
-#	print("px-%s, %s" % [pixel, pixel / 16]);
+#	print_debug("px-%s, %s" % [pixel, pixel / 16]);
 	
 	return pixel / 16;
 

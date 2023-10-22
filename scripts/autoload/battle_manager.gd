@@ -52,7 +52,7 @@ signal test_mp_change;
 func _test(event):
 	if(event.is_action_pressed(&"test_battle_start")):
 		if(in_battle): return;
-		print("Start battle...");
+		print_debug("Start battle...");
 		in_battle = true;
 		# TODO: normally would get populated based on party list & encountered enemy
 		var c1 = test_generate_character("Chimken", 10, AllyContainer, test_chimken._clone());
@@ -65,11 +65,11 @@ func _test(event):
 		e1.position = Vector2(c1.position.x + 64, c1.position.y + 16);
 		e2.position = Vector2(e1.position.x, e1.position.y + 32);
 		
-		print("c1 - %s" % [c1.position]);
-		print("e2 - %s" % [e2.position]);
+		print_debug("c1 - %s" % [c1.position]);
+		print_debug("e2 - %s" % [e2.position]);
 		for  a in AllyContainer.get_children():
-			print("char - %s, %s, [%s, '%s']" % [a.info.character_name, a.get_instance_id(), a.info, a.info.resource_path])
-		print("battleele - %s, %s" % [AllyContainer.get_children(), EnemyContainer.get_children()]);
+			print_debug("char - %s, %s, [%s, '%s']" % [a.info.character_name, a.get_instance_id(), a.info, a.info.resource_path])
+		print_debug("battleele - %s, %s" % [AllyContainer.get_children(), EnemyContainer.get_children()]);
 #		AllyContainer.add_child(c1);
 #		AllyContainer.add_child(c2);
 #		# TODO: instantiate enemies from a list based on the area
@@ -107,10 +107,10 @@ func test_generate_character(name, speed, node : Node, char : Character):
 
 
 #func test_print():
-#	print("allies - %s" % [AllyContainer.get_children()]);
-#	print("enemies - %s" % [EnemyContainer.get_children()]);
-#	print("turn_queue %s" % [turn_queue]);
-#	print("turn queue - %s"  % turn_queue);
+#	print_debug("allies - %s" % [AllyContainer.get_children()]);
+#	print_debug("enemies - %s" % [EnemyContainer.get_children()]);
+#	print_debug("turn_queue %s" % [turn_queue]);
+#	print_debug("turn queue - %s"  % turn_queue);
 #	print(ActionDefinition.target_type("All"));
 #	BattleUI.test_print();
 
@@ -125,7 +125,7 @@ func init_battle(allies, enemies):
 	# init battle, calculate turn order, create turns
 	# TODO: populate ally and enemy containers
 	# TODO: populate lists of actions for each character that can swap out when turns change
-	print("initializing battle...");
+	print_debug("initializing battle...");
 	round = 0;
 	
 	# TODO: init character action label dictionary in BattleMenuManager;
@@ -136,8 +136,8 @@ func init_battle(allies, enemies):
 	for e in enemies:
 		enemy_turns.append(EnemyTurn.new(e as Enemy));
 	
-#	print("ally  turns  -  %s" % [ally_turns]);
-#	print("enemy  turns  -  %s" % [enemy_turns]);
+#	print_debug("ally  turns  -  %s" % [ally_turns]);
+#	print_debug("enemy  turns  -  %s" % [enemy_turns]);
 	
 	start_turn();
 
@@ -145,7 +145,7 @@ func init_battle(allies, enemies):
 func end_battle():
 	if(!in_battle): return;
 	in_battle = false;
-	print("End battle");
+	print_debug("End battle");
 	
 	battle_menu_manager.on_battle_ended();
 	for n in AllyContainer.get_children():
@@ -162,15 +162,15 @@ func end_battle():
 func new_round():
 	turn_queue.append_array(ally_turns);
 	turn_queue.append_array(enemy_turns);
-#	print("before - %s" % [turn_queue]);
+#	print_debug("before - %s" % [turn_queue]);
 	calc_turn_order();
 	round += 1;
-	print("Round(%s) - %s" % [round, turn_queue]);
+	print_debug("Round(%s) - %s" % [round, turn_queue]);
 
 
 func start_turn():
 	current_actor = get_next_turn().character;
-	print("current_actor - %s" % [current_actor]);
+	print_debug("current_actor - %s" % [current_actor]);
 	if(current_actor.info.type == CharacterDefinition.Type.Ally):
 		battle_menu_manager.swap_actions(current_actor);
 	else:

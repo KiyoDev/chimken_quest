@@ -32,7 +32,7 @@ func _ready():
 	# TODO: quick test for reparenting player to tilemap
 	if(player == null): return;
 	
-	print("player - %s, %s, %s, %s, %s" % [player, current_scene, current_scene.get_node("Area"), get_tree().get_first_node_in_group("Bounds"), player.Camera]);
+	print_debug("player - %s, %s, %s, %s, %s" % [player, current_scene, current_scene.get_node("Area"), get_tree().get_first_node_in_group("Bounds"), player.Camera]);
 	
 	
 	player.reparent(current_scene.get_node("Area").get_node("TileMap"));

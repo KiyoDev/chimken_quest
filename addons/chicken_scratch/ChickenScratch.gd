@@ -13,11 +13,8 @@ var graph_instance;
 func _enter_tree():
 	graph_instance = graph.instantiate();
 	# Initialization of the plugin goes here.
-	print_debug(get_editor_interface().get_editor_main_screen().get_children());
-	print_debug(graph_instance);
-	
-#	add_control_to_dock(DOCK_SLOT_LEFT_UR, graph);
-#	add_control_to_container(CONTAINER_TOOLBAR, graph_instance);
+#	print_debug(get_editor_interface().get_editor_main_screen().get_children());
+#	print_debug(graph_instance);
 
 	get_editor_interface().get_editor_main_screen().add_child(graph_instance);
 	_make_visible(false);
@@ -36,7 +33,6 @@ func _has_main_screen():
 func _make_visible(visible):
 	if graph_instance:
 		graph_instance.visible = visible;
-
 
 
 func _get_plugin_name():

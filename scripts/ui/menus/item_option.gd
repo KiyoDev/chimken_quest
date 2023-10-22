@@ -27,4 +27,4 @@ func _selected():
 
 func _on_menu_closed():
 	super._on_menu_closed();
-	print("closing '%s'" % [name]);
+	print_debug("closing '%s'" % [name]);

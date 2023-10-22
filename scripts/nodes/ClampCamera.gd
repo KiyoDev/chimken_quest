@@ -10,7 +10,7 @@ func _ready():
 	set_scroll_limits(AreaBounds);
 	var t : TileMap = get_tree().get_first_node_in_group("TileMap");
 	
-	print("t.get_used_rect() - %s" % [t.get_used_rect()]);
+	print_debug("t.get_used_rect() - %s" % [t.get_used_rect()]);
 
 
 func set_scroll_limits(coll : CollisionShape2D):
@@ -23,8 +23,8 @@ func set_scroll_limits(coll : CollisionShape2D):
 	var left := coll.position.x - w_dia;
 	var right := coll.position.x + w_dia;
 	
-	print("[%s, %s, %s, %s]" % [top, bottom, left, right]);
-	print("area - %s, %s" % [rect.position, coll.position]);
+	print_debug("[%s, %s, %s, %s]" % [top, bottom, left, right]);
+	print_debug("area - %s, %s" % [rect.position, coll.position]);
 	
 	limit_top = top;
 	limit_bottom = bottom;

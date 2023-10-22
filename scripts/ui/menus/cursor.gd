@@ -15,7 +15,7 @@ var focused_opt : OptionBase;
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-#	print("Animator - %s" % [Animator]);
+#	print_debug("Animator - %s" % [Animator]);
 	hide();
 
 
@@ -25,7 +25,7 @@ func _reset(next : OptionBase):
 	
 
 func _menu():
-#	print("menu - %s" % [Animator]);
+#	print_debug("menu - %s" % [Animator]);
 	Animator.play(&"menu_cursor");
 
 
@@ -60,7 +60,7 @@ func change_focus(next):
 
 
 func update_pos(option : OptionBase):
-#	print("updating cursor pos - [%s, %s]" % [global_position, option.global_position]);
+#	print_debug("updating cursor pos - [%s, %s]" % [global_position, option.global_position]);
 	global_position = Vector2(option.global_position.x - 5, option.global_position.y + (option.size.y / 2));
 
 

@@ -17,12 +17,12 @@ var neighbor_left : TargetCursor;
 var neighbor_right : TargetCursor;
 
 func _ready():
-#	print("ioin - %s, %s" % [n_sprite, animator]);
+#	print_debug("ioin - %s, %s" % [n_sprite, animator]);
 	_unselect();
 
 
 func _select():
-	print("TargetCursor - selected [%s]" % [character.info]);
+	print_debug("TargetCursor - selected [%s]" % [character.info]);
 	animator.play(&"target_cursor_selected");
 	_show();
 	is_selected = true;

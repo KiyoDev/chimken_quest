@@ -28,7 +28,7 @@ func _disconnect_option_selected(callable):
 	
 
 func _selected():
-	print("_selected submenu '%s'" % [name]);
+	print_debug("_selected submenu '%s'" % [name]);
 	super._selected();
 	return Menu._open();
 
@@ -61,4 +61,4 @@ func _on_menu_opened():
 func _on_menu_closed():
 	super._on_menu_closed();
 	Menu._exit();
-	print("closing '%s'" % [name]);
+	print_debug("closing '%s'" % [name]);

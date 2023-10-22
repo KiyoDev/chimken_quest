@@ -28,11 +28,11 @@ func set_camera(cam : ClampCamera):
 func _ready():
 	moving_direction = Direction.Down
 	Animator.play(&"idle_down")
-	print("ccc - %s" % [Camera]);
+	print_debug("ccc - %s" % [Camera]);
 #	var cam : Camera2D = get_node("%MainCamera");
 #	add_child(cam);
-#	print("a-%s" % [get_children()]);
-#	print("asdsadas-%s" % [cam]);
+#	print_debug("a-%s" % [get_children()]);
+#	print_debug("asdsadas-%s" % [cam]);
 
 
 func _physics_process(delta):
@@ -56,8 +56,8 @@ func handle_input():
 	
 #	if(velocity.x != 0 || velocity.y != 0):
 	if(velocity):
-#		print("vel=%s, [%s], [%s]" % [velocity, position, direction]);
-#		print("velocity = %s" % velocity)
+#		print_debug("vel=%s, [%s], [%s]" % [velocity, position, direction]);
+#		print_debug("velocity = %s" % velocity)
 		if(direction.x > 0): # right
 			if(!Animator.current_animation.begins_with(&"idle") && direction.y != 0 && moving_direction != Direction.Left):
 				return;

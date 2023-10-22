@@ -11,7 +11,7 @@ func _ready():
 
 
 func _on_LineEdit_text_changed(new_text):
-	print("lkadjgkladgja");
+	print_debug("lkadjgkladgja");
 	if regex.search(new_text):
 		oldtext = new_text;
 		text = new_text;

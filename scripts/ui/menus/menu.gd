@@ -25,10 +25,10 @@ func _ready():
 
 func _navigate(move, horizontal):
 	if(!visible || !is_focused || option_count() == 0): 
-		print("trying to navigate an unfocused menu [%s]" % [name]);
+		print_debug("trying to navigate an unfocused menu [%s]" % [name]);
 		return;
 	var option : OptionBase;
-	print("is h - %s, %s, (%s)" % [horizontal, select_wrap, move]);
+	print_debug("is h - %s, %s, (%s)" % [horizontal, select_wrap, move]);
 	if(Options is VBoxContainer):
 		if(horizontal): return option;
 		if(select_wrap):
@@ -74,7 +74,7 @@ func navigate_wrap(direction_value) -> OptionBase:
 
 
 func try_get_option(index) -> OptionBase:
-	print("try get - %s, ch-'%s'" % [index, option_count()]);
+	print_debug("try get - %s, ch-'%s'" % [index, option_count()]);
 	print(Options.get_children());
 	if(index < 0 || index >= option_count()): 
 		return null;
@@ -90,7 +90,7 @@ func try_get_option(index) -> OptionBase:
 ## Connect callable to all menu's options' signals
 func _connect_option_selected(callable):
 	for opt in Options.get_children():
-#		print("connecting '%s' to '%s'" % [callable, opt]);
+#		print_debug("connecting '%s' to '%s'" % [callable, opt]);
 		opt._connect_option_selected(callable);
 		
 		
@@ -102,7 +102,7 @@ func _disconnect_option_selected(callable):
 
 func _focus():
 	is_focused = true;
-#	print("default_option - %s" % [Options.get_child(focused_index).global_position]);
+#	print_debug("default_option - %s" % [Options.get_child(focused_index).global_position]);
 
 
 func _unfocus():
@@ -116,7 +116,7 @@ func _open():
 	if(Options.get_child_count() > 0):
 		for opt in Options.get_children():
 #			opt.show(); # will show all the sub children, don't want that
-			print("option '%s' - %s" % [opt.name, opt.global_position]);
+			print_debug("option '%s' - %s" % [opt.name, opt.global_position]);
 		var default_option : OptionBase = _get_current_option();
 		default_option._focus();
 		return default_option;
@@ -124,7 +124,7 @@ func _open():
 
 
 func _exit():
-	print("Exiting Menu - '%s'" % [self]);
+	print_debug("Exiting Menu - '%s'" % [self]);
 	_hide();
 	for opt in Options.get_children():
 		opt._exit();
@@ -133,9 +133,9 @@ func _exit():
 	
 
 func _try_exit():
-	print("Trying to exit...");
+	print_debug("Trying to exit...");
 	if(!escapeable): return;
-	print("Exited");
+	print_debug("Exited");
 	_hide();
 	focused_index = 0;
 
@@ -165,14 +165,14 @@ func _select_option():
 	if(option_count() == 0): return;
 	_unfocus();
 	var curr := _get_current_option();
-	print("opt - %s" % [curr]);
+	print_debug("opt - %s" % [curr]);
 	
 	var option = curr._selected();
-	print("option '%s'" % [option]);
+	print_debug("option '%s'" % [option]);
 	if(option == null):
 		return null;
 		
-	print("selecting option on '%s'[children=%s, i=%s]" % [name, option_count(), focused_index]);
+	print_debug("selecting option on '%s'[children=%s, i=%s]" % [name, option_count(), focused_index]);
 	return option;
 
 
@@ -200,7 +200,7 @@ func _remove_option(option : OptionBase):
 
 
 func get_option(index : int) -> OptionBase:
-	print("getting - [%s, %s]" % [index, option_count()])
+	print_debug("getting - [%s, %s]" % [index, option_count()])
 	if(index < 0 || index >= option_count()): 
 		return null;
 	return Options.get_child(index);

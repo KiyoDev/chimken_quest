@@ -1,22 +1,44 @@
 [gd_scene load_steps=3 format=3 uid="uid://duio0ke3bpeoi"]
 
-[ext_resource type="Script" path="res://addons/chicken_scratch/dialogue_graph_editor.gd" id="1_b2x1w"]
 [ext_resource type="Script" path="res://scripts/dialogue/graph/DialogueGraph.gd" id="1_mbi1r"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/DialogueGraphEditor.gd" id="1_r3kp1"]
 
 [node name="ChickenScratch" type="VBoxContainer"]
 offset_right = 1584.0
 offset_bottom = 1040.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_b2x1w")
+script = ExtResource("1_r3kp1")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="FileMenu" type="MenuButton" parent="HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "..."
+item_count = 2
+popup/item_0/text = "Open"
+popup/item_0/id = 0
+popup/item_1/text = "Save"
+popup/item_1/id = 1
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
 layout_mode = 2
 
 [node name="Add Node" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Add Node"
+
+[node name="Get Connections" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Get Connections"
+
+[node name="VSeparator2" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
 
 [node name="Control" type="Control" parent="HBoxContainer"]
 layout_mode = 2
@@ -38,9 +60,39 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+right_disconnects = true
 show_zoom_label = true
 script = ExtResource("1_mbi1r")
 
+[node name="RightClickMenu" type="PanelContainer" parent="Graph"]
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1399.0
+offset_bottom = -869.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Graph/RightClickMenu"]
+layout_mode = 2
+
+[node name="NewNode" type="Button" parent="Graph/RightClickMenu/VBoxContainer"]
+layout_mode = 2
+text = "Add Node Here"
+
+[node name="Button2" type="Button" parent="Graph/RightClickMenu/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[connection signal="about_to_popup" from="HBoxContainer/FileMenu" to="." method="_on_file_menu_about_to_popup"]
 [connection signal="pressed" from="HBoxContainer/Add Node" to="." method="_on_add_node_pressed"]
+[connection signal="pressed" from="HBoxContainer/Get Connections" to="." method="_on_get_connections_pressed"]
 [connection signal="connection_request" from="Graph" to="." method="_on_graph_connection_request"]
+[connection signal="copy_nodes_request" from="Graph" to="." method="_on_graph_copy_nodes_request"]
+[connection signal="delete_nodes_request" from="Graph" to="." method="_on_graph_delete_nodes_request"]
 [connection signal="disconnection_request" from="Graph" to="." method="_on_graph_disconnection_request"]
+[connection signal="gui_input" from="Graph" to="." method="_on_graph_gui_input"]
+[connection signal="popup_request" from="Graph" to="." method="_on_graph_popup_request"]
+[connection signal="gui_input" from="Graph/RightClickMenu" to="." method="_on_right_click_menu_gui_input"]
+[connection signal="pressed" from="Graph/RightClickMenu/VBoxContainer/NewNode" to="." method="_on_new_node_pressed"]

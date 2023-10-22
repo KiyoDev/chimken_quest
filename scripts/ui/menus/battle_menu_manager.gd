@@ -49,20 +49,20 @@ func _input(event):
 		navigate_manu(move.sign(), horizontal);
 	elif(event.is_action_pressed(&"ui_accept")):
 		var next_option = curr_menu._select_option();
-		print("accept option - '%s'" % [next_option]);
+		print_debug("accept option - '%s'" % [next_option]);
 		
 		if(next_option == null): return;
 		
 		Cursor.change_focus(next_option);
 	elif(event.is_action_pressed(&"ui_cancel")):
-		print("cancel on '%s'" % [curr_menu]);
+		print_debug("cancel on '%s'" % [curr_menu]);
 		cancel_option();
 
 
 func on_battle_started(allies : Array):
-	print("Menu - %s" % [BattleMenu]);
+	print_debug("Menu - %s" % [BattleMenu]);
 	_open_menu();
-	print("atks - %s" % [attacks_menu.get_options()]);
+	print_debug("atks - %s" % [attacks_menu.get_options()]);
 
 
 func on_battle_ended():
@@ -118,13 +118,13 @@ func navigate_manu(move, horizontal):
 
 func cancel_option():
 	if(!menu_stack.is_empty()):
-		print("!menu_stack.is_empty() '%s'" % [curr_menu]);
+		print_debug("!menu_stack.is_empty() '%s'" % [curr_menu]);
 		curr_menu._cancel();
 		curr_menu = menu_stack.pop_back();
 		curr_menu._focus();
 		curr_menu._show();
 		Cursor.on_menu_open(curr_menu._get_current_option());
-		print("after - '%s'" % [curr_menu]);
+		print_debug("after - '%s'" % [curr_menu]);
 #		change_focus(curr_menu._get_current_option());
 	else:
 		curr_menu._try_exit(); # Try to exit menu if escapeable
@@ -153,19 +153,19 @@ func swap_actions(character : Character):
 	var attacks : Array[ActionDefinition] = character.info.attacks;
 	var skills : Array[ActionDefinition] = character.info.skills;
 
-#	print("swapping atks - %s, %s, %s" % [attacks_menu, attacks_menu.get_options(), skills_menu.get_options()]);
+#	print_debug("swapping atks - %s, %s, %s" % [attacks_menu, attacks_menu.get_options(), skills_menu.get_options()]);
 	
 	swap(attacks, attacks_menu);
 	swap(skills, skills_menu);
 		
-#	print("swapped atks - %s\n\t> %s\n\t> %s" % [attacks_menu, attacks_menu.get_options(), skills_menu.get_options()]);
+#	print_debug("swapped atks - %s\n\t> %s\n\t> %s" % [attacks_menu, attacks_menu.get_options(), skills_menu.get_options()]);
 
 
 func swap(actions : Array[ActionDefinition], menu : Menu):
 	adjust_menu_size(menu, actions.size());
 	for i in actions.size():
 		var opt : ActionOption = menu.get_option(i);
-		print("swap - %s, %s" % [i, opt]);
+		print_debug("swap - %s, %s" % [i, opt]);
 		opt.swap_action(actions[i]);
 		opt._show();
 
@@ -185,23 +185,23 @@ func adjust_menu_size(menu : Menu, size : int):
 
 ## 
 func on_option_selected(option : OptionBase, menu : Menu):
-	print("on_option_selected - %s from %s" % [option, menu]);
+	print_debug("on_option_selected - %s from %s" % [option, menu]);
 	
 	if(option is SubmenuOption || option is SeparatedSubmenuOption):
-		print("menu[%s] selected" % [option]);
+		print_debug("menu[%s] selected" % [option]);
 		menu_stack.push_back(curr_menu);
 		curr_menu = option.Menu;
 		var next = curr_menu._get_current_option();
 		Cursor.on_menu_open(next);
 	elif(option is ActionOption):
-		print("TODO: selected action - %s" % [option]);
+		print_debug("TODO: selected action - %s" % [option]);
 	elif(menu.name == "EscapeMenu"):
 		if(option.accept):
-			print("escape from battle");
+			print_debug("escape from battle");
 			on_battle_ended();
 			battle_escaped.emit();
 		else:
-			print("cancelled escape");
+			print_debug("cancelled escape");
 			Cursor.cancel_option();
 
 

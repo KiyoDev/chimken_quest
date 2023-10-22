@@ -19,7 +19,7 @@ func clone() -> ActionOption:
 
 
 func _selected():
-	print("_selected action '%s'" % [name]);
+	print_debug("_selected action '%s'" % [name]);
 	super._selected();
 	action_selected.emit(self)
 	return null; # TODO: implement
@@ -38,7 +38,7 @@ func _unfocus():
 
 func _on_menu_closed():
 	super._on_menu_closed();
-	print("closing '%s'" % [name]);
+	print_debug("closing '%s'" % [name]);
 
 
 func _show():

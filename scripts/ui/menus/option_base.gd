@@ -20,7 +20,7 @@ func _ready():
 #	print(parent_menu.name);
 #	print(parent_menu is Menu);
 #	print(parent_menu.has_signal("menu_closed"));
-#	print("%s - ...%s, %s, %s, %s" % [name, get_parent(), get_parent().get_parent(), get_parent().get_parent().get_parent(), get_parent().get_parent().get_parent().get_parent()])
+#	print_debug("%s - ...%s, %s, %s, %s" % [name, get_parent(), get_parent().get_parent(), get_parent().get_parent().get_parent(), get_parent().get_parent().get_parent().get_parent()])
 	pass;
 
 
@@ -29,7 +29,7 @@ func parent_menu() -> Menu:
 
 
 func _selected():
-	print("emit '%s'" % [option_selected]);
+	print_debug("emit '%s'" % [option_selected]);
 	option_selected.emit(self, parent_menu());
 
 
@@ -65,6 +65,6 @@ func _disconnect_option_selected(callable):
 
 
 func _on_menu_closed():
-	print("Parent menu closed");
+	print_debug("Parent menu closed");
 	_unfocus();
 #	hide();

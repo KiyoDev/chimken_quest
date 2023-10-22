@@ -90,17 +90,17 @@ func _input(event):
 #		# open menu corresponding to focused action category and change focus
 #		match(select_state):
 #			SelectState.Categories:
-#				print("category - selected '%s'" % [focused_ele]);
+#				print_debug("category - selected '%s'" % [focused_ele]);
 #				select_category();
 #			SelectState.Action:
 #				if(state_stack.back() == SelectState.Action): return;
-#				print("action - selected '%s'" % [focused_ele]);
+#				print_debug("action - selected '%s'" % [focused_ele]);
 #				# TODO: move on to target select if selecting an action or item
 #				select_action(curr_action);
 #			SelectState.Target:
-#				print("target - using '%s' against '%s'" % [focus_stack.back().name, focused_ele.character.info.character_name])
+#				print_debug("target - using '%s' against '%s'" % [focus_stack.back().name, focused_ele.character.info.character_name])
 #				(focused_ele as Control).focus
-##				print("focus - %s" % [focused_ele.focus_next]);
+##				print_debug("focus - %s" % [focused_ele.focus_next]);
 #
 #	elif(!menu_stack.is_empty() && event.is_action_pressed(&"ui_cancel")):
 #		cancel_select();
@@ -120,7 +120,7 @@ func change_target():
 
 
 func _on_focus_changed(control : Control):
-	print("focus changed - '%s', [%s, %s]" % [control, SelectState.keys()[select_state], curr_menu]);
+	print_debug("focus changed - '%s', [%s, %s]" % [control, SelectState.keys()[select_state], curr_menu]);
 	focused_ele = control;
 	if(select_state == SelectState.Target):
 		Cursor.visible = false;
@@ -148,7 +148,7 @@ func on_battle_start(allies, enemies):
 	curr_menu = ActionCategories;
 	select_state = SelectState.Categories;
 	
-#	print("ciruir - %s, %s" % [Cursor, Cursor.n_sprite]);
+#	print_debug("ciruir - %s, %s" % [Cursor, Cursor.n_sprite]);
 	Cursor.transform.origin = Vector2(focused_ele.global_position.x - 12, focused_ele.global_position.y + (focused_ele.size.y / 2));
 	init_target_cursors(allies, enemies);
 
@@ -162,8 +162,8 @@ func init_target_cursors(allies, enemies):
 #		TargetList.get_node("%Allies").visible = false;
 		TargetList.get_node("%Allies").add_child(cursor);
 		
-		print("targetea [%s, %s] (%s, %s)- %s, %s" % [a, a.n_sprite, a.n_sprite.global_position, a.n_sprite.position, cursor, cursor.n_sprite]); 
-		print("texture - ally_sprite[%s], cursor[%s]" % [a.n_sprite.texture.get_width(), cursor.n_sprite.texture.get_width()]);
+		print_debug("targetea [%s, %s] (%s, %s)- %s, %s" % [a, a.n_sprite, a.n_sprite.global_position, a.n_sprite.position, cursor, cursor.n_sprite]); 
+		print_debug("texture - ally_sprite[%s], cursor[%s]" % [a.n_sprite.texture.get_width(), cursor.n_sprite.texture.get_width()]);
 		cursor.character = a;
 		# TODO: needs to be in top left corner of sprite
 		cursor.n_sprite.global_position = Vector2(a.n_sprite.global_position.x - (a.n_sprite.texture.get_width() / 2) - (cursor.n_sprite.texture.get_width() / 8 / 2), a.n_sprite.global_position.y - (a.n_sprite.texture.get_height() / 2) - (cursor.n_sprite.texture.get_height() / 8 / 2));
@@ -205,7 +205,7 @@ func on_battle_end():
 
 
 func cancel_select():
-	print("cancel select");
+	print_debug("cancel select");
 	if(curr_menu != null): curr_menu.visible = false;
 	select_state = state_stack.pop_back();
 	curr_menu = menu_stack.pop_back();
@@ -237,8 +237,8 @@ func select_category():
 
 
 func select_action(action):
-	print("selected action");
-	print("curr_menu - [%s, %s]" % [curr_menu, focused_ele]);
+	print_debug("selected action");
+	print_debug("curr_menu - [%s, %s]" % [curr_menu, focused_ele]);
 	if(curr_menu == EscapeList.get_parent()):
 		if(focused_ele.name == "confirm"):
 			BattleSystem.end_battle();
@@ -260,7 +260,7 @@ func select_action(action):
 		
 		curr_menu = TargetList;
 		focused_ele = TargetList.get_child(0).get_child(0);
-		print("chose action, focused - %s" % [focused_ele]);
+		print_debug("chose action, focused - %s" % [focused_ele]);
 		
 #		TargetList.visible = true;
 		
@@ -274,17 +274,17 @@ func _target():
 	if(curr_action.target & ActionDefinition.Target.Self > 0):
 		# self, curr_actor
 		if(BattleSystem.current_actor.info.type == CharacterDefinition.Type.Ally):
-			print("targeting ally self");
+			print_debug("targeting ally self");
 			targetable_type |= TargetableType.Ally;
 			var allies = TargetList.get_node("%Allies");
 			for a in allies.get_children():
-				print("a - %s" % [a.character.info.character_name]);
+				print_debug("a - %s" % [a.character.info.character_name]);
 				if(a.character.info.character_name == BattleSystem.current_actor.info.character_name):
 					allies.visible = true;
 					targetable.push_back(a);
 					curr_targeted = a;
 					curr_targeted._select();
-					print("is self - %s, %s" % [a.is_selected, a.visible]);
+					print_debug("is self - %s, %s" % [a.is_selected, a.visible]);
 					break;
 		else:
 			targetable_type |= TargetableType.Enemy;
@@ -319,7 +319,7 @@ func _target():
 		if(curr_action.targeting_type == ActionDefinition.TargetingType.Single):
 			curr_targeted = targetable[0];
 			curr_targeted._select();
-			print("single target... %s, %s" % [curr_targeted.name, curr_targeted.visible]);
+			print_debug("single target... %s, %s" % [curr_targeted.name, curr_targeted.visible]);
 		else:
 			curr_targeted = [];
 			for t in targetable:
@@ -449,7 +449,7 @@ func _untarget():
 
 
 func _test_action(ele_name):
-	print("ele_name='%s'" % [ele_name]);
+	print_debug("ele_name='%s'" % [ele_name]);
 	if(ele_name == "potion"):
 		var potion = ActionDefinition.new();
 		potion.name = ele_name;
@@ -492,8 +492,8 @@ func _test_action(ele_name):
 		atk.target = ActionDefinition.Target.Enemy;
 		atk.targeting_type = ActionDefinition.TargetingType.Single;
 		curr_action = atk;
-	print("curr_action='%s'" % [curr_action]);
+	print_debug("curr_action='%s'" % [curr_action]);
 
 func test_print():
-	print("state=[%s], curr_menu=[%s], focused[%s]" % [SelectState.keys()[select_state], curr_menu.name if curr_menu != null else "null", focused_ele.name if focused_ele != null else "null"]);
-	print("targeting - '%s' using '%s' against [%s, %s]" % [BattleSystem.current_actor, curr_action.name, curr_targeted, targetable]);
+	print_debug("state=[%s], curr_menu=[%s], focused[%s]" % [SelectState.keys()[select_state], curr_menu.name if curr_menu != null else "null", focused_ele.name if focused_ele != null else "null"]);
+	print_debug("targeting - '%s' using '%s' against [%s, %s]" % [BattleSystem.current_actor, curr_action.name, curr_targeted, targetable]);

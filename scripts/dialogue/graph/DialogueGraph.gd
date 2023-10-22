@@ -12,4 +12,4 @@ func _process(delta):
 
 
 func _on_add_node_pressed():
-	print("on add node");
+	print_debug("on add node");
