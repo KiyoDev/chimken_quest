@@ -26,6 +26,7 @@ func _ready():
 func add_new_node(position := Vector2(0, 0)):
 	var new_node : DialogueNode = dialogue_node.instantiate().empty();
 	new_node.node_closed.connect(_on_graph_node_closed);
+	new_node.slots_changed.connect(_on_graph_node_slots_changed);
 	Graph.add_child(new_node);
 	new_node.position_offset = position;
 	node_dict[new_node.name] = new_node; # cache node names
@@ -70,6 +71,18 @@ func _on_graph_node_closed(node : DialogueNode):
 	
 	node_dict.erase(node.name);
 	print_debug("del - node_dict=%s" % [node_dict]);
+
+
+## When DailogueNode slots change
+func _on_graph_node_slots_changed(node : DialogueNode, from_port : int):
+#	print_debug("node closed - %s, %s" % [node, Graph.get_connection_list()]);
+	for connections in Graph.get_connection_list():
+#		print_debug("connections - %s, %s" % [connections, typeof(connections)]);
+		if(connections.from == node.name && connections.from_port == from_port):
+			Graph.disconnect_node(connections.from, connections.from_port, connections.to, connections.to_port);
+	
+#	node_dict.erase(node.name); # FIXME: change node_dict to support name and slots
+	print_debug("node slot changed - '%s'=%s" % [node.name, from_port]);
 
 
 func _on_get_connections_pressed():

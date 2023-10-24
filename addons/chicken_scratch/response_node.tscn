@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=3 uid="uid://dv8pk15nx1s0w"]
+
+[ext_resource type="Theme" uid="uid://bi4ct4ejmsk48" path="res://assets/fonts/battle_ui_big.theme" id="1_bldm5"]
+
+[node name="Response" type="VBoxContainer"]
+custom_minimum_size = Vector2(0, 64)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -14.0
+offset_right = -1492.0
+offset_bottom = -850.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 3
+
+[node name="ResponseText" type="TextEdit" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_bldm5")
+placeholder_text = "Placeholder"
+wrap_mode = 1
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2

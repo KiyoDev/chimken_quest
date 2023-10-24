@@ -1,11 +1,5 @@
 class_name Dialogue extends DialogueBase
 
-## Text to display in a dialogue box.
-@export var text := "";
-
-# if using dialogue icons, then need dict<name, icon>
-@export var speaker := "";
-
 @export var next_trigger : DialogueTrigger;
 
 @export var next : DialogueBase;
