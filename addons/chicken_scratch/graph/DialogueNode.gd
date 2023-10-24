@@ -16,10 +16,12 @@ enum Type {
 @onready var TypeOptions : OptionButton = $VBoxContainer/HBoxContainer2/TypeOptions;
 @onready var Speaker : LineEdit = $VBoxContainer/Speaker;
 @onready var Text : TextEdit = $VBoxContainer/ScrollContainer/Text;
-@onready var SlotsConfig : Control = $SlotsConfig; # TODO: hide slots and config depending on option type
+@onready var OfferConfig : Control = $OfferConfig;
+@onready var SlotsConfig : Control = $SlotsConfig;
 
 
 @export var response_element : PackedScene;
+@export var offer_element : PackedScene;
 
 @export var type := Type.Dialogue;
 @export var dialogue : DialogueBase;
@@ -56,17 +58,14 @@ func _ready():
 func update_node_options():
 	match(type):
 		Type.Dialogue:
-			SlotsConfig.hide();
-			for index in range(slot_node_index(0), get_child_count()):
-				var child := get_child(index);
-				child.hide();
-				set_slot_enabled_right(0, true);
-				set_slot_enabled_right(index, false);
-				print_debug("child[%s]=%s" % [index, child]);
-				slots_changed.emit(self, index - SlotsConfig.get_index() - 1);
+			hide_offer_slots();
+			hide_response_slots();
 		Type.Offer:
-			pass;
+			OfferConfig.show();
+			hide_response_slots();
+			set_slot_enabled_right(OfferConfig.get_index(), true);
 		Type.Response:
+			hide_offer_slots();
 			update_response_slots(current_slots);
 			SlotsConfig.show();
 			for index in range(slot_node_index(0), get_child_count()):
@@ -77,6 +76,22 @@ func update_node_options():
 				print_debug("child[%s]=%s" % [index, child]);
 	print_debug("slo - %s" % [current_slots]);
 	reset_size();
+
+
+func hide_offer_slots():
+	OfferConfig.hide();
+	set_slot_enabled_right(OfferConfig.get_index(), false);
+
+
+func hide_response_slots():
+	SlotsConfig.hide();
+	for index in range(slot_node_index(0), get_child_count()):
+		var child := get_child(index);
+		child.hide();
+		set_slot_enabled_right(0, true);
+		set_slot_enabled_right(index, false);
+		print_debug("child[%s]=%s" % [index, child]);
+		slots_changed.emit(self, index - SlotsConfig.get_index() - 1);
 
 
 func update_response_slots(value):

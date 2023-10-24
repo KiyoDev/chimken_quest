@@ -1,16 +1,17 @@
 [gd_scene load_steps=4 format=3 uid="uid://duio0ke3bpeoi"]
 
-[ext_resource type="Script" path="res://scripts/dialogue/graph/DialogueGraph.gd" id="1_mbi1r"]
-[ext_resource type="Script" path="res://addons/chicken_scratch/DialogueGraphEditor.gd" id="1_r3kp1"]
-[ext_resource type="PackedScene" uid="uid://bvskd0vgeq032" path="res://addons/chicken_scratch/dialogue_node.tscn" id="2_yspnd"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueGraphEditor.gd" id="1_x85w6"]
+[ext_resource type="PackedScene" uid="uid://bvskd0vgeq032" path="res://addons/chicken_scratch/graph/dialogue_node.tscn" id="2_84rds"]
+[ext_resource type="Script" path="res://scripts/dialogue/graph/DialogueGraph.gd" id="3_1gqce"]
 
 [node name="ChickenScratch" type="VBoxContainer"]
+texture_filter = 1
 offset_right = 1584.0
 offset_bottom = 1040.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_r3kp1")
-dialogue_node = ExtResource("2_yspnd")
+script = ExtResource("1_x85w6")
+dialogue_node = ExtResource("2_84rds")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -64,7 +65,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 right_disconnects = true
 show_zoom_label = true
-script = ExtResource("1_mbi1r")
+script = ExtResource("3_1gqce")
 
 [node name="RightClickMenu" type="PanelContainer" parent="Graph"]
 visible = false

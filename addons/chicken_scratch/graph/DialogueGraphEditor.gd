@@ -13,6 +13,7 @@ class_name DialogueGraphEditor extends VBoxContainer
 var node_dict : Dictionary = {};
 var file_menu_items : Dictionary = {};
 
+
 static var right_click_menu_open := false;
 
 

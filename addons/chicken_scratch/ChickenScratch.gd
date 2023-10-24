@@ -2,7 +2,7 @@
 extends EditorPlugin
 
 
-const graph = preload("res://addons/chicken_scratch/dialogue_graph.tscn");
+const graph = preload("res://addons/chicken_scratch/graph/dialogue_graph.tscn");
 
 var graph_instance;
 

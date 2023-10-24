@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://2878ebeahf7g"]
+
+[node name="Offer" type="VBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ItemName" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+placeholder_text = "<item_name>"
+
+[node name="ItemType" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+placeholder_text = "<item_type>"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Quantity" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Quantity"
+
+[node name="SpinBox" type="SpinBox" parent="HBoxContainer"]
+layout_mode = 2
+value = 1.0
+rounded = true
