@@ -8,7 +8,7 @@ signal slots_changed(node : DialogueNode, from_port : int);
 
 enum Type {
 	Dialogue,
-	Menu,
+	Offer,
 	Response
 }
 
@@ -18,8 +18,8 @@ enum Type {
 @onready var Text : TextEdit = $VBoxContainer/ScrollContainer/Text;
 @onready var SlotsConfig : Control = $SlotsConfig; # TODO: hide slots and config depending on option type
 
-@onready var response_node = preload("res://addons/chicken_scratch/response_node.tscn");
 
+@export var response_element : PackedScene;
 
 @export var type := Type.Dialogue;
 @export var dialogue : DialogueBase;
@@ -64,7 +64,7 @@ func update_node_options():
 				set_slot_enabled_right(index, false);
 				print_debug("child[%s]=%s" % [index, child]);
 				slots_changed.emit(self, index - SlotsConfig.get_index() - 1);
-		Type.Menu:
+		Type.Offer:
 			pass;
 		Type.Response:
 			update_response_slots(current_slots);
@@ -84,7 +84,7 @@ func update_response_slots(value):
 		var curr_last_index := slot_node_index(current_slots);
 		for i in value - current_slots:
 			print_debug("value > curr [%s, %s]" % [get_child_count(), i]);
-			var new_resp = response_node.instantiate();
+			var new_resp = response_element.instantiate();
 			add_child(new_resp);
 			set_slot_enabled_right(curr_last_index + i, true);
 	elif(value < current_slots):
@@ -92,7 +92,6 @@ func update_response_slots(value):
 			print_debug("value < curr [%s, %s]" % [get_child_count(), i]);
 			remove_child(get_child(i));
 	current_slots = value;
-	reset_size();
 	print_debug("slot count = %s" % [value]);
 
 
@@ -116,7 +115,9 @@ func _clone(flags := 0b0111):
 
 
 func _on_resize_request(new_minsize):
+	print("new_minsize - %s" % [new_minsize]);
 	custom_minimum_size = new_minsize;
+	reset_size(); # ensures window size updates to correct minimum, even if it gets resized from adding/removing children
 
 
 func _on_close_request():
@@ -154,3 +155,4 @@ func _on_type_options_item_selected(index):
 
 func _on_slot_count_value_changed(value):
 	update_response_slots(value);
+	reset_size();

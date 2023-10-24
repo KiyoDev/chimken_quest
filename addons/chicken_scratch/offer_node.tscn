@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://2878ebeahf7g"]
+
+[node name="Offer" type="VBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0

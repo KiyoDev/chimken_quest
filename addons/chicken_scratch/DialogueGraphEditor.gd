@@ -6,7 +6,8 @@ class_name DialogueGraphEditor extends VBoxContainer
 @onready var FileMenu : MenuButton = %FileMenu;
 
 
-var dialogue_node = preload("res://addons/chicken_scratch/dialogue_node.tscn");
+@export var dialogue_node : PackedScene;
+#var dialogue_node = preload("res://addons/chicken_scratch/dialogue_node.tscn");
 
 
 var node_dict : Dictionary = {};
