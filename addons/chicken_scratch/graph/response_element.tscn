@@ -1,17 +1,12 @@
-[gd_scene format=3 uid="uid://dv8pk15nx1s0w"]
+[gd_scene load_steps=2 format=3 uid="uid://dv8pk15nx1s0w"]
+
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/ResponseElement.gd" id="1_rsr8q"]
 
 [node name="Response" type="VBoxContainer"]
-custom_minimum_size = Vector2(0, 64)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -14.0
-offset_right = -1492.0
-offset_bottom = -850.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+custom_minimum_size = Vector2(108, 64)
+offset_right = 108.0
+offset_bottom = 64.0
+script = ExtResource("1_rsr8q")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 2

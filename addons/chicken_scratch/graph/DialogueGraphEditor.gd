@@ -2,12 +2,11 @@
 class_name DialogueGraphEditor extends VBoxContainer
 
 @onready var Graph : GraphEdit = $Graph;
-@onready var RightClickMenu : Container = $Graph/RightClickMenu;
 @onready var FileMenu : MenuButton = %FileMenu;
 
 
 @export var dialogue_node : PackedScene;
-#var dialogue_node = preload("res://addons/chicken_scratch/dialogue_node.tscn");
+@export var right_click_menu : Container;
 
 
 var node_dict : Dictionary = {};
@@ -25,10 +24,27 @@ func _ready():
 	print_debug("file_menu_items=%s" % [file_menu_items]);
 
 
+func to_json():
+	var out := {};
+	out["connections"] = Graph.get_connection_list();
+#	print_debug(get_)
+	print_debug("connections - %s" % [JSON.stringify(Graph.get_connection_list())]);
+	var nodes := get_graph_nodes();
+	print_debug("nodes - %s" % [nodes]);
+	var json := "";
+
+
+func get_graph_nodes() -> Array[DialogueNode]:
+	var nodes : Array[DialogueNode] = [];
+	for i in range(1, Graph.get_child_count()):
+		nodes.append(Graph.get_child(i));
+	return nodes;
+
+# FIXME: graph nodes are being instantiated at different locations if moving the viewport
 func add_new_node(position := Vector2(0, 0)):
 	var new_node : DialogueNode = dialogue_node.instantiate().empty();
 	new_node.node_closed.connect(_on_graph_node_closed);
-	new_node.slots_changed.connect(_on_graph_node_slots_changed);
+	new_node.slots_removed.connect(_on_graph_node_slots_removed);
 	Graph.add_child(new_node);
 	new_node.position_offset = position;
 	node_dict[new_node.name] = new_node; # cache node names
@@ -76,8 +92,8 @@ func _on_graph_node_closed(node : DialogueNode):
 
 
 ## When DailogueNode slots change
-func _on_graph_node_slots_changed(node : DialogueNode, from_port : int):
-#	print_debug("node closed - %s, %s" % [node, Graph.get_connection_list()]);
+func _on_graph_node_slots_removed(node : DialogueNode, from_port : int):
+	print_debug("node slot[%s] removed - %s, %s" % [from_port, node, Graph.get_connection_list()]);
 	for connections in Graph.get_connection_list():
 #		print_debug("connections - %s, %s" % [connections, typeof(connections)]);
 		if(connections.from == node.name && connections.from_port == from_port):
@@ -88,23 +104,24 @@ func _on_graph_node_slots_changed(node : DialogueNode, from_port : int):
 
 
 func _on_get_connections_pressed():
-	print_debug("Graph Node connections - %s" % [Graph.get_connection_list()]);
+	to_json();
+#	print_debug("DialogueGraph - %s" % [to_json()]);
 
 
 ## Right click menu
 func _on_graph_popup_request(position):
 	print_debug("_on_graph_popup_request - %s, %s" % [position, right_click_menu_open]);
 	if(right_click_menu_open):
-		RightClickMenu.set_position(position);
-		RightClickMenu.show();
+		right_click_menu.set_position(position);
+		right_click_menu.show();
 
 
 ## Add new node from menu
 func _on_new_node_pressed():
-	print_debug("_on_new_node_pressed - %s" % [RightClickMenu.position]);
-	add_new_node(RightClickMenu.position);
+	print_debug("_on_new_node_pressed - %s" % [right_click_menu.position]);
+	add_new_node(right_click_menu.position);
 	right_click_menu_open = false;
-	RightClickMenu.hide();
+	right_click_menu.hide();
 
 
 func _on_right_click_menu_gui_input(event):
@@ -119,14 +136,14 @@ func _on_graph_gui_input(event):
 			print_debug("own left click %s, %s" % [event, right_click_menu_open]);
 			if(right_click_menu_open):
 				right_click_menu_open = false;
-				RightClickMenu.hide();
+				right_click_menu.hide();
 		if(event.is_pressed() && event.button_index == MOUSE_BUTTON_RIGHT):
 			print_debug("own right click %s, %s" % [event, right_click_menu_open]);
 			if(!right_click_menu_open):
 				right_click_menu_open = true;
 			else:
 				right_click_menu_open = false;
-				RightClickMenu.hide();
+				right_click_menu.hide();
 
 
 # TODO: add confirmation request function

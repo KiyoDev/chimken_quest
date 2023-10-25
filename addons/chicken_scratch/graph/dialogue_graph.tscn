@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bvskd0vgeq032" path="res://addons/chicken_scratch/graph/dialogue_node.tscn" id="2_84rds"]
 [ext_resource type="Script" path="res://scripts/dialogue/graph/DialogueGraph.gd" id="3_1gqce"]
 
-[node name="ChickenScratch" type="VBoxContainer"]
+[node name="ChickenScratch" type="VBoxContainer" node_paths=PackedStringArray("right_click_menu")]
 texture_filter = 1
 offset_right = 1584.0
 offset_bottom = 1040.0
@@ -12,6 +12,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_x85w6")
 dialogue_node = ExtResource("2_84rds")
+right_click_menu = NodePath("Graph/RightClickMenu")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -35,10 +36,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Add Node"
 
-[node name="Get Connections" type="Button" parent="HBoxContainer"]
+[node name="Print" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Get Connections"
+text = "Print"
 
 [node name="VSeparator2" type="VSeparator" parent="HBoxContainer"]
 layout_mode = 2
@@ -69,11 +70,10 @@ script = ExtResource("3_1gqce")
 
 [node name="RightClickMenu" type="PanelContainer" parent="Graph"]
 visible = false
-layout_mode = 0
+layout_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = -1399.0
-offset_bottom = -869.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -90,7 +90,7 @@ layout_mode = 2
 
 [connection signal="about_to_popup" from="HBoxContainer/FileMenu" to="." method="_on_file_menu_about_to_popup"]
 [connection signal="pressed" from="HBoxContainer/Add Node" to="." method="_on_add_node_pressed"]
-[connection signal="pressed" from="HBoxContainer/Get Connections" to="." method="_on_get_connections_pressed"]
+[connection signal="pressed" from="HBoxContainer/Print" to="." method="_on_get_connections_pressed"]
 [connection signal="connection_request" from="Graph" to="." method="_on_graph_connection_request"]
 [connection signal="copy_nodes_request" from="Graph" to="." method="_on_graph_copy_nodes_request"]
 [connection signal="delete_nodes_request" from="Graph" to="." method="_on_graph_delete_nodes_request"]
