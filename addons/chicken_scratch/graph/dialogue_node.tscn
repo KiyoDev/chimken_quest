@@ -72,7 +72,6 @@ offering_config = ExtResource("6_uatgp")
 offering_fail = ExtResource("7_tugy6")
 slots_config = ExtResource("8_gtsrh")
 response_element = ExtResource("4_jhsr8")
-offer_element = ExtResource("3_amdp0")
 dialogue = SubResource("Resource_wtxyr")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]

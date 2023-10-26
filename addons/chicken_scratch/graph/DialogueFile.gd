@@ -24,7 +24,7 @@ func from_json(json):
 		push_error("Incoming file must be a dictionary, was '%s'" % [typeof(data)]);
 		return;
 	
-#	print_debug("dialogue(%s)" % JSON.stringify(data));
-	print_debug("dialogue(%s)" % data);
+	print_debug("dialogue(%s)" % JSON.stringify(data, "\t", false));
+#	print_debug("dialogue(%s)" % data);
 #	JSON.parse(json);
 	pass;

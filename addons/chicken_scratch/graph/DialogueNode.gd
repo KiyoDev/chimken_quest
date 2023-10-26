@@ -26,11 +26,12 @@ enum Type {
 
 
 @export var offering_config : PackedScene;
+## Item name from element can be used by front end dialogue manager to grab items it needs
+@export var offering_element : PackedScene; 
 @export var offering_fail : PackedScene;
 @export var slots_config : PackedScene;
 @export var response_element : PackedScene;
-## Item name from element can be used by front end dialogue manager to grab items it needs
-@export var offer_element : PackedScene; 
+
 
 @export var type := Type.Dialogue;
 @export var dialogue : DialogueBase;
@@ -57,12 +58,6 @@ func _exit_tree():
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print_debug("ready");
-#	resize_request.disconnect(_on_resize_request);
-#	close_request.disconnect(_on_close_request);
-	if(SlotsConfig == null):
-		SlotsConfig = slots_config.instantiate().duplicate(0b0111);
-		SlotsConfig.find_child("SlotCount").value_changed.connect(_on_slot_count_value_changed);
-	
 	
 	if(dialogue == null):
 		dialogue = Dialogue.new();
@@ -81,6 +76,63 @@ func _ready():
 	hide_offer_slots();
 	hide_response_slots();
 	update_node_options();
+
+
+static func new_from_dict(scn : PackedScene, dict : Dictionary) -> DialogueNode:
+	var node : DialogueNode = scn.instantiate().duplicate(0b0111);
+	node.type = dict.type;
+	node.Speaker.text = dict.speaker;
+	node.Text.text = dict.text;
+	match(node.type):
+		Type.Dialogue:
+			pass;
+		Type.Offer:
+			var count = dict.properties.offerings.size();
+			if(node.ItemOfferings.get_child_count() < count):
+				for i in count - node.ItemOfferings.get_child_count():
+					var new_offering : OfferElement = node.offering_element.instantiate();
+					node.ItemOfferings.add_child(new_offering);
+			elif(node.ItemOfferings.get_child_count() > count):
+				for i in range(node.ItemOfferings.get_child_count() - 1, count, -1):
+					node.ItemOfferings.remove_child(node.ItemOfferings.get_child(i));
+			
+			var index := 0;
+			for offering in dict.properties.offerings:
+				var off : OfferElement = node.ItemOfferings.get_child(index);
+				off.ItemName.text = offering.item_name;
+				off.ItemType.text = offering.item_type;
+				off.Quantity.get_line_edit().text = offering.quantity;
+				index += 1;
+		Type.Response:
+			var count = dict.properties.responses.size();
+			node.update_response_slots(count);
+			
+			var index := node.SlotsConfig.get_index() + 1;
+			for response in dict.properties.responses:
+				var resp : ResponseElement = node.get_child(index);
+				resp.Text.text = response.text;
+				index += 1;
+		_:
+			push_error("Invalid type found in dictionary - %s" % [JSON.stringify(dict, "", false)]);
+	return node;
+
+
+func from_dict(dict : Dictionary):
+	type = dict.type;
+	Speaker.text = dict.speaker;
+	Text.text = dict.text;
+	match(type):
+		Type.Dialogue:
+			pass;
+		Type.Offer:
+			for offering in dict.properties.offerings:
+				pass;
+			pass;
+		Type.Response:
+			pass;
+		_:
+			push_error("Invalid type found in dictionary - %s" % [JSON.stringify(dict, "", false)]);
+	pass;
 
 
 func to_dict() -> Dictionary:

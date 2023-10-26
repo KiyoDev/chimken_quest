@@ -14,6 +14,9 @@ var file_menu_items : Dictionary = {};
 
 
 static var right_click_menu_open := false;
+
+# TODO: open DialogueFile from disk and populate graph (adding nodes, adding connections, etc)
+static var current_dialogue_file : DialogueFile;
  
 
 func _ready():
@@ -23,18 +26,19 @@ func _ready():
 		file_menu_items[i] = popup.get_item_text(i);
 	print_debug("file_menu_items=%s" % [file_menu_items]);
 
-
+# from graph to json
+# TODO: on_graph_save, update DialogueFile and save to disk
 func to_json():
 	# TODO: have a DialogueGraphFile extends RefCounted that keeps track of currently loaded file?
 	var graph := {
-		"file_name": "",
+		"file_name": current_dialogue_file.name if current_dialogue_file else "",
 		"connections": Graph.get_connection_list(),
 		"nodes": get_graph_node_dicts()
 	};
 	
 	var file = DialogueFile.new();
 	
-	file.from_json(JSON.stringify(graph));
+	file.from_json(JSON.stringify(graph, "\t", false));
 	
 #	print_debug("connections - %s" % [JSON.stringify(Graph.get_connection_list(), "\t", false)]);
 #	var nodes := get_graph_nodes();
@@ -64,7 +68,7 @@ func add_new_node(position := Vector2(0, 0)):
 
 
 func _on_file_menu_opened(id : int):
-	print_debug("opening file menu - %s, %s" % [id]);
+	print_debug("opening file menu - %s" % [id]);
 	match id:
 		0: # Open
 			# TODO: implement file open dialogue
