@@ -2,14 +2,14 @@
 class_name OfferConfig extends VBoxContainer
 
 
-@onready var Offers := $Offers;
+@onready var Offerings := $Offerings;
 
 
 
 func get_offers() -> Array[OfferElement]:
-	var offers : Array[OfferElement] = [];
+	var offerings : Array[OfferElement] = [];
 	
-	for offer in Offers.get_children():
-		offers.append(offer);
+	for offering in Offerings.get_children():
+		offerings.append(offering);
 	
-	return offers;
+	return offerings;

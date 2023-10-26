@@ -27,5 +27,9 @@ text = "Quantity"
 
 [node name="Quanitity" type="SpinBox" parent="HBoxContainer"]
 layout_mode = 2
+min_value = 1.0
 value = 1.0
 rounded = true
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2

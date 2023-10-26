@@ -6,6 +6,7 @@ signal node_closed(node : DialogueNode);
 
 signal slots_removed(node : DialogueNode, from_port : int);
 
+
 enum Type {
 	Dialogue,
 	Offer,
@@ -13,16 +14,20 @@ enum Type {
 }
 
 
-@onready var TypeOptions : OptionButton = $VBoxContainer/HBoxContainer2/TypeOptions;
+@onready var TypeOptions : OptionButton = $VBoxContainer/HBoxContainer/TypeOptions;
 @onready var Speaker : LineEdit = $VBoxContainer/Speaker;
-@onready var Text : TextEdit = $VBoxContainer/ScrollContainer/Text;
+@onready var Text : TextEdit = $VBoxContainer/ScrollContainer/Dialogue;
 @onready var _OfferConfig : OfferConfig = $OfferConfig;
-@onready var OfferFail = $OfferFail;
+@onready var ItemOfferings : VBoxContainer = $OfferConfig/Offerings;
+@onready var OfferingFail = $OfferingFail;
 @onready var SlotsConfig : Control = $SlotsConfig;
 
 @onready var Hidden = $VBoxContainer/Hidden;
 
 
+@export var offering_config : PackedScene;
+@export var offering_fail : PackedScene;
+@export var slots_config : PackedScene;
 @export var response_element : PackedScene;
 ## Item name from element can be used by front end dialogue manager to grab items it needs
 @export var offer_element : PackedScene; 
@@ -32,18 +37,32 @@ enum Type {
 
 
 var curr_resp_slots := 1;
+var curr_item_count := 1;
 
 var response_elements : Array[ResponseElement] = [];
+
 
 func _init():
 	print_debug("init dialogue node");
 
+
+
+func _exit_tree():
+	print_debug("'%s' exiting tree..." % [name]);
+	for child in Hidden.get_children():
+		child.reparent(self);
+
+# FIXME: SHIT KEEPS DISAPPEARING FROM PACKED SCENE
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print_debug("ready");
 #	resize_request.disconnect(_on_resize_request);
 #	close_request.disconnect(_on_close_request);
+	if(SlotsConfig == null):
+		SlotsConfig = slots_config.instantiate().duplicate(0b0111);
+		SlotsConfig.find_child("SlotCount").value_changed.connect(_on_slot_count_value_changed);
+	
 	
 	if(dialogue == null):
 		dialogue = Dialogue.new();
@@ -64,29 +83,53 @@ func _ready():
 	update_node_options();
 
 
-func _to_string():
+func to_dict() -> Dictionary:
 	var dict := {};
 	
-#	dict["name"] = name;
-#	dict["type"] = Type.keys()[type];
-#	dict["speaker"] = Speaker.text;
-#	dict["text"] = Text.text;
-#	dict["properties"] = {};
-#	match(type):
-#		Type.Offer:
-#			dict["properties"]["items"] = [];
-#			for offer in _OfferConfig.get_offers():
-#				var item := {}
-#
-#				item["name"] = offer.ItemName.text;
-#				item["type"] = offer.ItemType.text;
-#				item["quantity"] = offer.Quantity.value;
-#
-#				dict["properties"]["items"].append(item);
-#		Type.Response:
-##			print_debug("responses - %s" % [get_responses()]);
-#			pass;
-	return JSON.stringify(dict);
+	dict["name"] = name;
+	dict["type"] = Type.keys()[type];
+	dict["speaker"] = Speaker.text;
+	dict["text"] = Text.text;
+	dict["properties"] = {};
+	match(type):
+		Type.Dialogue:
+			# TODO: add connections?
+			pass;
+		Type.Offer:
+			dict["properties"]["offerings"] = [];
+			for offer in _OfferConfig.get_offers():
+				var item := {}
+
+				item["item_name"] = offer.ItemName.text;
+				item["item_type"] = offer.ItemType.text;
+				item["quantity"] = offer.Quantity.value;
+
+				dict["properties"]["offerings"].append(item);
+			# TODO: add connections
+		Type.Response:
+			# TODO: add connections; but maybe is just managed by the graph editor itself
+			# response index = node port for the editor connections
+			dict["properties"]["responses"] = [];
+			for index in range(SlotsConfig.get_index() + 1, get_child_count()):
+				var child : ResponseElement = get_child(index);
+				var response := {"text": child.text()};
+				dict["properties"]["responses"].append(response);
+#			print_debug("responses - %s" % [get_responses()]);
+			pass;
+#	return "{\"name\":\"%s\"}" % [];
+	dict["metadata"] = {
+		"position": {"x": position_offset.x, "y": position_offset.y},
+		"custom_minimum_size": {"x": custom_minimum_size.x, "y": custom_minimum_size.y}
+	};
+	return dict;
+
+
+func to_string_pretty() -> String:
+	return JSON.stringify(to_dict(), "\t", false);
+
+
+func _to_string():
+	return JSON.stringify(to_dict(), "", false);
 
 
 func update_node_options():
@@ -96,12 +139,12 @@ func update_node_options():
 		Type.Offer:
 #			set_slot_enabled_right(0, false);
 			_OfferConfig.reparent(self);
-			OfferFail.reparent(self);
+			OfferingFail.reparent(self);
 			_OfferConfig.show();
-			OfferFail.show();
-			print_debug("g - %s, %s" % [_OfferConfig.get_index(), OfferFail.get_index()]);
+			OfferingFail.show();
+			print_debug("g - %s, %s" % [_OfferConfig.get_index(), OfferingFail.get_index()]);
 			set_slot_enabled_right(_OfferConfig.get_index(), true);
-			set_slot_enabled_right(OfferFail.get_index(), true);
+			set_slot_enabled_right(OfferingFail.get_index(), true);
 		Type.Response:
 			SlotsConfig.reparent(self);
 			SlotsConfig.show();
@@ -140,7 +183,7 @@ func hide_previous_options(type : Type):
 			
 
 func hide_offer_slots():
-	if(!_OfferConfig.visible || !OfferFail.visible): return;
+	if(!_OfferConfig.visible || !OfferingFail.visible): return;
 	
 	print_debug("hiding offer - [%s]" % [get_connection_output_count()]);
 #	set_slot_enabled_right(0, false);
@@ -148,9 +191,9 @@ func hide_offer_slots():
 	print_debug("hiding - [%s, %s]" % [get_connection_output_slot(0), get_connection_output_slot(1)]);
 
 	_OfferConfig.reparent(Hidden);
-	OfferFail.reparent(Hidden);
+	OfferingFail.reparent(Hidden);
 	_OfferConfig.hide();
-	OfferFail.hide();
+	OfferingFail.hide();
 	slots_removed.emit(self, 0);
 	slots_removed.emit(self, 1);
 
@@ -190,6 +233,22 @@ func update_response_slots(value):
 			response_elements.remove_at(i - 2); # -(text.index + config.index)
 	curr_resp_slots = value;
 	print_debug("slot count = %s, %s" % [value, response_elements]);
+
+
+func update_item_count(value):
+#	print_debug("v=%s, c=%s" % [value, curr_resp_slots]);
+	if(value > curr_item_count):
+		for i in value - curr_item_count:
+			var new_offer = OfferElement.instantiate();
+#			ItemOfferings.append(new_offer);
+			ItemOfferings.add_child(new_offer);
+	elif(value < curr_item_count):
+		for i in range(curr_item_count - 1, value, -1):
+#			print_debug("value < curr [%s, %s]" % [get_child_count(), i]);
+			ItemOfferings.remove_child(ItemOfferings.get_child(i));
+#			response_elements.remove_at(i - 2); # -(text.index + config.index)
+	curr_item_count = value;
+	print_debug("curr_item_count count = %s" % [curr_item_count]);
 
 
 func slot_node_index(slot : int) -> int:
@@ -234,10 +293,10 @@ func _on_close_request():
 	print_debug("_on_close_request");
 	node_closed.emit(self);
 	queue_free();
-	
 
-func _on_speaker_text_changed():
-	dialogue.speaker = Speaker.text;
+
+func _on_speaker_text_submitted(new_text):
+	dialogue.speaker = new_text;
 
 
 func _on_dialogue_text_changed():
@@ -268,4 +327,9 @@ func _on_type_options_item_selected(index):
 
 func _on_slot_count_value_changed(value):
 	update_response_slots(value);
+	reset_size();
+
+
+func _on_item_count_value_changed(value):
+	update_item_count(value);
 	reset_size();

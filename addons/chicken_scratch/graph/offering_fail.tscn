@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://nhonh44age0u"]
+
+[node name="OfferingFail" type="HBoxContainer"]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer"]
+layout_mode = 2
+text = " Offer Fail "
+horizontal_alignment = 2

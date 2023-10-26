@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://cff4kt8q1fk7w"]
+
+[node name="VBoxContainer" type="VBoxContainer"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="TypeLabel" type="Label" parent="HBoxContainer2"]
+layout_mode = 2
+text = "Type"
+
+[node name="TypeOptions" type="OptionButton" parent="HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+vertical_icon_alignment = 0
+item_count = 3
+selected = 0
+popup/item_0/text = "Dialogue"
+popup/item_0/id = 0
+popup/item_1/text = "Offer"
+popup/item_1/id = 1
+popup/item_2/text = "Response"
+popup/item_2/id = 2
+
+[node name="SpeakerLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Speaker"
+
+[node name="Speaker" type="LineEdit" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 32)
+layout_mode = 2
+placeholder_text = "Speaker"
+
+[node name="TextLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Text
+"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 3
+
+[node name="Text" type="TextEdit" parent="ScrollContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+placeholder_text = "Dialogue goes here..."
+wrap_mode = 1
+
+[node name="Test Print" type="Button" parent="."]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Test Print"
+
+[node name="Hidden" type="Control" parent="."]
+visible = false
+layout_mode = 2

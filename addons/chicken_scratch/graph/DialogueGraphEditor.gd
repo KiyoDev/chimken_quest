@@ -14,7 +14,7 @@ var file_menu_items : Dictionary = {};
 
 
 static var right_click_menu_open := false;
-
+ 
 
 func _ready():
 	var popup := FileMenu.get_popup();
@@ -25,31 +25,41 @@ func _ready():
 
 
 func to_json():
-	var out := {};
-	out["connections"] = Graph.get_connection_list();
-#	print_debug(get_)
-	print_debug("connections - %s" % [JSON.stringify(Graph.get_connection_list())]);
-	var nodes := get_graph_nodes();
-	print_debug("nodes - %s" % [nodes]);
+	# TODO: have a DialogueGraphFile extends RefCounted that keeps track of currently loaded file?
+	var graph := {
+		"file_name": "",
+		"connections": Graph.get_connection_list(),
+		"nodes": get_graph_node_dicts()
+	};
+	
+	var file = DialogueFile.new();
+	
+	file.from_json(JSON.stringify(graph));
+	
+#	print_debug("connections - %s" % [JSON.stringify(Graph.get_connection_list(), "\t", false)]);
+#	var nodes := get_graph_nodes();
+#	print_debug("nodes - %s" % [nodes]);
 	var json := "";
 
 
-func get_graph_nodes() -> Array[DialogueNode]:
-	var nodes : Array[DialogueNode] = [];
+func get_graph_node_dicts() ->  Array[Dictionary]:
+	var nodes : Array[Dictionary] = [];
 	for i in range(1, Graph.get_child_count()):
-		nodes.append(Graph.get_child(i));
+		nodes.append(Graph.get_child(i).to_dict());
 	return nodes;
 
 # FIXME: graph nodes are being instantiated at different locations if moving the viewport
 func add_new_node(position := Vector2(0, 0)):
-	var new_node : DialogueNode = dialogue_node.instantiate().empty();
+	var new_node : DialogueNode = dialogue_node.instantiate().duplicate(0b0111).empty();
 	new_node.node_closed.connect(_on_graph_node_closed);
 	new_node.slots_removed.connect(_on_graph_node_slots_removed);
 	Graph.add_child(new_node);
+	print_debug("add new node=%s" % [position]);
+#	new_node.global_position = position;
 	new_node.position_offset = position;
 	node_dict[new_node.name] = new_node; # cache node names
 	
-	print_debug("add - node_dict=%s" % [node_dict]);
+#	print_debug("add - node_dict=%s" % [node_dict]);
 #	print_debug("new_node - %s, %s, %s, %s" % [position, new_node.position, new_node.global_position, new_node.position_offset]);
 
 
@@ -65,7 +75,7 @@ func _on_file_menu_opened(id : int):
 
 
 func _on_add_node_pressed():
-	print_debug("on add - %s, %s" % [Graph, dialogue_node]);
+#	print_debug("on add - %s, %s" % [Graph, dialogue_node]);
 	add_new_node();
 
 
@@ -93,7 +103,8 @@ func _on_graph_node_closed(node : DialogueNode):
 
 ## When DailogueNode slots change
 func _on_graph_node_slots_removed(node : DialogueNode, from_port : int):
-	print_debug("node slot[%s] removed - %s, %s" % [from_port, node, Graph.get_connection_list()]);
+	print_debug("node slot[%s] removed - %s" % [from_port, node.name]);
+#	print_debug("node slot[%s] removed - %s, %s" % [from_port, node, Graph.get_connection_list()]);
 	for connections in Graph.get_connection_list():
 #		print_debug("connections - %s, %s" % [connections, typeof(connections)]);
 		if(connections.from == node.name && connections.from_port == from_port):
@@ -119,7 +130,8 @@ func _on_graph_popup_request(position):
 ## Add new node from menu
 func _on_new_node_pressed():
 	print_debug("_on_new_node_pressed - %s" % [right_click_menu.position]);
-	add_new_node(right_click_menu.position);
+	# Add scroll offset and apply zoom value to position
+	add_new_node((right_click_menu.position + Graph.scroll_offset) / Graph.zoom);
 	right_click_menu_open = false;
 	right_click_menu.hide();
 

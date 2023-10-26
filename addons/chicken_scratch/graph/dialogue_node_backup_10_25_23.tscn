@@ -1,24 +1,25 @@
-[gd_scene load_steps=10 format=3 uid="uid://bvskd0vgeq032"]
+[gd_scene load_steps=10 format=3 uid="uid://7d36jpxbvxl3"]
 
-[ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueNode.gd" id="2_qpaxv"]
-[ext_resource type="Script" path="res://addons/chicken_scratch/Dialogue.gd" id="3_0a0po"]
-[ext_resource type="PackedScene" uid="uid://2878ebeahf7g" path="res://addons/chicken_scratch/graph/offer_element.tscn" id="3_amdp0"]
-[ext_resource type="PackedScene" uid="uid://dv8pk15nx1s0w" path="res://addons/chicken_scratch/graph/response_element.tscn" id="4_jhsr8"]
-[ext_resource type="Script" path="res://addons/chicken_scratch/graph/OfferConfig.gd" id="5_vc4jl"]
-[ext_resource type="PackedScene" uid="uid://j4i1b4cdlcrs" path="res://addons/chicken_scratch/graph/offering_config.tscn" id="6_uatgp"]
-[ext_resource type="PackedScene" uid="uid://nhonh44age0u" path="res://addons/chicken_scratch/graph/offering_fail.tscn" id="7_tugy6"]
-[ext_resource type="PackedScene" uid="uid://r7ibrepvtebn" path="res://addons/chicken_scratch/graph/slots_config.tscn" id="8_gtsrh"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueNode.gd" id="1_uuq6s"]
+[ext_resource type="PackedScene" uid="uid://dv8pk15nx1s0w" path="res://addons/chicken_scratch/graph/response_element.tscn" id="2_8ge26"]
+[ext_resource type="PackedScene" uid="uid://2878ebeahf7g" path="res://addons/chicken_scratch/graph/offer_element.tscn" id="3_01ifk"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/Dialogue.gd" id="4_6k1n5"]
+[ext_resource type="PackedScene" uid="uid://j4i1b4cdlcrs" path="res://addons/chicken_scratch/graph/offering_config.tscn" id="6_7156e"]
+[ext_resource type="PackedScene" uid="uid://nhonh44age0u" path="res://addons/chicken_scratch/graph/offering_fail.tscn" id="7_o01ys"]
+[ext_resource type="PackedScene" uid="uid://r7ibrepvtebn" path="res://addons/chicken_scratch/graph/slots_config.tscn" id="8_174q6"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/OfferConfig.gd" id="8_vhny4"]
 
-[sub_resource type="Resource" id="Resource_wtxyr"]
-script = ExtResource("3_0a0po")
+[sub_resource type="Resource" id="Resource_8015f"]
+resource_local_to_scene = true
+script = ExtResource("4_6k1n5")
 text = ""
 speaker = ""
 
-[node name="DialogueNode" type="GraphNode"]
-offset_left = 18.0
-offset_top = 42.0
-offset_right = 234.0
-offset_bottom = 359.0
+[node name="GraphNodeBackup" type="GraphNode"]
+texture_filter = 1
+custom_minimum_size = Vector2(240, 0)
+offset_right = 240.0
+offset_bottom = 280.0
 title = "Dialogue Node"
 show_close = true
 resizable = true
@@ -53,7 +54,7 @@ slot/3/left_enabled = false
 slot/3/left_type = 0
 slot/3/left_color = Color(1, 1, 1, 1)
 slot/3/left_icon = null
-slot/3/right_enabled = true
+slot/3/right_enabled = false
 slot/3/right_type = 0
 slot/3/right_color = Color(1, 1, 1, 1)
 slot/3/right_icon = null
@@ -62,32 +63,33 @@ slot/4/left_enabled = false
 slot/4/left_type = 0
 slot/4/left_color = Color(1, 1, 1, 1)
 slot/4/left_icon = null
-slot/4/right_enabled = true
+slot/4/right_enabled = false
 slot/4/right_type = 0
 slot/4/right_color = Color(1, 1, 1, 1)
 slot/4/right_icon = null
 slot/4/draw_stylebox = true
-script = ExtResource("2_qpaxv")
-offering_config = ExtResource("6_uatgp")
-offering_fail = ExtResource("7_tugy6")
-slots_config = ExtResource("8_gtsrh")
-response_element = ExtResource("4_jhsr8")
-offer_element = ExtResource("3_amdp0")
-dialogue = SubResource("Resource_wtxyr")
+script = ExtResource("1_uuq6s")
+offering_config = ExtResource("6_7156e")
+offering_fail = ExtResource("7_o01ys")
+slots_config = ExtResource("8_174q6")
+response_element = ExtResource("2_8ge26")
+offer_element = ExtResource("3_01ifk")
+dialogue = SubResource("Resource_8015f")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="TypeLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="TypeLabel" type="Label" parent="VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 text = "Type"
 
-[node name="TypeOptions" type="OptionButton" parent="VBoxContainer/HBoxContainer"]
+[node name="TypeOptions" type="OptionButton" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
 layout_mode = 2
 vertical_icon_alignment = 0
 item_count = 3
@@ -104,6 +106,7 @@ layout_mode = 2
 text = "Speaker"
 
 [node name="Speaker" type="LineEdit" parent="VBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(180, 32)
 layout_mode = 2
 placeholder_text = "Speaker"
@@ -119,7 +122,8 @@ layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 3
 
-[node name="Dialogue" type="TextEdit" parent="VBoxContainer/ScrollContainer"]
+[node name="Text" type="TextEdit" parent="VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(180, 100)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -134,12 +138,12 @@ size_flags_horizontal = 3
 text = "Test Print"
 
 [node name="Hidden" type="Control" parent="VBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="OfferConfig" type="VBoxContainer" parent="."]
 layout_mode = 2
-size_flags_vertical = 3
-script = ExtResource("5_vc4jl")
+script = ExtResource("8_vhny4")
 
 [node name="HSeparator" type="HSeparator" parent="OfferConfig"]
 layout_mode = 2
@@ -166,7 +170,7 @@ alignment = 2
 [node name="Offerings" type="VBoxContainer" parent="OfferConfig"]
 layout_mode = 2
 
-[node name="Offer" parent="OfferConfig/Offerings" instance=ExtResource("3_amdp0")]
+[node name="Offer" parent="OfferConfig/Offerings" instance=ExtResource("3_01ifk")]
 layout_mode = 2
 
 [node name="OfferingFail" type="HBoxContainer" parent="."]
@@ -190,7 +194,6 @@ horizontal_alignment = 2
 
 [node name="SlotsConfig" type="VBoxContainer" parent="."]
 layout_mode = 2
-size_flags_vertical = 3
 
 [node name="HSeparator" type="HSeparator" parent="SlotsConfig"]
 layout_mode = 2
@@ -211,15 +214,10 @@ rounded = true
 [node name="Control" type="Control" parent="SlotsConfig/HBoxContainer"]
 layout_mode = 2
 
-[node name="Response" parent="." instance=ExtResource("4_jhsr8")]
+[node name="Response" parent="." instance=ExtResource("2_8ge26")]
 layout_mode = 2
-size_flags_vertical = 3
 
 [connection signal="close_request" from="." to="." method="_on_close_request"]
 [connection signal="dragged" from="." to="." method="_on_dragged"]
 [connection signal="resize_request" from="." to="." method="_on_resize_request"]
-[connection signal="item_selected" from="VBoxContainer/HBoxContainer/TypeOptions" to="." method="_on_type_options_item_selected"]
-[connection signal="text_submitted" from="VBoxContainer/Speaker" to="." method="_on_speaker_text_submitted"]
-[connection signal="text_changed" from="VBoxContainer/ScrollContainer/Dialogue" to="." method="_on_dialogue_text_changed"]
 [connection signal="value_changed" from="OfferConfig/HBoxContainer/ItemCount" to="." method="_on_item_count_value_changed"]
-[connection signal="value_changed" from="SlotsConfig/HBoxContainer/SlotCount" to="." method="_on_slot_count_value_changed"]
