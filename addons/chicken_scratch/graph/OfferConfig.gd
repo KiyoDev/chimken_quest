@@ -2,7 +2,8 @@
 class_name OfferConfig extends VBoxContainer
 
 
-@onready var Offerings := $Offerings;
+@export var Offerings : VBoxContainer;
+@export var ItemCount : SpinBox;
 
 
 

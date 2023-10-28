@@ -1,24 +1,21 @@
-[gd_scene load_steps=10 format=3 uid="uid://bvskd0vgeq032"]
+[gd_scene load_steps=6 format=3 uid="uid://542bcl844gbm"]
 
-[ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueNode.gd" id="2_qpaxv"]
-[ext_resource type="Script" path="res://addons/chicken_scratch/Dialogue.gd" id="3_0a0po"]
-[ext_resource type="PackedScene" uid="uid://2878ebeahf7g" path="res://addons/chicken_scratch/graph/offer_element.tscn" id="3_amdp0"]
-[ext_resource type="PackedScene" uid="uid://dv8pk15nx1s0w" path="res://addons/chicken_scratch/graph/response_element.tscn" id="4_jhsr8"]
-[ext_resource type="Script" path="res://addons/chicken_scratch/graph/OfferConfig.gd" id="5_vc4jl"]
-[ext_resource type="PackedScene" uid="uid://j4i1b4cdlcrs" path="res://addons/chicken_scratch/graph/offering_config.tscn" id="6_uatgp"]
-[ext_resource type="PackedScene" uid="uid://nhonh44age0u" path="res://addons/chicken_scratch/graph/offering_fail.tscn" id="7_tugy6"]
-[ext_resource type="PackedScene" uid="uid://r7ibrepvtebn" path="res://addons/chicken_scratch/graph/slots_config.tscn" id="8_gtsrh"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueNode.gd" id="1_dm8qm"]
+[ext_resource type="PackedScene" uid="uid://qxsqh32rr507" path="res://addons/chicken_scratch/graph/dialogue_node_template.tscn" id="2_1q038"]
+[ext_resource type="PackedScene" uid="uid://dv8pk15nx1s0w" path="res://addons/chicken_scratch/graph/response_element.tscn" id="5_dsjvb"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/Dialogue.gd" id="7_607fp"]
 
-[sub_resource type="Resource" id="Resource_wtxyr"]
-script = ExtResource("3_0a0po")
-text = ""
+[sub_resource type="Resource" id="Resource_8015f"]
+resource_local_to_scene = true
+script = ExtResource("7_607fp")
+text = null
 speaker = ""
 
-[node name="DialogueNode" type="GraphNode"]
-offset_left = 18.0
-offset_top = 42.0
-offset_right = 234.0
-offset_bottom = 359.0
+[node name="GraphNode" type="GraphNode" node_paths=PackedStringArray("TypeOptions", "Speaker", "Text", "Hidden")]
+texture_filter = 1
+custom_minimum_size = Vector2(240, 0)
+offset_right = 240.0
+offset_bottom = 280.0
 title = "Dialogue Node"
 show_close = true
 resizable = true
@@ -31,62 +28,29 @@ slot/0/right_type = 0
 slot/0/right_color = Color(1, 1, 1, 1)
 slot/0/right_icon = null
 slot/0/draw_stylebox = true
-slot/1/left_enabled = false
-slot/1/left_type = 0
-slot/1/left_color = Color(1, 1, 1, 1)
-slot/1/left_icon = null
-slot/1/right_enabled = true
-slot/1/right_type = 0
-slot/1/right_color = Color(1, 1, 1, 1)
-slot/1/right_icon = null
-slot/1/draw_stylebox = true
-slot/2/left_enabled = false
-slot/2/left_type = 0
-slot/2/left_color = Color(1, 1, 1, 1)
-slot/2/left_icon = null
-slot/2/right_enabled = true
-slot/2/right_type = 0
-slot/2/right_color = Color(1, 1, 1, 1)
-slot/2/right_icon = null
-slot/2/draw_stylebox = true
-slot/3/left_enabled = false
-slot/3/left_type = 0
-slot/3/left_color = Color(1, 1, 1, 1)
-slot/3/left_icon = null
-slot/3/right_enabled = true
-slot/3/right_type = 0
-slot/3/right_color = Color(1, 1, 1, 1)
-slot/3/right_icon = null
-slot/3/draw_stylebox = true
-slot/4/left_enabled = false
-slot/4/left_type = 0
-slot/4/left_color = Color(1, 1, 1, 1)
-slot/4/left_icon = null
-slot/4/right_enabled = true
-slot/4/right_type = 0
-slot/4/right_color = Color(1, 1, 1, 1)
-slot/4/right_icon = null
-slot/4/draw_stylebox = true
-script = ExtResource("2_qpaxv")
-offering_config = ExtResource("6_uatgp")
-offering_fail = ExtResource("7_tugy6")
-slots_config = ExtResource("8_gtsrh")
-response_element = ExtResource("4_jhsr8")
-dialogue = SubResource("Resource_wtxyr")
+script = ExtResource("1_dm8qm")
+TypeOptions = NodePath("BaseElements/HBoxContainer/TypeOptions")
+Speaker = NodePath("BaseElements/Speaker")
+Text = NodePath("BaseElements/ScrollContainer/Dialogue")
+Hidden = NodePath("BaseElements/Hidden")
+template = ExtResource("2_1q038")
+response_element = ExtResource("5_dsjvb")
+dialogue = SubResource("Resource_8015f")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="BaseElements" type="VBoxContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BaseElements"]
 layout_mode = 2
 
-[node name="TypeLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="TypeLabel" type="Label" parent="BaseElements/HBoxContainer"]
 layout_mode = 2
 text = "Type"
 
-[node name="TypeOptions" type="OptionButton" parent="VBoxContainer/HBoxContainer"]
+[node name="TypeOptions" type="OptionButton" parent="BaseElements/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 vertical_icon_alignment = 0
 item_count = 3
@@ -98,27 +62,29 @@ popup/item_1/id = 1
 popup/item_2/text = "Response"
 popup/item_2/id = 2
 
-[node name="SpeakerLabel" type="Label" parent="VBoxContainer"]
+[node name="SpeakerLabel" type="Label" parent="BaseElements"]
 layout_mode = 2
 text = "Speaker"
 
-[node name="Speaker" type="LineEdit" parent="VBoxContainer"]
+[node name="Speaker" type="LineEdit" parent="BaseElements"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(180, 32)
 layout_mode = 2
 placeholder_text = "Speaker"
 
-[node name="TextLabel" type="Label" parent="VBoxContainer"]
+[node name="TextLabel" type="Label" parent="BaseElements"]
 layout_mode = 2
 text = "Text
 "
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="BaseElements"]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 3
 
-[node name="Dialogue" type="TextEdit" parent="VBoxContainer/ScrollContainer"]
+[node name="Dialogue" type="TextEdit" parent="BaseElements/ScrollContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(180, 100)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -126,99 +92,23 @@ size_flags_vertical = 3
 placeholder_text = "Dialogue goes here..."
 wrap_mode = 1
 
-[node name="Test Print" type="Button" parent="VBoxContainer"]
+[node name="Test Print" type="Button" parent="BaseElements"]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Test Print"
 
-[node name="Hidden" type="Control" parent="VBoxContainer"]
-layout_mode = 2
-
-[node name="OfferConfig" type="VBoxContainer" parent="."]
-layout_mode = 2
-size_flags_vertical = 3
-script = ExtResource("5_vc4jl")
-
-[node name="HSeparator" type="HSeparator" parent="OfferConfig"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="OfferConfig"]
-layout_mode = 2
-text = "Item Offer"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="OfferConfig"]
+[node name="Hidden" type="Control" parent="BaseElements"]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="OfferConfig/HBoxContainer"]
+[node name="Control" type="Control" parent="BaseElements"]
+custom_minimum_size = Vector2(0, 5)
 layout_mode = 2
-text = "Items"
-
-[node name="ItemCount" type="SpinBox" parent="OfferConfig/HBoxContainer"]
-layout_mode = 2
-min_value = 1.0
-value = 1.0
-rounded = true
-alignment = 2
-
-[node name="Offerings" type="VBoxContainer" parent="OfferConfig"]
-layout_mode = 2
-
-[node name="Offer" parent="OfferConfig/Offerings" instance=ExtResource("3_amdp0")]
-layout_mode = 2
-
-[node name="OfferingFail" type="HBoxContainer" parent="."]
-layout_mode = 2
-
-[node name="Control" type="Control" parent="OfferingFail"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="MarginContainer" type="MarginContainer" parent="OfferingFail"]
-layout_mode = 2
-theme_override_constants/margin_left = 4
-
-[node name="PanelContainer" type="PanelContainer" parent="OfferingFail/MarginContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="OfferingFail/MarginContainer/PanelContainer"]
-layout_mode = 2
-text = " Offer Fail "
-horizontal_alignment = 2
-
-[node name="SlotsConfig" type="VBoxContainer" parent="."]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="HSeparator" type="HSeparator" parent="SlotsConfig"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="SlotsConfig"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="SlotsConfig/HBoxContainer"]
-layout_mode = 2
-text = "Slots"
-
-[node name="SlotCount" type="SpinBox" parent="SlotsConfig/HBoxContainer"]
-layout_mode = 2
-min_value = 1.0
-value = 1.0
-rounded = true
-
-[node name="Control" type="Control" parent="SlotsConfig/HBoxContainer"]
-layout_mode = 2
-
-[node name="Response" parent="." instance=ExtResource("4_jhsr8")]
-layout_mode = 2
-size_flags_vertical = 3
 
 [connection signal="close_request" from="." to="." method="_on_close_request"]
 [connection signal="dragged" from="." to="." method="_on_dragged"]
 [connection signal="resize_request" from="." to="." method="_on_resize_request"]
-[connection signal="item_selected" from="VBoxContainer/HBoxContainer/TypeOptions" to="." method="_on_type_options_item_selected"]
-[connection signal="text_submitted" from="VBoxContainer/Speaker" to="." method="_on_speaker_text_submitted"]
-[connection signal="text_changed" from="VBoxContainer/ScrollContainer/Dialogue" to="." method="_on_dialogue_text_changed"]
-[connection signal="value_changed" from="OfferConfig/HBoxContainer/ItemCount" to="." method="_on_item_count_value_changed"]
-[connection signal="value_changed" from="SlotsConfig/HBoxContainer/SlotCount" to="." method="_on_slot_count_value_changed"]
+[connection signal="item_selected" from="BaseElements/HBoxContainer/TypeOptions" to="." method="_on_type_options_item_selected"]
+[connection signal="text_submitted" from="BaseElements/Speaker" to="." method="_on_speaker_text_submitted"]
+[connection signal="text_changed" from="BaseElements/ScrollContainer/Dialogue" to="." method="_on_text_text_changed"]

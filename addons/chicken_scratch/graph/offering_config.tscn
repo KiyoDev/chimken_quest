@@ -3,8 +3,10 @@
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/OfferConfig.gd" id="1_8cubm"]
 [ext_resource type="PackedScene" uid="uid://2878ebeahf7g" path="res://addons/chicken_scratch/graph/offer_element.tscn" id="2_356vx"]
 
-[node name="OfferConfig" type="VBoxContainer"]
+[node name="OfferConfig" type="VBoxContainer" node_paths=PackedStringArray("Offerings", "ItemCount")]
 script = ExtResource("1_8cubm")
+Offerings = NodePath("Offerings")
+ItemCount = NodePath("HBoxContainer/ItemCount")
 
 [node name="HSeparator" type="HSeparator" parent="."]
 layout_mode = 2

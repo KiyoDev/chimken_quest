@@ -5,6 +5,7 @@ class_name DialogueGraphEditor extends VBoxContainer
 @onready var FileMenu : MenuButton = %FileMenu;
 
 
+#@export var dialogue_node_template : PackedScene;
 @export var dialogue_node : PackedScene;
 @export var right_click_menu : Container;
 
@@ -27,7 +28,7 @@ func _ready():
 	print_debug("file_menu_items=%s" % [file_menu_items]);
 
 # from graph to json
-# TODO: on_graph_save, update DialogueFile and save to disk
+# TODO: on_graph_save, update DialogueFile and save to disk; .dngraph
 func to_json():
 	# TODO: have a DialogueGraphFile extends RefCounted that keeps track of currently loaded file?
 	var graph := {
@@ -52,19 +53,22 @@ func get_graph_node_dicts() ->  Array[Dictionary]:
 		nodes.append(Graph.get_child(i).to_dict());
 	return nodes;
 
+
 # FIXME: graph nodes are being instantiated at different locations if moving the viewport
 func add_new_node(position := Vector2(0, 0)):
-	var new_node : DialogueNode = dialogue_node.instantiate().duplicate(0b0111).empty();
+	var new_node : DialogueNode = dialogue_node.instantiate().clone_from_template();
+#	var new_node : DialogueNode = dialogue_node.instantiate().duplicate(0b0111).empty();
 	new_node.node_closed.connect(_on_graph_node_closed);
 	new_node.slots_removed.connect(_on_graph_node_slots_removed);
 	Graph.add_child(new_node);
-	print_debug("add new node=%s" % [position]);
+	print_debug("add new node=%s, %s" % [position, new_node]);
 #	new_node.global_position = position;
 	new_node.position_offset = position;
 	node_dict[new_node.name] = new_node; # cache node names
 	
 #	print_debug("add - node_dict=%s" % [node_dict]);
 #	print_debug("new_node - %s, %s, %s, %s" % [position, new_node.position, new_node.global_position, new_node.position_offset]);
+
 
 
 func _on_file_menu_opened(id : int):
@@ -173,3 +177,15 @@ func _on_graph_delete_nodes_request(nodes):
 func _on_graph_copy_nodes_request():
 	print_debug("graph copy request");
 
+
+func _on_graph_tree_entered():
+	print_debug("entering graph");
+
+
+func _on_graph_tree_exited():
+	print_debug("exiting graph");
+
+
+
+func _on_root_node_pressed():
+	print_debug("Add root node");

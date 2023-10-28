@@ -1,0 +1,86 @@
+[gd_scene load_steps=7 format=3 uid="uid://qxsqh32rr507"]
+
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueNodeTemplate.gd" id="1_yf58m"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/OfferConfig.gd" id="2_xxev2"]
+[ext_resource type="PackedScene" uid="uid://nhonh44age0u" path="res://addons/chicken_scratch/graph/offering_fail.tscn" id="3_a73rs"]
+[ext_resource type="PackedScene" uid="uid://2878ebeahf7g" path="res://addons/chicken_scratch/graph/offer_element.tscn" id="4_6kocs"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/Slotsconfig.gd" id="5_i1vtk"]
+[ext_resource type="PackedScene" uid="uid://dv8pk15nx1s0w" path="res://addons/chicken_scratch/graph/response_element.tscn" id="6_6wwvp"]
+
+[node name="DialogueNodeTemplate" type="Control" node_paths=PackedStringArray("_OfferConfig", "OfferElement", "OfferingFail", "SlotsConfig", "Response")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_yf58m")
+_OfferConfig = NodePath("OfferConfig")
+OfferElement = NodePath("Offer")
+OfferingFail = NodePath("OfferingFail")
+SlotsConfig = NodePath("SlotsConfig")
+Response = NodePath("Response")
+
+[node name="OfferConfig" type="VBoxContainer" parent="." node_paths=PackedStringArray("Offerings", "ItemCount")]
+layout_mode = 0
+script = ExtResource("2_xxev2")
+Offerings = NodePath("Offerings")
+ItemCount = NodePath("HBoxContainer/ItemCount")
+
+[node name="HSeparator" type="HSeparator" parent="OfferConfig"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="OfferConfig"]
+layout_mode = 2
+text = "Item Offer"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OfferConfig"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="OfferConfig/HBoxContainer"]
+layout_mode = 2
+text = "Items"
+
+[node name="ItemCount" type="SpinBox" parent="OfferConfig/HBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+value = 1.0
+rounded = true
+alignment = 2
+
+[node name="Offerings" type="VBoxContainer" parent="OfferConfig"]
+layout_mode = 2
+
+[node name="Offer" parent="OfferConfig/Offerings" instance=ExtResource("4_6kocs")]
+layout_mode = 2
+
+[node name="OfferingFail" parent="." instance=ExtResource("3_a73rs")]
+layout_mode = 0
+
+[node name="Offer" parent="." instance=ExtResource("4_6kocs")]
+layout_mode = 0
+
+[node name="SlotsConfig" type="VBoxContainer" parent="." node_paths=PackedStringArray("SlotCount")]
+layout_mode = 0
+script = ExtResource("5_i1vtk")
+SlotCount = NodePath("HBoxContainer/SlotCount")
+
+[node name="HSeparator" type="HSeparator" parent="SlotsConfig"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SlotsConfig"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SlotsConfig/HBoxContainer"]
+layout_mode = 2
+text = "Slots"
+
+[node name="SlotCount" type="SpinBox" parent="SlotsConfig/HBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+value = 1.0
+rounded = true
+
+[node name="Control" type="Control" parent="SlotsConfig/HBoxContainer"]
+layout_mode = 2
+
+[node name="Response" parent="." instance=ExtResource("6_6wwvp")]
+layout_mode = 0

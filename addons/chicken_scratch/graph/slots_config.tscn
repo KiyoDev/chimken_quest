@@ -1,6 +1,10 @@
-[gd_scene format=3 uid="uid://r7ibrepvtebn"]
+[gd_scene load_steps=2 format=3 uid="uid://r7ibrepvtebn"]
 
-[node name="SlotsConfig" type="VBoxContainer"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/Slotsconfig.gd" id="1_aob32"]
+
+[node name="SlotsConfig" type="VBoxContainer" node_paths=PackedStringArray("SlotCount")]
+script = ExtResource("1_aob32")
+SlotCount = NodePath("HBoxContainer/SlotCount")
 
 [node name="HSeparator" type="HSeparator" parent="."]
 layout_mode = 2
