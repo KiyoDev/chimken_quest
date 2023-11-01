@@ -1,15 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://542bcl844gbm"]
+[gd_scene load_steps=7 format=3 uid="uid://542bcl844gbm"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueNode.gd" id="1_dm8qm"]
 [ext_resource type="PackedScene" uid="uid://qxsqh32rr507" path="res://addons/chicken_scratch/graph/dialogue_node_template.tscn" id="2_1q038"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/SpeakerEdit.gd" id="5_35nv3"]
 [ext_resource type="PackedScene" uid="uid://dv8pk15nx1s0w" path="res://addons/chicken_scratch/graph/response_element.tscn" id="5_dsjvb"]
 [ext_resource type="Script" path="res://addons/chicken_scratch/Dialogue.gd" id="7_607fp"]
 
 [sub_resource type="Resource" id="Resource_8015f"]
 resource_local_to_scene = true
 script = ExtResource("7_607fp")
-text = null
 speaker = ""
+lines = Array[Resource("res://addons/chicken_scratch/DialogueLine.gd")]([])
 
 [node name="GraphNode" type="GraphNode" node_paths=PackedStringArray("TypeOptions", "Speaker", "Text", "Hidden")]
 texture_filter = 1
@@ -71,6 +72,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(180, 32)
 layout_mode = 2
 placeholder_text = "Speaker"
+script = ExtResource("5_35nv3")
 
 [node name="TextLabel" type="Label" parent="BaseElements"]
 layout_mode = 2
@@ -111,4 +113,5 @@ layout_mode = 2
 [connection signal="resize_request" from="." to="." method="_on_resize_request"]
 [connection signal="item_selected" from="BaseElements/HBoxContainer/TypeOptions" to="." method="_on_type_options_item_selected"]
 [connection signal="text_submitted" from="BaseElements/Speaker" to="." method="_on_speaker_text_submitted"]
-[connection signal="text_changed" from="BaseElements/ScrollContainer/Dialogue" to="." method="_on_text_text_changed"]
+[connection signal="text_submitted" from="BaseElements/Speaker" to="BaseElements/Speaker" method="_on_text_submitted"]
+[connection signal="text_changed" from="BaseElements/ScrollContainer/Dialogue" to="." method="_on_dialogue_text_changed"]

@@ -4,26 +4,57 @@ extends EditorPlugin
 
 const graph = preload("res://addons/chicken_scratch/graph/dialogue_graph.tscn");
 
-var graph_instance;
+var graph_instance : DialogueGraphEditor;
 
 #func _ready():
 #	print_debug(graph);
+
+var enabled : bool;
 
 
 func _enter_tree():
 	graph_instance = graph.instantiate();
 	# Initialization of the plugin goes here.
-#	print_debug(get_editor_interface().get_editor_main_screen().get_children());
+	print_debug(get_editor_interface().get_editor_main_screen().get_children());
 #	print_debug(graph_instance);
 
 	get_editor_interface().get_editor_main_screen().add_child(graph_instance);
 	_make_visible(false);
 
+
 func _exit_tree():
-#	remove_control_from_docks(graph);
-	if(graph_instance):
+	_make_visible(false);
+	if(enabled && graph_instance):
+		print("exit tree");
+		graph_instance.release_focus();
+		get_editor_interface().get_editor_main_screen().remove_child(graph_instance);
 		graph_instance.queue_free();
-#	remove_control_from_container(CONTAINER_TOOLBAR, graph_instance);
+#		get_editor_interface().get_editor_main_screen().get_
+#		get_editor_interface().get_editor_main_screen().get_child(0).grab_focus();
+#		get_editor_interface().get_editor_main_screen().get_child(0).visible = true;
+#		update_overlays();
+
+
+func _enable_plugin():
+	enabled = true;
+	
+
+func _disable_plugin():
+	_make_visible(false);
+	enabled = false;
+	if(graph_instance):
+		print("disable plugin, %s" % [get_viewport().gui_get_focus_owner().name]);
+#		print("disable plugin, %s" % [get_editor_interface().get_editor_main_screen().get_child(0)]);
+#		var curr := get_viewport().gui_get_focus_owner();
+##		curr.visible = false;
+#		curr.release_focus();
+		
+		graph_instance.release_focus();
+		get_editor_interface().get_editor_main_screen().remove_child(graph_instance);
+		graph_instance.queue_free();
+#		get_editor_interface().get_editor_main_screen().get_child(0).grab_focus();
+#		get_editor_interface().get_editor_main_screen().get_child(0).visible = true;
+#		update_overlays();
 
 
 func _has_main_screen():

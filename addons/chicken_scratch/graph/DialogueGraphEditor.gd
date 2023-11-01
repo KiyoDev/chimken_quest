@@ -1,14 +1,17 @@
 @tool
-class_name DialogueGraphEditor extends VBoxContainer
+class_name DialogueGraphEditor extends Control
 
-@onready var Graph : GraphEdit = $Graph;
-@onready var FileMenu : MenuButton = %FileMenu;
 
 
 #@export var dialogue_node_template : PackedScene;
+@export var Graph : DialogueGraph;
+@export var FileMenu : MenuButton;
+
+@export var root_node_scn : PackedScene;
 @export var dialogue_node : PackedScene;
 @export var right_click_menu : Container;
 
+var root_node : RootNode;
 
 var node_dict : Dictionary = {};
 var file_menu_items : Dictionary = {};
@@ -21,19 +24,48 @@ static var current_dialogue_file : DialogueFile;
  
 
 func _ready():
+	pass;
+
+
+func _enter_tree():
 	var popup := FileMenu.get_popup();
 	popup.id_pressed.connect(_on_file_menu_opened);
 	for i in popup.item_count:
 		file_menu_items[i] = popup.get_item_text(i);
 	print_debug("file_menu_items=%s" % [file_menu_items]);
+	
+	new_dialogue_graph();
+
+
+func _exit_tree():
+	if(root_node):
+		root_node.queue_free();
+
+
+func _set_root_node(node):
+	if(root_node != null) :
+		push_warning("Root node already set - [%s]" % [root_node]);
+		return;
+
+	root_node = node;
+
+
+func new_dialogue_graph():
+	if(root_node) :
+		root_node.queue_free();
+	root_node = root_node_scn.instantiate().duplicate(0b0111);
+	Graph.add_child(root_node);
+
 
 # from graph to json
 # TODO: on_graph_save, update DialogueFile and save to disk; .dngraph
 func to_json():
 	# TODO: have a DialogueGraphFile extends RefCounted that keeps track of currently loaded file?
+	print("Graph %s" % Graph);
 	var graph := {
 		"file_name": current_dialogue_file.name if current_dialogue_file else "",
 		"connections": Graph.get_connection_list(),
+		"root_node": root_node.to_dict(),
 		"nodes": get_graph_node_dicts()
 	};
 	
@@ -49,6 +81,7 @@ func to_json():
 
 func get_graph_node_dicts() ->  Array[Dictionary]:
 	var nodes : Array[Dictionary] = [];
+	# ignore root node
 	for i in range(1, Graph.get_child_count()):
 		nodes.append(Graph.get_child(i).to_dict());
 	return nodes;
@@ -80,11 +113,6 @@ func _on_file_menu_opened(id : int):
 		1: # Save
 			# TODO: implement file save dialogue
 			pass;
-
-
-func _on_add_node_pressed():
-#	print_debug("on add - %s, %s" % [Graph, dialogue_node]);
-	add_new_node();
 
 
 func _on_graph_connection_request(from_node, from_port, to_node, to_port):
@@ -120,11 +148,6 @@ func _on_graph_node_slots_removed(node : DialogueNode, from_port : int):
 	
 #	node_dict.erase(node.name); # FIXME: change node_dict to support name and slots
 	print_debug("node slot changed - '%s'=%s" % [node.name, from_port]);
-
-
-func _on_get_connections_pressed():
-	to_json();
-#	print_debug("DialogueGraph - %s" % [to_json()]);
 
 
 ## Right click menu
@@ -187,5 +210,9 @@ func _on_graph_tree_exited():
 
 
 
-func _on_root_node_pressed():
+func _on_root_node_scn_pressed():
 	print_debug("Add root node");
+
+
+func _on_print_pressed():
+	to_json();

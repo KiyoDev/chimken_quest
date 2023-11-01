@@ -1,69 +1,78 @@
-[gd_scene load_steps=4 format=3 uid="uid://duio0ke3bpeoi"]
+[gd_scene load_steps=5 format=3 uid="uid://duio0ke3bpeoi"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueGraphEditor.gd" id="1_x85w6"]
 [ext_resource type="PackedScene" uid="uid://542bcl844gbm" path="res://addons/chicken_scratch/graph/dialogue_node.tscn" id="2_1eaom"]
+[ext_resource type="PackedScene" uid="uid://dgeynvwx2mhg5" path="res://addons/chicken_scratch/graph/root_node.tscn" id="2_7o4b3"]
 [ext_resource type="Script" path="res://scripts/dialogue/graph/DialogueGraph.gd" id="3_1gqce"]
 
-[node name="ChickenScratch" type="VBoxContainer" node_paths=PackedStringArray("right_click_menu")]
+[node name="ChickenScratch" type="Control" node_paths=PackedStringArray("Graph", "FileMenu", "right_click_menu")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1584.0
+script = ExtResource("1_x85w6")
+Graph = NodePath("VBoxContainer/Graph")
+FileMenu = NodePath("VBoxContainer/HBoxContainer/FileMenu")
+root_node_scn = ExtResource("2_7o4b3")
+dialogue_node = ExtResource("2_1eaom")
+right_click_menu = NodePath("RightClickMenu")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 texture_filter = 1
+layout_mode = 0
 offset_right = 1584.0
 offset_bottom = 1040.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_x85w6")
-dialogue_node = ExtResource("2_1eaom")
-right_click_menu = NodePath("Graph/RightClickMenu")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="FileMenu" type="MenuButton" parent="HBoxContainer"]
-unique_name_in_owner = true
+[node name="FileMenu" type="MenuButton" parent="VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 text = "..."
+flat = false
 item_count = 2
 popup/item_0/text = "Open"
 popup/item_0/id = 0
 popup/item_1/text = "Save"
 popup/item_1/id = 1
 
-[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="Add Node" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Add Node"
-
-[node name="Print" type="Button" parent="HBoxContainer"]
+[node name="Print" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Print"
 
-[node name="VSeparator2" type="VSeparator" parent="HBoxContainer"]
+[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="SpinBox" type="SpinBox" parent="HBoxContainer"]
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/HBoxContainer"]
+visible = false
 layout_mode = 2
 
-[node name="Control" type="Control" parent="HBoxContainer"]
+[node name="Filename" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "new_file"
+horizontal_alignment = 1
+
+[node name="Control2" type="Control" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Control2" type="Control" parent="HBoxContainer"]
+[node name="Control3" type="Control" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Control3" type="Control" parent="HBoxContainer"]
+[node name="Control4" type="Control" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Control4" type="Control" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Graph" type="GraphEdit" parent="."]
+[node name="Graph" type="GraphEdit" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -71,40 +80,35 @@ right_disconnects = true
 show_zoom_label = true
 script = ExtResource("3_1gqce")
 
-[node name="RightClickMenu" type="PanelContainer" parent="Graph"]
+[node name="RightClickMenu" type="PanelContainer" parent="."]
 visible = false
 layout_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 35.0
 offset_right = -1399.0
-offset_bottom = -973.0
+offset_bottom = 66.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Graph/RightClickMenu"]
+[node name="VBoxContainer" type="VBoxContainer" parent="RightClickMenu"]
 layout_mode = 2
 
-[node name="NewNode" type="Button" parent="Graph/RightClickMenu/VBoxContainer"]
+[node name="NewNode" type="Button" parent="RightClickMenu/VBoxContainer"]
 layout_mode = 2
 text = "Add Dialogue Node"
 alignment = 0
 
-[node name="RootNode" type="Button" parent="Graph/RightClickMenu/VBoxContainer"]
-layout_mode = 2
-text = "Add Root Node"
-alignment = 0
-
-[connection signal="about_to_popup" from="HBoxContainer/FileMenu" to="." method="_on_file_menu_about_to_popup"]
-[connection signal="pressed" from="HBoxContainer/Add Node" to="." method="_on_add_node_pressed"]
-[connection signal="pressed" from="HBoxContainer/Print" to="." method="_on_get_connections_pressed"]
-[connection signal="connection_request" from="Graph" to="." method="_on_graph_connection_request"]
-[connection signal="copy_nodes_request" from="Graph" to="." method="_on_graph_copy_nodes_request"]
-[connection signal="delete_nodes_request" from="Graph" to="." method="_on_graph_delete_nodes_request"]
-[connection signal="disconnection_request" from="Graph" to="." method="_on_graph_disconnection_request"]
-[connection signal="gui_input" from="Graph" to="." method="_on_graph_gui_input"]
-[connection signal="popup_request" from="Graph" to="." method="_on_graph_popup_request"]
-[connection signal="tree_entered" from="Graph" to="." method="_on_graph_tree_entered"]
-[connection signal="tree_exited" from="Graph" to="." method="_on_graph_tree_exited"]
-[connection signal="gui_input" from="Graph/RightClickMenu" to="." method="_on_right_click_menu_gui_input"]
-[connection signal="pressed" from="Graph/RightClickMenu/VBoxContainer/NewNode" to="." method="_on_new_node_pressed"]
-[connection signal="pressed" from="Graph/RightClickMenu/VBoxContainer/RootNode" to="." method="_on_root_node_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Print" to="." method="_on_print_pressed"]
+[connection signal="connection_request" from="VBoxContainer/Graph" to="." method="_on_graph_connection_request"]
+[connection signal="copy_nodes_request" from="VBoxContainer/Graph" to="." method="_on_graph_copy_nodes_request"]
+[connection signal="delete_nodes_request" from="VBoxContainer/Graph" to="." method="_on_graph_delete_nodes_request"]
+[connection signal="disconnection_request" from="VBoxContainer/Graph" to="." method="_on_graph_disconnection_request"]
+[connection signal="gui_input" from="VBoxContainer/Graph" to="." method="_on_graph_gui_input"]
+[connection signal="popup_request" from="VBoxContainer/Graph" to="." method="_on_graph_popup_request"]
+[connection signal="tree_entered" from="VBoxContainer/Graph" to="." method="_on_graph_tree_entered"]
+[connection signal="tree_exited" from="VBoxContainer/Graph" to="." method="_on_graph_tree_exited"]
+[connection signal="resize_request" from="VBoxContainer/Graph/@GraphNode@24314" to="VBoxContainer/Graph/@GraphNode@24314" method="_on_resize_request" flags=18]
+[connection signal="value_changed" from="VBoxContainer/Graph/@GraphNode@24314/ConditionsConfig/Count" to="VBoxContainer/Graph/@GraphNode@24314" method="_on_count_value_changed" flags=18]
+[connection signal="gui_input" from="RightClickMenu" to="." method="_on_right_click_menu_gui_input"]
+[connection signal="pressed" from="RightClickMenu/VBoxContainer/NewNode" to="." method="_on_new_node_pressed"]

@@ -19,6 +19,12 @@ enum Type {
 @export var Text : TextEdit;
 @export var Hidden : Control;
 
+
+#@export var TypeOptions : OptionButton;
+#@export var Speaker : LineEdit;
+#@export var Text : TextEdit;
+#@export var Hidden : Control;
+
 var offer_config : OfferConfig;
 var item_offerings : VBoxContainer;
 var offer_element : OfferElement;
@@ -79,29 +85,49 @@ func _ready():
 func clone_from_template() -> DialogueNode:
 	print_debug("cloning from template");
 	var tmp : DialogueNodeTemplate = template.instantiate().duplicate(0b0111);
-	var node : DialogueNode = duplicate(0b0111);
-	node.curr_resp_slots = 1;
-	node.curr_item_count = 1;
+	curr_resp_slots = 1;
+	curr_item_count = 1;
 	
 	var off_cfg : OfferConfig = tmp._OfferConfig;
-	off_cfg.reparent(node);
-	node.offer_config = off_cfg;
-	node.item_offerings = off_cfg.Offerings;
-	node.offer_element = off_cfg.Offerings.get_child(0);
+	off_cfg.reparent(self);
+	offer_config = off_cfg;
+	item_offerings = off_cfg.Offerings;
+	offer_element = off_cfg.Offerings.get_child(0);
 	
 	var off_fail = tmp.OfferingFail;
-	off_fail.reparent(node);
-	node.offering_fail = off_fail;
+	off_fail.reparent(self);
+	offering_fail = off_fail;
 	
 	var slots_cfg : SlotsConfig = tmp.SlotsConfig;
-	slots_cfg.reparent(node);
-	node.slots_config = slots_cfg;
+	slots_cfg.reparent(self);
+	slots_config = slots_cfg;
 	
-	tmp.Response.reparent(node);
+	tmp.Response.reparent(self);
 	
-	node.on_create();
+	on_create();
+#	var node : DialogueNode = duplicate(0b0111);
+#	node.curr_resp_slots = 1;
+#	node.curr_item_count = 1;
+#
+#	var off_cfg : OfferConfig = tmp._OfferConfig;
+#	off_cfg.reparent(node);
+#	node.offer_config = off_cfg;
+#	node.item_offerings = off_cfg.Offerings;
+#	node.offer_element = off_cfg.Offerings.get_child(0);
+#
+#	var off_fail = tmp.OfferingFail;
+#	off_fail.reparent(node);
+#	node.offering_fail = off_fail;
+#
+#	var slots_cfg : SlotsConfig = tmp.SlotsConfig;
+#	slots_cfg.reparent(node);
+#	node.slots_config = slots_cfg;
+#
+#	tmp.Response.reparent(node);
+#
+#	node.on_create();
 	
-	return node;
+	return self;
 
 
 func on_create():
@@ -189,6 +215,8 @@ func from_dict(dict : Dictionary):
 func to_dict() -> Dictionary:
 	var dict := {};
 	
+	print("a - %s" % [Speaker.text]);
+	
 	dict["name"] = name;
 	dict["type"] = Type.keys()[type];
 	dict["speaker"] = Speaker.text;
@@ -251,8 +279,7 @@ func update_node_options():
 		Type.Response:
 			slots_config.reparent(self);
 			slots_config.show();
-			set_slot_enabled_right(1, false);
-#			set_slot_enabled_right(1, true);
+			set_slot_enabled_right(slots_config.get_index(), false); # config index = first response slot
 #			for index in range(slots_config.get_index() + 1, get_child_count()):
 			# TODO: GraphNode slot count changes depending on visible children
 #			for index in range(slots_config.get_index() + 1, get_child_count()):
@@ -264,7 +291,7 @@ func update_node_options():
 #				if(!(child is ResponseElement)): continue;
 				child.reparent(self);
 				child.show();
-				set_slot_enabled_right(index + 2, true);
+				set_slot_enabled_right(index + slots_config.get_index() + 1, true);
 #				set_slot_enabled_right(index - 2, true); # TODO: depends on if offer nodes are showing or not
 				print_debug("resp - child[%s]=%s" % [index, child]);
 	print_debug("slo - count=%s, curr=%s" % [get_connection_output_count(), curr_resp_slots]);
@@ -314,12 +341,12 @@ func hide_response_slots():
 
 
 func update_response_slots(value):
-	print_debug("v=%s, c=%s" % [value, curr_resp_slots]);
+	print_debug("v=%s, c=%s, %s" % [value, curr_resp_slots, slots_config.get_index()]);
 	if(value > curr_resp_slots):
 		# ignore base ele and slot config ele
-		var curr_last_index := 2 + curr_resp_slots;
+		var curr_last_index := curr_resp_slots + slots_config.get_index() + 1;
 #		for i in value - curr_resp_slots:
-		for i in range(curr_last_index, value + 2):
+		for i in range(curr_last_index, value + slots_config.get_index() + 1):
 			print("5 - %s=%s" % [curr_last_index + i, is_slot_enabled_right(curr_last_index + i)]);
 			print_debug("value > curr [count=%s, i=%s, last=%s, slot_config=%s, rsp=%s]" % [get_child_count(), i, curr_last_index, slots_config.get_index(), response_elements]);
 			var new_resp = response_element.instantiate();
@@ -330,8 +357,9 @@ func update_response_slots(value):
 	elif(value < curr_resp_slots):
 		for i in range(get_child_count() - 1, slots_config.get_index() + value, -1):
 			print_debug("value < curr [%s, %s]" % [get_child_count(), i]);
+			slots_removed.emit(self, i - 2);
 			remove_child(get_child(i));
-			response_elements.remove_at(i - 2); # -(text.index + config.index)
+			response_elements.pop_back(); # -(text.index + config.index)
 	curr_resp_slots = value;
 	print_debug("slot count = %s, %s" % [value, response_elements]);
 
@@ -348,7 +376,6 @@ func update_item_count(value):
 		for i in range(curr_item_count - 1, value - 1, -1):
 			print_debug("value < curr [%s, %s]" % [get_child_count(), i]);
 			item_offerings.remove_child(item_offerings.get_child(i));
-#			response_elements.remove_at(i - 2); # -(text.index + config.index)
 	curr_item_count = value;
 	print_debug("curr_item_count count = %s" % [curr_item_count]);
 
@@ -398,11 +425,16 @@ func _on_close_request():
 
 
 func _on_speaker_text_submitted(new_text):
-	dialogue.speaker = new_text;
+	# FIXME: text values aren't being stored
+	print_debug("speaker - '%s, %s', '%s', new=%s" % [Speaker.get_parent().get_parent().name, Speaker.name, Speaker.text, new_text]);
+#	Speaker.text = new_text;
+	print_debug("speaker - %s" % [Speaker.text]);
 
 
 func _on_dialogue_text_changed():
-	dialogue.text = Text.text;
+	print_debug("dialogue - %s" % [Text.text]);
+#	print_debug("dialogue - %s" % [Text.text]);
+#	Text.text = Text.text;
 
 
 func _on_test_print_pressed():
@@ -438,6 +470,3 @@ func _on_item_count_value_changed(value):
 	update_item_count(value);
 	reset_size();
 
-
-func _on_text_text_changed():
-	pass # Replace with function body.
