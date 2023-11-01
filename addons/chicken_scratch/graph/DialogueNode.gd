@@ -84,7 +84,7 @@ func _ready():
 
 func clone_from_template() -> DialogueNode:
 	print_debug("cloning from template");
-	var tmp : DialogueNodeTemplate = template.instantiate().duplicate(0b0111);
+	var tmp : DialogueNodeTemplate = template.instantiate();
 	curr_resp_slots = 1;
 	curr_item_count = 1;
 	
@@ -105,27 +105,6 @@ func clone_from_template() -> DialogueNode:
 	tmp.Response.reparent(self);
 	
 	on_create();
-#	var node : DialogueNode = duplicate(0b0111);
-#	node.curr_resp_slots = 1;
-#	node.curr_item_count = 1;
-#
-#	var off_cfg : OfferConfig = tmp._OfferConfig;
-#	off_cfg.reparent(node);
-#	node.offer_config = off_cfg;
-#	node.item_offerings = off_cfg.Offerings;
-#	node.offer_element = off_cfg.Offerings.get_child(0);
-#
-#	var off_fail = tmp.OfferingFail;
-#	off_fail.reparent(node);
-#	node.offering_fail = off_fail;
-#
-#	var slots_cfg : SlotsConfig = tmp.SlotsConfig;
-#	slots_cfg.reparent(node);
-#	node.slots_config = slots_cfg;
-#
-#	tmp.Response.reparent(node);
-#
-#	node.on_create();
 	
 	return self;
 
@@ -215,7 +194,7 @@ func from_dict(dict : Dictionary):
 func to_dict() -> Dictionary:
 	var dict := {};
 	
-	print("a - %s" % [Speaker.text]);
+#	print("a - %s" % [Speaker.text]);
 	
 	dict["name"] = name;
 	dict["type"] = Type.keys()[type];
@@ -425,16 +404,12 @@ func _on_close_request():
 
 
 func _on_speaker_text_submitted(new_text):
-	# FIXME: text values aren't being stored
-	print_debug("speaker - '%s, %s', '%s', new=%s" % [Speaker.get_parent().get_parent().name, Speaker.name, Speaker.text, new_text]);
-#	Speaker.text = new_text;
 	print_debug("speaker - %s" % [Speaker.text]);
+	
 
 
 func _on_dialogue_text_changed():
 	print_debug("dialogue - %s" % [Text.text]);
-#	print_debug("dialogue - %s" % [Text.text]);
-#	Text.text = Text.text;
 
 
 func _on_test_print_pressed():

@@ -113,5 +113,4 @@ layout_mode = 2
 [connection signal="resize_request" from="." to="." method="_on_resize_request"]
 [connection signal="item_selected" from="BaseElements/HBoxContainer/TypeOptions" to="." method="_on_type_options_item_selected"]
 [connection signal="text_submitted" from="BaseElements/Speaker" to="." method="_on_speaker_text_submitted"]
-[connection signal="text_submitted" from="BaseElements/Speaker" to="BaseElements/Speaker" method="_on_text_submitted"]
 [connection signal="text_changed" from="BaseElements/ScrollContainer/Dialogue" to="." method="_on_dialogue_text_changed"]

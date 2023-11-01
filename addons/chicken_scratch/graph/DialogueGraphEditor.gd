@@ -61,10 +61,11 @@ func new_dialogue_graph():
 # TODO: on_graph_save, update DialogueFile and save to disk; .dngraph
 func to_json():
 	# TODO: have a DialogueGraphFile extends RefCounted that keeps track of currently loaded file?
-	print("Graph %s" % Graph);
+#	print("Graph %s, %s" % [Graph, JSON.stringify(connection_dict(), "\t", false)]);
 	var graph := {
 		"file_name": current_dialogue_file.name if current_dialogue_file else "",
-		"connections": Graph.get_connection_list(),
+		"connections": connection_dict(),
+#		"connections": Graph.get_connection_list(),
 		"root_node": root_node.to_dict(),
 		"nodes": get_graph_node_dicts()
 	};
@@ -77,6 +78,19 @@ func to_json():
 #	var nodes := get_graph_nodes();
 #	print_debug("nodes - %s" % [nodes]);
 	var json := "";
+
+
+func connection_dict() -> Dictionary:
+	var connections := {};
+	for connection in Graph.get_connection_list():
+		if(!connections.has(connection.from)):
+			print("add new connection to dict");
+			connections[connection.from] = {};
+		# support multiple connections at same "from_port"?
+		connections[connection.from][connection.from_port] = {"to": connection.to, "to_port": connection.to_port};
+	
+	return connections;
+			
 
 
 func get_graph_node_dicts() ->  Array[Dictionary]:
