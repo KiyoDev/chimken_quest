@@ -16,6 +16,8 @@ var root_node : RootNode;
 var node_dict : Dictionary = {};
 var file_menu_items : Dictionary = {};
 
+static var OpenFileDialog : EditorFileDialog;
+static var SaveFileDialog : EditorFileDialog;
 
 static var right_click_menu_open := false;
 
@@ -29,7 +31,8 @@ func _ready():
 
 func _enter_tree():
 	var popup := FileMenu.get_popup();
-	popup.id_pressed.connect(_on_file_menu_opened);
+	if(!popup.id_pressed.is_connected(_on_file_menu_opened)):
+		popup.id_pressed.connect(_on_file_menu_opened);
 	for i in popup.item_count:
 		file_menu_items[i] = popup.get_item_text(i);
 	print_debug("file_menu_items=%s" % [file_menu_items]);
@@ -40,6 +43,11 @@ func _enter_tree():
 func _exit_tree():
 	if(root_node):
 		root_node.queue_free();
+		root_node = null;
+	var popup := FileMenu.get_popup();
+	popup.id_pressed.disconnect(_on_file_menu_opened);
+	OpenFileDialog.queue_free();
+	SaveFileDialog.queue_free();
 
 
 func _set_root_node(node):
@@ -51,10 +59,34 @@ func _set_root_node(node):
 
 
 func new_dialogue_graph():
-	if(root_node) :
-		root_node.queue_free();
 	root_node = root_node_scn.instantiate().duplicate(0b0111);
 	Graph.add_child(root_node);
+	OpenFileDialog = EditorFileDialog.new();
+	OpenFileDialog.title = "Open a DialogueNode graph";
+#	OpenFileDialog.size = Vector2i(400, 200);
+	OpenFileDialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE;
+	OpenFileDialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS;
+	OpenFileDialog.transient = true;
+	OpenFileDialog.add_filter("*.dngraph", "DialogueNode Graph");
+	OpenFileDialog.file_selected.connect(_on_open_file);
+	add_child(OpenFileDialog);
+	
+	SaveFileDialog = EditorFileDialog.new();
+#	SaveFileDialog.size = Vector2i(400, 200);
+	SaveFileDialog.file_mode = EditorFileDialog.FILE_MODE_SAVE_FILE;
+	SaveFileDialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS;
+	SaveFileDialog.transient = true;
+	SaveFileDialog.add_filter("*.dngraph", "DialogueNode Graph");
+	SaveFileDialog.confirmed.connect(_on_save_file);
+	add_child(SaveFileDialog);
+
+
+func _on_open_file(path : String):
+	print_debug("opening file '%s'" % [path]);
+
+
+func _on_save_file():
+	print_debug("saving file");
 
 
 # from graph to json
@@ -123,10 +155,11 @@ func _on_file_menu_opened(id : int):
 	match id:
 		0: # Open
 			# TODO: implement file open dialogue
-			pass;
+			OpenFileDialog.show();
 		1: # Save
 			# TODO: implement file save dialogue
-			pass;
+#			DialogueFileDialog.
+			SaveFileDialog.show();
 
 
 func _on_graph_connection_request(from_node, from_port, to_node, to_port):

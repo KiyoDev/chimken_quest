@@ -2,20 +2,18 @@
 
 [ext_resource type="Script" path="res://scripts/ui/menus/menu.gd" id="1_2mc5k"]
 [ext_resource type="Script" path="res://scripts/ui/menus/action_option.gd" id="3_af8un"]
-[ext_resource type="FontFile" uid="uid://dkd16xl6tpv0l" path="res://assets/fonts/white_font_small_filled.png" id="3_m72eg"]
 [ext_resource type="Theme" uid="uid://1qeq3n04pcoe" path="res://assets/fonts/battle_ui.theme" id="3_ui3bp"]
 [ext_resource type="Texture2D" uid="uid://b17a46f72xa3s" path="res://assets/battle/ui/chimken_battle_actions_title.png" id="3_x4ljg"]
+[ext_resource type="Theme" uid="uid://dq3s2di4rr3ut" path="res://assets/fonts/white_font_filled_ui.theme" id="4_knfgv"]
 [ext_resource type="Script" path="res://scripts/ui/menus/separated_submenu_option.gd" id="4_opylm"]
 [ext_resource type="Texture2D" uid="uid://bgfifx7n7sr7q" path="res://assets/battle/ui/chimken_battle_label_background_selectable.png" id="5_h83ow"]
+[ext_resource type="Theme" uid="uid://c876hw0vxkcc6" path="res://assets/fonts/white_font_small_ui.theme" id="9_u78pn"]
 [ext_resource type="Script" path="res://scripts/ui/menus/int_label.gd" id="10_n5g42"]
 [ext_resource type="Script" path="res://scripts/ui/menus/item_option.gd" id="10_t50w4"]
 [ext_resource type="PackedScene" uid="uid://b0chtymgiamjd" path="res://scenes/ui/ui_menu_background.tscn" id="12_21wyt"]
 [ext_resource type="PackedScene" uid="uid://d4fcp74bnegbd" path="res://scenes/ui/ui_menu_option_background.tscn" id="12_q1s6e"]
 [ext_resource type="Texture2D" uid="uid://d2w1dryhgxhl8" path="res://assets/battle/ui/chimken_items_phoenix_burger_8x8.png" id="13_fh7n2"]
 [ext_resource type="Script" path="res://scripts/ui/menus/confirm_option.gd" id="16_7syk2"]
-
-[sub_resource type="Theme" id="Theme_idwei"]
-default_font = ExtResource("3_m72eg")
 
 [node name="Container" type="Node2D"]
 texture_filter = 1
@@ -25,6 +23,7 @@ unique_name_in_owner = true
 texture_filter = 1
 offset_right = 65.0
 offset_bottom = 101.0
+theme = ExtResource("3_ui3bp")
 script = ExtResource("1_2mc5k")
 select_wrap = true
 escapeable = false
@@ -43,7 +42,7 @@ theme_override_constants/margin_top = 15
 [node name="Title" type="Label" parent="BattleMenu/MenuLayout"]
 layout_mode = 2
 size_flags_vertical = 1
-theme = SubResource("Theme_idwei")
+theme = ExtResource("4_knfgv")
 text = "  ACTIONS "
 horizontal_alignment = 1
 uppercase = true
@@ -193,6 +192,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_left = 103.0
 offset_right = 103.0
+theme = ExtResource("3_ui3bp")
 
 [node name="AttacksMenu" type="MarginContainer" parent="SubMenus"]
 unique_name_in_owner = true
@@ -218,7 +218,7 @@ theme_override_constants/margin_top = 15
 [node name="Title" type="Label" parent="SubMenus/AttacksMenu/MenuLayout"]
 layout_mode = 2
 size_flags_vertical = 1
-theme = SubResource("Theme_idwei")
+theme = ExtResource("9_u78pn")
 text = "  ATTACKS "
 horizontal_alignment = 1
 uppercase = true
@@ -379,7 +379,7 @@ theme_override_constants/margin_top = 15
 [node name="Title" type="Label" parent="SubMenus/SkillsMenu/MenuLayout"]
 layout_mode = 2
 size_flags_vertical = 1
-theme = SubResource("Theme_idwei")
+theme = ExtResource("4_knfgv")
 text = "  SKILLS "
 horizontal_alignment = 1
 uppercase = true
@@ -669,7 +669,7 @@ theme_override_constants/margin_top = 15
 [node name="Title" type="Label" parent="SubMenus/ItemsMenu/MenuLayout"]
 layout_mode = 2
 size_flags_vertical = 1
-theme = SubResource("Theme_idwei")
+theme = ExtResource("9_u78pn")
 text = "  ITEMS 
 "
 horizontal_alignment = 1
@@ -758,7 +758,7 @@ theme_override_constants/margin_top = 15
 [node name="Title" type="Label" parent="SubMenus/EscapeMenu/MenuLayout"]
 layout_mode = 2
 size_flags_vertical = 1
-theme = SubResource("Theme_idwei")
+theme = ExtResource("4_knfgv")
 text = "  Escape? "
 horizontal_alignment = 1
 uppercase = true
