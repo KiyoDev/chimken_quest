@@ -7,3 +7,7 @@ class_name ResponseElement extends VBoxContainer
 
 func text() -> String:
 	return Text.text;
+
+
+func set_text(text : String):
+	Text.text = text;

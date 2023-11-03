@@ -1,5 +1,6 @@
 class_name DialogueFile extends RefCounted
 
+# TODO: Used to read from a file. to know what current dialogue is being read, etc
 
 var name := "";
 

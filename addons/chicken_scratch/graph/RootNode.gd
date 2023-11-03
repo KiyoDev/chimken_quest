@@ -41,7 +41,7 @@ func _ready():
 #		TypeOptions.add_item(type, Type[type]);
 #	type = Type.Dialogue;
 #
-#	response_elements.append(get_child(slots_config.get_index() + 1));
+#	response_elements.append(get_child(response_config.get_index() + 1));
 	
 #	hide_offer_slots();
 #	hide_response_slots();
@@ -87,9 +87,9 @@ func clone_from_template() -> DialogueNode:
 #	off_fail.reparent(node);
 #	node.offering_fail = off_fail;
 #
-#	var slots_cfg : SlotsConfig = tmp.SlotsConfig;
+#	var slots_cfg : ResponseConfig = tmp.ResponseConfig;
 #	slots_cfg.reparent(node);
-#	node.slots_config = slots_cfg;
+#	node.response_config = slots_cfg;
 #
 #	tmp.Response.reparent(node);
 #
@@ -106,13 +106,13 @@ func on_create():
 #		TypeOptions.add_item(type, Type[type]);
 #	type = Type.Dialogue;
 #
-#	response_elements.append(get_child(slots_config.get_index() + 1));
+#	response_elements.append(get_child(response_config.get_index() + 1));
 #
 #	offer_config.ItemCount.value_changed.connect(_on_item_count_value_changed, CONNECT_PERSIST);
-#	slots_config.SlotCount.value_changed.connect(_on_slot_count_value_changed, CONNECT_PERSIST);
-##	slots_config.connect_to_value_changed(_on_slot_count_value_changed);
+#	response_config.SlotCount.value_changed.connect(_on_slot_count_value_changed, CONNECT_PERSIST);
+##	response_config.connect_to_value_changed(_on_slot_count_value_changed);
 #	print_debug("init offers - %s" % [offer_config.ItemCount.value_changed.get_connections()]);
-#	print_debug("init responses - %s" % [slots_config.SlotCount.value_changed.get_connections()]);
+#	print_debug("init responses - %s" % [response_config.SlotCount.value_changed.get_connections()]);
 #
 #	# enable all slots after adding children nodes
 #	for i in get_child_count():
@@ -156,7 +156,7 @@ func _on_count_value_changed(value):
 #		for i in value - curr_resp_slots:
 		for i in range(curr_last_index, value + ConditionConfig.get_index() + 1):
 			print("5 - %s=%s" % [curr_last_index + i, is_slot_enabled_right(curr_last_index + i)]);
-#			print_debug("value > curr [count=%s, i=%s, last=%s, slot_config=%s, rsp=%s]" % [get_child_count(), i, curr_last_index, slots_config.get_index(), response_elements]);
+#			print_debug("value > curr [count=%s, i=%s, last=%s, slot_config=%s, rsp=%s]" % [get_child_count(), i, curr_last_index, response_config.get_index(), response_elements]);
 			var new_condition = ConditionEle.duplicate(0b0111);
 			condition_elements.append(new_condition);
 			add_child(new_condition);

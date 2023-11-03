@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://r7ibrepvtebn"]
 
-[ext_resource type="Script" path="res://addons/chicken_scratch/graph/Slotsconfig.gd" id="1_aob32"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/SlotsConfig.gd" id="1_hi6sp"]
 
-[node name="SlotsConfig" type="VBoxContainer" node_paths=PackedStringArray("SlotCount")]
-script = ExtResource("1_aob32")
+[node name="ResponseConfig" type="VBoxContainer" node_paths=PackedStringArray("SlotCount")]
+script = ExtResource("1_hi6sp")
 SlotCount = NodePath("HBoxContainer/SlotCount")
 
 [node name="HSeparator" type="HSeparator" parent="."]

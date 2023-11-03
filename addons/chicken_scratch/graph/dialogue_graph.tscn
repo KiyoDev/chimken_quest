@@ -18,6 +18,7 @@ right_click_menu = NodePath("RightClickMenu")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 texture_filter = 1
+clip_contents = true
 layout_mode = 0
 offset_right = 1584.0
 offset_bottom = 1040.0
@@ -108,7 +109,5 @@ alignment = 0
 [connection signal="popup_request" from="VBoxContainer/Graph" to="." method="_on_graph_popup_request"]
 [connection signal="tree_entered" from="VBoxContainer/Graph" to="." method="_on_graph_tree_entered"]
 [connection signal="tree_exited" from="VBoxContainer/Graph" to="." method="_on_graph_tree_exited"]
-[connection signal="resize_request" from="VBoxContainer/Graph/RootNode" to="VBoxContainer/Graph/RootNode" method="_on_resize_request" flags=18]
-[connection signal="value_changed" from="VBoxContainer/Graph/RootNode/ConditionsConfig/Count" to="VBoxContainer/Graph/RootNode" method="_on_count_value_changed" flags=18]
 [connection signal="gui_input" from="RightClickMenu" to="." method="_on_right_click_menu_gui_input"]
 [connection signal="pressed" from="RightClickMenu/VBoxContainer/NewNode" to="." method="_on_new_node_pressed"]

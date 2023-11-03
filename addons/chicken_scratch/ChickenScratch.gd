@@ -20,12 +20,13 @@ func _enter_tree():
 
 	get_editor_interface().get_editor_main_screen().add_child(graph_instance);
 	_make_visible(false);
+	graph_instance.on_plugin_start();
 
 
 func _exit_tree():
 	_make_visible(false);
 	if(enabled && graph_instance):
-		print("exit tree");
+#		print("exit tree");
 		graph_instance.release_focus();
 		get_editor_interface().get_editor_main_screen().remove_child(graph_instance);
 		graph_instance.queue_free();

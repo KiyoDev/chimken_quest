@@ -6,6 +6,8 @@ signal node_closed(node : DialogueNode);
 
 signal slots_removed(node : DialogueNode, from_port : int);
 
+signal type_changed(type : Type);
+
 
 enum Type {
 	Dialogue,
@@ -29,7 +31,7 @@ var offer_config : OfferConfig;
 var item_offerings : VBoxContainer;
 var offer_element : OfferElement;
 var offering_fail : HBoxContainer;
-var slots_config : SlotsConfig;
+var response_config : ResponseConfig;
 
 
 @export var template : PackedScene;
@@ -39,6 +41,7 @@ var slots_config : SlotsConfig;
 
 
 @export var type := Type.Dialogue;
+	
 @export var dialogue : DialogueBase;
 
 
@@ -62,7 +65,7 @@ func _exit_tree():
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print_debug("ready");
-	
+#	type_changed.connect(_on_type_changed);
 #	if(dialogue == null):
 #		dialogue = Dialogue.new();
 #	else:
@@ -76,11 +79,37 @@ func _ready():
 #		TypeOptions.add_item(type, Type[type]);
 #	type = Type.Dialogue;
 #
-#	response_elements.append(get_child(slots_config.get_index() + 1));
+#	response_elements.append(get_child(response_config.get_index() + 1));
 	
 #	hide_offer_slots();
 #	hide_response_slots();
 #	update_node_options();
+
+
+func set_type(value):
+	if(value == type): return;
+	
+	print_debug("type change - %s->%s" % [Type.keys()[type], Type.keys()[value]]);
+	hide_previous_options(type);
+	reset_size();
+	type = value;
+	print_debug("on type option - %s, %s" % [type, Type.keys()[value]]);
+	TypeOptions.select(value);
+	update_node_options();
+	reset_size();
+
+
+func get_type():
+	return type;
+
+
+func set_speaker(speaker : String):
+	Speaker.text = speaker;
+
+
+func set_dialogue(text : String):
+	Text.text = text;
+
 
 func clone_from_template() -> DialogueNode:
 	print_debug("cloning from template");
@@ -98,9 +127,9 @@ func clone_from_template() -> DialogueNode:
 	off_fail.reparent(self);
 	offering_fail = off_fail;
 	
-	var slots_cfg : SlotsConfig = tmp.SlotsConfig;
+	var slots_cfg : ResponseConfig = tmp.ResponseConfig;
 	slots_cfg.reparent(self);
-	slots_config = slots_cfg;
+	response_config = slots_cfg;
 	
 	tmp.Response.reparent(self);
 	
@@ -116,13 +145,13 @@ func on_create():
 		TypeOptions.add_item(type, Type[type]);
 	type = Type.Dialogue;
 	
-	response_elements.append(get_child(slots_config.get_index() + 1));
+	response_elements.append(get_child(response_config.get_index() + 1));
 	
 	offer_config.ItemCount.value_changed.connect(_on_item_count_value_changed, CONNECT_PERSIST);
-	slots_config.SlotCount.value_changed.connect(_on_slot_count_value_changed, CONNECT_PERSIST);
-#	slots_config.connect_to_value_changed(_on_slot_count_value_changed);
+	response_config.SlotCount.value_changed.connect(_on_slot_count_value_changed, CONNECT_PERSIST);
+#	response_config.connect_to_value_changed(_on_slot_count_value_changed);
 	print_debug("init offers - %s" % [offer_config.ItemCount.value_changed.get_connections()]);
-	print_debug("init responses - %s" % [slots_config.SlotCount.value_changed.get_connections()]);
+	print_debug("init responses - %s" % [response_config.SlotCount.value_changed.get_connections()]);
 	
 	# enable all slots after adding children nodes
 	for i in get_child_count():
@@ -134,36 +163,37 @@ func on_create():
 	reset_size();
 
 
-static func new_from_dict(scn : PackedScene, dict : Dictionary) -> DialogueNode:
-	var node : DialogueNode = scn.instantiate().duplicate(0b0111);
-	node.type = dict.type;
+static func new_from_dict(scn : PackedScene, dict : Dictionary, graph : GraphEdit) -> DialogueNode:
+	var node : DialogueNode = scn.instantiate().clone_from_template();
+	node.name = dict.name.replace("@", "_");
+	graph.add_child(node);
+	node.set_type(DialogueNode.Type[dict.type]);
 	node.Speaker.text = dict.speaker;
 	node.Text.text = dict.text;
+#	print_debug("add new node=%s, %s" % [position, node]);
+	var pos := Vector2(dict.metadata.position.x, dict.metadata.position.y);
+	node.position_offset = pos;
+#	node.position_offset = Vector2(dict.metadata.position.x, dict.metadata.position.y);
+	print_debug("new from dict - %s" % [dict]);
 	match(node.type):
 		Type.Dialogue:
 			pass;
 		Type.Offer:
 			var count = dict.properties.offerings.size();
-			if(node.item_offerings.get_child_count() < count):
-				for i in count - node.item_offerings.get_child_count():
-					var new_offering : OfferElement = node.offering_element.instantiate();
-					node.item_offerings.add_child(new_offering);
-			elif(node.item_offerings.get_child_count() > count):
-				for i in range(node.item_offerings.get_child_count() - 1, count, -1):
-					node.item_offerings.remove_child(node.item_offerings.get_child(i));
-			
+			node.offer_config.set_item_count(count);
+			# Update node's properties to saved properties
 			var index := 0;
 			for offering in dict.properties.offerings:
 				var off : OfferElement = node.item_offerings.get_child(index);
 				off.ItemName.text = offering.item_name;
 				off.ItemType.text = offering.item_type;
-				off.Quantity.get_line_edit().text = offering.quantity;
+				off.Quantity.value = offering.quantity;
 				index += 1;
 		Type.Response:
 			var count = dict.properties.responses.size();
-			node.update_response_slots(count);
-			
-			var index := node.slots_config.get_index() + 1;
+			node.response_config.set_response_count(count);
+			# Update node's properties to saved properties
+			var index := node.response_config.get_index() + 1;
 			for response in dict.properties.responses:
 				var resp : ResponseElement = node.get_child(index);
 				resp.Text.text = response.text;
@@ -196,6 +226,7 @@ func to_dict() -> Dictionary:
 	
 #	print("a - %s" % [Speaker.text]);
 	
+#	dict["name"] = str(name).replace("@", "_");
 	dict["name"] = name;
 	dict["type"] = Type.keys()[type];
 	dict["speaker"] = Speaker.text;
@@ -220,7 +251,7 @@ func to_dict() -> Dictionary:
 			# TODO: add connections; but maybe is just managed by the graph editor itself
 			# response index = node port for the editor connections
 			dict["properties"]["responses"] = [];
-			for index in range(slots_config.get_index() + 1, get_child_count()):
+			for index in range(response_config.get_index() + 1, get_child_count()):
 				var child : ResponseElement = get_child(index);
 				var response := {"text": child.text()};
 				dict["properties"]["responses"].append(response);
@@ -256,12 +287,12 @@ func update_node_options():
 			set_slot_enabled_right(offer_config.get_index(), true);
 			set_slot_enabled_right(offering_fail.get_index(), true);
 		Type.Response:
-			slots_config.reparent(self);
-			slots_config.show();
-			set_slot_enabled_right(slots_config.get_index(), false); # config index = first response slot
-#			for index in range(slots_config.get_index() + 1, get_child_count()):
+			response_config.reparent(self);
+			response_config.show();
+			set_slot_enabled_right(response_config.get_index(), false); # config index = first response slot
+#			for index in range(response_config.get_index() + 1, get_child_count()):
 			# TODO: GraphNode slot count changes depending on visible children
-#			for index in range(slots_config.get_index() + 1, get_child_count()):
+#			for index in range(response_config.get_index() + 1, get_child_count()):
 			print_debug("switching to  resp - [%s, %s]" % [get_connection_output_count(), response_elements]);
 #			for index in range(Hidden.get_child_count() - 1, -1, -1):
 			var index := 0;
@@ -270,10 +301,10 @@ func update_node_options():
 #				if(!(child is ResponseElement)): continue;
 				child.reparent(self);
 				child.show();
-				set_slot_enabled_right(index + slots_config.get_index() + 1, true);
+				set_slot_enabled_right(index + response_config.get_index() + 1, true);
 #				set_slot_enabled_right(index - 2, true); # TODO: depends on if offer nodes are showing or not
 				print_debug("resp - child[%s]=%s" % [index, child]);
-	print_debug("slo - count=%s, curr=%s" % [get_connection_output_count(), curr_resp_slots]);
+#	print_debug("slo - count=%s, curr=%s" % [get_connection_output_count(), curr_resp_slots]);
 	reset_size();
 	
 	
@@ -306,35 +337,35 @@ func hide_offer_slots():
 
 
 func hide_response_slots():
-	if(!slots_config.visible): return;
-	for index in range(get_child_count() - 1, slots_config.get_index(), -1):
+	if(!response_config.visible): return;
+	for index in range(get_child_count() - 1, response_config.get_index(), -1):
 		var child := get_child(index);
-		print_debug("hiding resp[%s, %s]=%s" % [index - slots_config.get_index() + 1, is_slot_enabled_right(index - slots_config.get_index() + 1), child]);
+		print_debug("hiding resp[%s, %s]=%s" % [index - response_config.get_index() + 1, is_slot_enabled_right(index - response_config.get_index() + 1), child]);
 		print_debug("%s, %s" % [is_slot_enabled_right(0), is_slot_enabled_right(1)])
-#		set_slot_enabled_right(index - slots_config.get_index() + 1, false);
+#		set_slot_enabled_right(index - response_config.get_index() + 1, false);
 		child.reparent(Hidden);
 		child.hide();
-		slots_removed.emit(self, index - (slots_config.get_index() + 1));
-	slots_config.reparent(Hidden);
-	slots_config.hide();
+		slots_removed.emit(self, index - (response_config.get_index() + 1));
+	response_config.reparent(Hidden);
+	response_config.hide();
 
 
 func update_response_slots(value):
-	print_debug("v=%s, c=%s, %s" % [value, curr_resp_slots, slots_config.get_index()]);
+	print_debug("v=%s, c=%s, %s" % [value, curr_resp_slots, response_config.get_index()]);
 	if(value > curr_resp_slots):
 		# ignore base ele and slot config ele
-		var curr_last_index := curr_resp_slots + slots_config.get_index() + 1;
+		var curr_last_index := curr_resp_slots + response_config.get_index() + 1;
 #		for i in value - curr_resp_slots:
-		for i in range(curr_last_index, value + slots_config.get_index() + 1):
+		for i in range(curr_last_index, value + response_config.get_index() + 1):
 			print("5 - %s=%s" % [curr_last_index + i, is_slot_enabled_right(curr_last_index + i)]);
-			print_debug("value > curr [count=%s, i=%s, last=%s, slot_config=%s, rsp=%s]" % [get_child_count(), i, curr_last_index, slots_config.get_index(), response_elements]);
+			print_debug("value > curr [count=%s, i=%s, last=%s, slot_config=%s, rsp=%s]" % [get_child_count(), i, curr_last_index, response_config.get_index(), response_elements]);
 			var new_resp = response_element.instantiate();
 			response_elements.append(new_resp);
 			add_child(new_resp);
 			set_slot_enabled_right(i, true);
 #			set_slot_enabled_right(curr_last_index + i, true);
 	elif(value < curr_resp_slots):
-		for i in range(get_child_count() - 1, slots_config.get_index() + value, -1):
+		for i in range(get_child_count() - 1, response_config.get_index() + value, -1):
 			print_debug("value < curr [%s, %s]" % [get_child_count(), i]);
 			slots_removed.emit(self, i - 2);
 			remove_child(get_child(i));
@@ -361,7 +392,7 @@ func update_item_count(value):
 
 func slot_node_index(slot : int) -> int:
 	# -1 since hiding elements changes slot indices
-	return slots_config.get_index() + slot;
+	return response_config.get_index() + slot;
 
 
 func empty() -> DialogueNode:
@@ -375,7 +406,7 @@ func empty() -> DialogueNode:
 func get_responses() -> Array[ResponseElement]:
 	var responses : Array[ResponseElement] = [];
 	
-	for i in range(slots_config.get_index() + 1, get_child_count()):
+	for i in range(response_config.get_index() + 1, get_child_count()):
 		var resp = get_child(i);
 #		print_debug("a - %s" % resp);
 		responses.append(resp);
@@ -425,23 +456,26 @@ func _on_type_options_item_selected(index):
 #	print_debug("on type option - %s" % [Type.get(key)]);
 #	type = Type.get(key);
 	# TODO: hide previous options
+#	type_changed.emit(index);
+	
 	print_debug("type change - %s->%s" % [Type.keys()[type], Type.keys()[index]]);
 	hide_previous_options(type);
 	reset_size();
 	type = index;
 	print_debug("on type option - %s, %s" % [type, Type.keys()[index]]);
+	TypeOptions.select(index);
 	update_node_options();
 	reset_size();
 
 
 func _on_slot_count_value_changed(value):
-	print_debug("on slot count change");
+#	print_debug("on slot count change");
 	update_response_slots(value);
 	reset_size();
 
 
 func _on_item_count_value_changed(value):
-	print_debug("on item count change");
+#	print_debug("on item count change");
 	update_item_count(value);
 	reset_size();
 
