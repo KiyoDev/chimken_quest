@@ -35,11 +35,15 @@ custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 text = "..."
 flat = false
-item_count = 2
-popup/item_0/text = "Open"
+item_count = 4
+popup/item_0/text = "New Graph"
 popup/item_0/id = 0
-popup/item_1/text = "Save"
+popup/item_1/text = "Open..."
 popup/item_1/id = 1
+popup/item_2/text = "Save"
+popup/item_2/id = 2
+popup/item_3/text = "Save as..."
+popup/item_3/id = 3
 
 [node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -111,7 +115,11 @@ dialog_text = "Do you want to delete the node(s)?"
 [connection signal="copy_nodes_request" from="VBoxContainer/Graph" to="." method="_on_graph_copy_nodes_request"]
 [connection signal="delete_nodes_request" from="VBoxContainer/Graph" to="." method="_on_graph_delete_nodes_request"]
 [connection signal="disconnection_request" from="VBoxContainer/Graph" to="." method="_on_graph_disconnection_request"]
+[connection signal="duplicate_nodes_request" from="VBoxContainer/Graph" to="." method="_on_graph_duplicate_nodes_request"]
 [connection signal="gui_input" from="VBoxContainer/Graph" to="." method="_on_graph_gui_input"]
+[connection signal="node_deselected" from="VBoxContainer/Graph" to="." method="_on_graph_node_deselected"]
+[connection signal="node_selected" from="VBoxContainer/Graph" to="." method="_on_graph_node_selected"]
+[connection signal="paste_nodes_request" from="VBoxContainer/Graph" to="." method="_on_graph_paste_nodes_request"]
 [connection signal="popup_request" from="VBoxContainer/Graph" to="." method="_on_graph_popup_request"]
 [connection signal="tree_entered" from="VBoxContainer/Graph" to="." method="_on_graph_tree_entered"]
 [connection signal="tree_exited" from="VBoxContainer/Graph" to="." method="_on_graph_tree_exited"]

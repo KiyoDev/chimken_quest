@@ -19,6 +19,11 @@ var node_dict : Dictionary = {};
 var file_menu_items : Dictionary = {};
 var nodes_to_delete : Array[StringName] = [];
 
+var selected_nodes := {};
+var to_copy : Array[Dictionary] = [];
+
+var current_file_path : String = "";
+
 static var OpenFileDialog : EditorFileDialog;
 static var SaveFileDialog : EditorFileDialog;
 
@@ -114,10 +119,19 @@ func _set_root_node(node):
 
 
 func new_dialogue_graph():
+	node_dict.clear();
+	nodes_to_delete.clear();
+	selected_nodes.clear();
+	current_file_path = "";
+	
+	for connections in Graph.get_connection_list():
+		Graph.disconnect_node(connections.from, connections.from_port, connections.to, connections.to_port);
+	
 	for child in Graph.get_children():
-		Graph.remove_child(child);
-	root_node = root_node_scn.instantiate().duplicate(0b0111);
+		child.free();
+	root_node = root_node_scn.instantiate();
 	Graph.add_child(root_node);
+
 
 # from graph to json
 func graph_to_json(indent := ""):
@@ -216,7 +230,7 @@ func root_from_dict(dict : Dictionary):
 	root_node.set_from_dict(dict);
 
 
-func node_from_dict(dict: Dictionary):
+func node_from_dict(dict: Dictionary) -> DialogueNode:
 	var node := DialogueNode.new_from_dict(dialogue_node, dict, Graph);
 #	print_debug("from d  %s" % [node]);
 	
@@ -224,17 +238,21 @@ func node_from_dict(dict: Dictionary):
 	node.slots_removed.connect(_on_graph_node_slots_removed);
 	node_dict[node.name] = node; # cache node names
 	print_debug("nod 0 %s, %s, %s" % [dict.name, dict.type, node]);
+	
+	return node;
 
 
 func _on_file_menu_opened(id : int):
 	print_debug("opening file menu - %s" % [id]);
 	match id:
-		0: # Open
-			# TODO: implement file open dialogue
+		0: # New Graph
+			new_dialogue_graph();
+		1: # Open
 			OpenFileDialog.show();
-		1: # Save
-			print(SaveFileDialog.position);
+		2: # Save
 			SaveFileDialog.show();
+		3: # Save as...
+			pass;
 
 
 func _on_open_file(path : String):
@@ -244,6 +262,7 @@ func _on_open_file(path : String):
 	print_debug("dialogue(%s)" % JSON.stringify(dict, "\t", false));
 	
 	init_nodes_from_json(dict);
+	current_file_path = path;
 	Filename.text = path.get_file();
 	
 #	print_debug("root[%s] - %s" % [dict.root_node.name, dict.root_node.metadata.position]);
@@ -275,6 +294,7 @@ func close_node(node : DialogueNode):
 		if(connections.from == node.name || connections.to == node.name):
 			Graph.disconnect_node(connections.from, connections.from_port, connections.to, connections.to_port);
 	
+	Graph.node_deselected.emit(node); # closed node needs to be deselected
 	node_dict.erase(node.name);
 	node.close_node();
 #	print_debug("del - node_dict=%s" % [node_dict]);
@@ -352,10 +372,6 @@ func _on_graph_delete_nodes_request(nodes):
 
 # TODO: undoredo
 
-# TODO: graph copy request
-func _on_graph_copy_nodes_request():
-	print_debug("graph copy request");
-
 
 func _on_graph_tree_entered():
 	print_debug("entering graph");
@@ -382,3 +398,36 @@ func _on_delete_confirmation_dialog_confirmed():
 
 func _on_delete_confirmation_dialog_canceled():
 	nodes_to_delete.clear();
+
+
+func _on_graph_node_selected(node):
+	selected_nodes[node] = true;
+#	print_debug("Selected '%s' - %s" % [node.name, selected_nodes]);
+
+
+func _on_graph_node_deselected(node):
+	selected_nodes.erase(node);
+#	print_debug("Deselected '%s' -  %s" % [node.name, selected_nodes]);
+
+
+# TODO: append node.to_dict() to array
+func _on_graph_copy_nodes_request():
+	print_debug("graph copy request: trying to copy nodes - %s" % [selected_nodes]);
+#	if(selected_nodes.is_empty()): return; # TODO: do want to clear copy by trying to copy nothing?
+	
+	to_copy.clear();
+	for node in selected_nodes:
+		if(node is RootNode): continue; # do not copy root node
+		to_copy.append(node.to_dict());
+
+
+# TODO: take node.to_dict() array and instantiate new node from dict
+func _on_graph_paste_nodes_request():
+	print_debug("graph paste request: trying to paste nodes - %s" % [to_copy]);
+	for dict in to_copy:
+		var node := node_from_dict(dict);
+		node.position_offset = Vector2(node.position_offset.x + 20, node.position_offset.y + 20);
+
+
+func _on_graph_duplicate_nodes_request():
+	print_debug("Duplcate requested");
