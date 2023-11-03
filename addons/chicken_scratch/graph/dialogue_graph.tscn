@@ -33,7 +33,7 @@ layout_mode = 2
 [node name="FileMenu" type="MenuButton" parent="VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
-text = "..."
+text = "File"
 flat = false
 item_count = 4
 popup/item_0/text = "New Graph"
