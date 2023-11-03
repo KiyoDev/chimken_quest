@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://cpmp4yh04cg38"]
+
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/ConditionElement.gd" id="1_a3vs8"]
+
+[node name="ConditionElement" type="VBoxContainer" node_paths=PackedStringArray("condition")]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_a3vs8")
+condition = NodePath("condition")
+
+[node name="condition" type="LineEdit" parent="."]
+layout_mode = 2
+placeholder_text = "<condition>"
+alignment = 1

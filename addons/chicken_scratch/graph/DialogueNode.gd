@@ -4,6 +4,8 @@ class_name DialogueNode extends GraphNode
 
 signal node_closed(node : DialogueNode);
 
+signal node_close_request(node : DialogueNode);
+
 signal slots_removed(node : DialogueNode, from_port : int);
 
 signal type_changed(type : Type);
@@ -414,11 +416,14 @@ func get_responses() -> Array[ResponseElement]:
 	return responses;
 
 
+func close_node():
+	queue_free();
+
+
 func _clone(flags := 0b0111):
 	var node := super.duplicate(flags);
 	node.dialogue = dialogue.duplicate();
 	return node;
-
 
 
 func _on_resize_request(new_minsize):
@@ -429,9 +434,9 @@ func _on_resize_request(new_minsize):
 
 func _on_close_request():
 	# FIXME: add confirmation menu before actually deleting
-	print_debug("_on_close_request");
-	node_closed.emit(self);
-	queue_free();
+	print_debug("_on_close_request - %s" % [name]);
+	node_close_request.emit(self);
+#	queue_free();
 
 
 func _on_speaker_text_submitted(new_text):

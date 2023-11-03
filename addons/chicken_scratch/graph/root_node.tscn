@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=3 uid="uid://dgeynvwx2mhg5"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/RootNode.gd" id="1_ucoe3"]
-[ext_resource type="Script" path="res://addons/chicken_scratch/graph/ConditionElement.gd" id="2_ir4t5"]
+[ext_resource type="PackedScene" uid="uid://cpmp4yh04cg38" path="res://addons/chicken_scratch/graph/condition_element.tscn" id="2_qvq84"]
 
-[node name="RootNode" type="GraphNode" node_paths=PackedStringArray("ConditionConfig", "ConditionCount", "ConditionEle")]
+[node name="RootNode" type="GraphNode" node_paths=PackedStringArray("ConditionConfig", "ConditionCount")]
 offset_right = 206.0
 offset_bottom = 190.0
 resizable = true
@@ -34,19 +34,10 @@ slot/2/right_type = 0
 slot/2/right_color = Color(1, 1, 1, 1)
 slot/2/right_icon = null
 slot/2/draw_stylebox = true
-slot/3/left_enabled = false
-slot/3/left_type = 0
-slot/3/left_color = Color(1, 1, 1, 1)
-slot/3/left_icon = null
-slot/3/right_enabled = true
-slot/3/right_type = 0
-slot/3/right_color = Color(1, 1, 1, 1)
-slot/3/right_icon = null
-slot/3/draw_stylebox = true
 script = ExtResource("1_ucoe3")
 ConditionConfig = NodePath("ConditionsConfig")
 ConditionCount = NodePath("ConditionsConfig/Count")
-ConditionEle = NodePath("ConditionElement")
+condition_element = ExtResource("2_qvq84")
 
 [node name="BaseElements" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -86,17 +77,6 @@ layout_mode = 2
 min_value = 1.0
 value = 1.0
 rounded = true
-
-[node name="ConditionElement" type="VBoxContainer" parent="." node_paths=PackedStringArray("condition")]
-layout_mode = 2
-size_flags_vertical = 3
-script = ExtResource("2_ir4t5")
-condition = NodePath("condition")
-
-[node name="condition" type="LineEdit" parent="ConditionElement"]
-layout_mode = 2
-placeholder_text = "<condition>"
-alignment = 1
 
 [connection signal="resize_request" from="." to="." method="_on_resize_request"]
 [connection signal="value_changed" from="ConditionsConfig/Count" to="." method="_on_count_value_changed"]

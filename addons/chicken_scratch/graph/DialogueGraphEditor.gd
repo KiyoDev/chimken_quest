@@ -10,11 +10,13 @@ class_name DialogueGraphEditor extends Control
 @export var root_node_scn : PackedScene;
 @export var dialogue_node : PackedScene;
 @export var right_click_menu : Container;
+@export var delete_confirmation : ConfirmationDialog;
 
 var root_node : RootNode;
 
 var node_dict : Dictionary = {};
 var file_menu_items : Dictionary = {};
+var nodes_to_delete : Array[StringName] = [];
 
 static var OpenFileDialog : EditorFileDialog;
 static var SaveFileDialog : EditorFileDialog;
@@ -174,7 +176,7 @@ func add_new_node(position := Vector2(0, 0)) -> DialogueNode:
 	var new_node : DialogueNode = dialogue_node.instantiate().clone_from_template();
 #	var new_node : DialogueNode = dialogue_node.instantiate().duplicate(0b0111).empty();
 #	print("asf %s" % [str(new_node.name).replace("@", "_")]);
-	new_node.node_closed.connect(_on_graph_node_closed);
+	new_node.node_close_request.connect(_on_graph_node_close_request);
 	new_node.slots_removed.connect(_on_graph_node_slots_removed);
 	Graph.add_child(new_node);
 	new_node.name = new_node.name.replace("@", "_");
@@ -208,47 +210,19 @@ func init_nodes_from_json(dict : Dictionary):
 
 
 func root_from_dict(dict : Dictionary):
-	root_node = root_node_scn.instantiate().duplicate(0b0111);
+	root_node = root_node_scn.instantiate();
 	Graph.add_child(root_node);
-	root_node.position_offset = Vector2(dict.metadata.position.x, dict.metadata.position.y);
-	root_node.custom_minimum_size = Vector2(dict.metadata.custom_minimum_size.x, dict.metadata.custom_minimum_size.y);
-	print_debug("root[%s] - %s" % [dict.name, dict.metadata.position]);
+	root_node.set_from_dict(dict);
 
 
-# FIXME: isn't creating response slots properly; index out of bounds; 
 func node_from_dict(dict: Dictionary):
 	var node := DialogueNode.new_from_dict(dialogue_node, dict, Graph);
 #	print_debug("from d  %s" % [node]);
 	
-	node.node_closed.connect(_on_graph_node_closed);
+	node.node_close_request.connect(_on_graph_node_close_request);
 	node.slots_removed.connect(_on_graph_node_slots_removed);
 	node_dict[node.name] = node; # cache node names
-#	Graph.add_child(node);
-#	node.name = node.name.replace("@", "_");
-#	print_debug("add new node=%s, %s" % [position, node]);
-#	new_node.global_position = position;
-#	node.position_offset = pos;
-	
-#	var node := add_new_node(pos);
 	print_debug("nod 0 %s, %s, %s" % [dict.name, dict.type, node]);
-#	node.name = dict.name;
-#	node.set_type(DialogueNode.Type[dict.type]);
-#	node.set_speaker(dict.speaker);
-#	node.set_dialogue(dict.text);
-#
-#	if(node.type == DialogueNode.Type.Response):
-#		node._on_slot_count_value_changed(dict.properties.responses.size());
-##		for i in range(1, node.get_responses().size()):
-##			var response = node.get_responses()[i];
-#		var i = 0;
-#		for response in node.get_responses():
-#			print_debug("resp - %s" % [response]);
-#			response.set_text(dict.properties.responses[i].text);
-#			i += 1;
-#	elif(node.type == DialogueNode.Type.Offer):
-#		pass;
-	
-#	print_debug("node[%s] - %s" % [node.name, node.position]);
 
 
 func _on_file_menu_opened(id : int):
@@ -268,8 +242,6 @@ func _on_open_file(path : String):
 	var dict = from_json(file.get_as_text());
 	print_debug("dialogue(%s)" % JSON.stringify(dict, "\t", false));
 	
-#	for child in Graph.get_children():
-#		Graph.remove_child(child);
 	init_nodes_from_json(dict);
 	
 #	print_debug("root[%s] - %s" % [dict.root_node.name, dict.root_node.metadata.position]);
@@ -295,30 +267,41 @@ func _on_graph_disconnection_request(from_node, from_port, to_node, to_port):
 	Graph.disconnect_node(from_node, from_port, to_node, to_port);
 
 
-# TODO: figure out if theres a better way than looping through every node connection... maybe connect nodes to eachother to close those connections if the neighbor closes.
-# Removes all connections related to the closed node
-func _on_graph_node_closed(node : DialogueNode):
-#	print_debug("node closed - %s, %s" % [node, Graph.get_connection_list()]);
+func close_node(node : DialogueNode):
 	for connections in Graph.get_connection_list():
 #		print_debug("connections - %s, %s" % [connections, typeof(connections)]);
 		if(connections.from == node.name || connections.to == node.name):
 			Graph.disconnect_node(connections.from, connections.from_port, connections.to, connections.to_port);
 	
 	node_dict.erase(node.name);
-	print_debug("del - node_dict=%s" % [node_dict]);
+	node.close_node();
+#	print_debug("del - node_dict=%s" % [node_dict]);
+
+
+# TODO: figure out if theres a better way than looping through every node connection... maybe connect nodes to eachother to close those connections if the neighbor closes.
+# Removes all connections related to the closed node
+func _on_graph_node_close_request(node : DialogueNode):
+	print_debug("node close request - %s, %s" % [node, Graph.get_connection_list()]);
+	nodes_to_delete.clear();
+	nodes_to_delete.append(node.name);
+	delete_confirmation.show();
+	
+#	for connections in Graph.get_connection_list():
+##		print_debug("connections - %s, %s" % [connections, typeof(connections)]);
+#		if(connections.from == node.name || connections.to == node.name):
+#			Graph.disconnect_node(connections.from, connections.from_port, connections.to, connections.to_port);
+#
+#	node_dict.erase(node.name);
+#	print_debug("del - node_dict=%s" % [node_dict]);
 
 
 ## When DailogueNode slots change
 func _on_graph_node_slots_removed(node : DialogueNode, from_port : int):
-#	print_debug("node slot[%s] removed - %s" % [from_port, node.name]);
 #	print_debug("node slot[%s] removed - %s, %s" % [from_port, node, Graph.get_connection_list()]);
 	for connections in Graph.get_connection_list():
 #		print_debug("connections - %s, %s" % [connections, typeof(connections)]);
 		if(connections.from == node.name && connections.from_port == from_port):
 			Graph.disconnect_node(connections.from, connections.from_port, connections.to, connections.to_port);
-	
-#	node_dict.erase(node.name); # FIXME: change node_dict to support name and slots
-#	print_debug("node slot changed - '%s'=%s" % [node.name, from_port]);
 
 
 ## Right click menu
@@ -363,9 +346,11 @@ func _on_graph_gui_input(event):
 # TODO: add confirmation request function
 func _on_graph_delete_nodes_request(nodes):
 	print_debug("graph delete request - %s" % [nodes]);
-	for name in nodes:
-		var node = node_dict[name];
-		node._on_close_request();
+	nodes_to_delete = nodes;
+	delete_confirmation.show();
+#	for name in nodes:
+#		var node = node_dict[name];
+#		node._on_close_request();
 
 # TODO: graph copy request
 func _on_graph_copy_nodes_request():
@@ -387,3 +372,15 @@ func _on_root_node_scn_pressed():
 
 func _on_print_pressed():
 	print_debug(graph_to_json("\t"));
+
+
+func _on_delete_confirmation_dialog_confirmed():
+	print("confirm delete - %s" % [nodes_to_delete]);
+	for name in nodes_to_delete:
+		var node = node_dict[name];
+		close_node(node);
+	nodes_to_delete.clear();
+
+
+func _on_delete_confirmation_dialog_canceled():
+	nodes_to_delete.clear();

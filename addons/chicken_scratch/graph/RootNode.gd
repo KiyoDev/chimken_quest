@@ -2,12 +2,13 @@
 class_name RootNode extends GraphNode
 
 
-signal node_closed(node : DialogueNode);
+signal node_close_request(node : DialogueNode);
 
 
 @export var ConditionConfig : HBoxContainer;
 @export var ConditionCount : SpinBox;
-@export var ConditionEle : VBoxContainer;
+
+@export var condition_element : PackedScene;
 
 
 var curr_condition_count := 1;
@@ -27,25 +28,23 @@ func _exit_tree():
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print_debug("ready");
+	add_child(condition_element.instantiate());
+	set_slot_enabled_right(ConditionConfig.get_index() + 1, true);
+
+
+func set_from_dict(dict : Dictionary):
+	var condition_count : int = dict.conditions.size();
+	ConditionCount.value = condition_count;
 	
-#	if(dialogue == null):
-#		dialogue = Dialogue.new();
-#	else:
-#		Speaker.text = dialogue.speaker;
-#		Text.text = dialogue.text;
+	var index := 1;
+	for condition in dict.conditions:
+		var con : ConditionElement = get_child(index + ConditionConfig.get_index());
+		con.condition.text = condition.condition;
+		index += 1;
 	
-	# Set type options to Type enum values
-	
-#	TypeOptions.clear();
-#	for type in Type.keys():
-#		TypeOptions.add_item(type, Type[type]);
-#	type = Type.Dialogue;
-#
-#	response_elements.append(get_child(response_config.get_index() + 1));
-	
-#	hide_offer_slots();
-#	hide_response_slots();
-#	update_node_options();
+	position_offset = Vector2(dict.metadata.position.x, dict.metadata.position.y);
+	custom_minimum_size = Vector2(dict.metadata.custom_minimum_size.x, dict.metadata.custom_minimum_size.y);
+	print_debug("root[%s] - %s" % [dict.name, dict.metadata.position]);
 
 
 func to_dict() -> Dictionary:
@@ -55,12 +54,13 @@ func to_dict() -> Dictionary:
 	# TODO: add connections; but maybe is just managed by the graph editor itself
 	# response index = node port for the editor connections
 	dict["conditions"] = [];
+	print("hhh '%s'" % [get_children()]);
 	for index in range(ConditionConfig.get_index() + 1, get_child_count()):
 		var child : ConditionElement = get_child(index);
-		var condition := {
+		print("lakdhgjklad '%s', '%s'" % [child.condition.name, child.condition.text]);
+		dict["conditions"].append({
 			"condition": child.condition.text
-		};
-		dict["conditions"].append(condition);
+		});
 #			print_debug("responses - %s" % [get_responses()]);
 #	return "{\"name\":\"%s\"}" % [];
 	dict["metadata"] = {
@@ -70,64 +70,9 @@ func to_dict() -> Dictionary:
 	return dict;
 
 
-func clone_from_template() -> DialogueNode:
-#	print_debug("cloning from template");
-#	var tmp : DialogueNodeTemplate = template.instantiate().duplicate(0b0111);
-#	var node : DialogueNode = duplicate(0b0111);
-#	node.curr_resp_slots = 1;
-#	node.curr_item_count = 1;
-#
-#	var off_cfg : OfferConfig = tmp._OfferConfig;
-#	off_cfg.reparent(node);
-#	node.offer_config = off_cfg;
-#	node.item_offerings = off_cfg.Offerings;
-#	node.offer_element = off_cfg.Offerings.get_child(0);
-#
-#	var off_fail = tmp.OfferingFail;
-#	off_fail.reparent(node);
-#	node.offering_fail = off_fail;
-#
-#	var slots_cfg : ResponseConfig = tmp.ResponseConfig;
-#	slots_cfg.reparent(node);
-#	node.response_config = slots_cfg;
-#
-#	tmp.Response.reparent(node);
-#
-#	node.on_create();
-#
-#	return node;
-	return null;
-
-
-func on_create():
-#	print_debug("on_create");
-#	TypeOptions.clear();
-#	for type in Type.keys():
-#		TypeOptions.add_item(type, Type[type]);
-#	type = Type.Dialogue;
-#
-#	response_elements.append(get_child(response_config.get_index() + 1));
-#
-#	offer_config.ItemCount.value_changed.connect(_on_item_count_value_changed, CONNECT_PERSIST);
-#	response_config.SlotCount.value_changed.connect(_on_slot_count_value_changed, CONNECT_PERSIST);
-##	response_config.connect_to_value_changed(_on_slot_count_value_changed);
-#	print_debug("init offers - %s" % [offer_config.ItemCount.value_changed.get_connections()]);
-#	print_debug("init responses - %s" % [response_config.SlotCount.value_changed.get_connections()]);
-#
-#	# enable all slots after adding children nodes
-#	for i in get_child_count():
-#		set_slot_enabled_right(i, true);
-#
-#	hide_offer_slots();
-#	hide_response_slots();
-#	update_node_options();
-	reset_size();
-
-
 func _clone(flags := 0b0111):
 	var node := super.duplicate(flags);
 	return node;
-
 
 
 func _on_resize_request(new_minsize):
@@ -141,10 +86,8 @@ func _on_close_request():
 	print_debug("Cannot close root node.");
 
 
-
 func _on_dragged(from, to):
 	print_debug("dragging '%s' [%s->%s] %s" % [name, from, to, position]);
-
 
 
 func _on_count_value_changed(value):
@@ -157,7 +100,7 @@ func _on_count_value_changed(value):
 		for i in range(curr_last_index, value + ConditionConfig.get_index() + 1):
 			print("5 - %s=%s" % [curr_last_index + i, is_slot_enabled_right(curr_last_index + i)]);
 #			print_debug("value > curr [count=%s, i=%s, last=%s, slot_config=%s, rsp=%s]" % [get_child_count(), i, curr_last_index, response_config.get_index(), response_elements]);
-			var new_condition = ConditionEle.duplicate(0b0111);
+			var new_condition = condition_element.instantiate();
 			condition_elements.append(new_condition);
 			add_child(new_condition);
 			set_slot_enabled_right(i, true);
