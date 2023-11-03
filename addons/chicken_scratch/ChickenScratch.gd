@@ -26,7 +26,7 @@ func _enter_tree():
 func _exit_tree():
 	_make_visible(false);
 	if(enabled && graph_instance):
-#		print("exit tree");
+#		print_debug("exit tree");
 		graph_instance.release_focus();
 		get_editor_interface().get_editor_main_screen().remove_child(graph_instance);
 		graph_instance.queue_free();
@@ -44,8 +44,8 @@ func _disable_plugin():
 	_make_visible(false);
 	enabled = false;
 	if(graph_instance):
-		print("disable plugin, %s" % [get_viewport().gui_get_focus_owner().name]);
-#		print("disable plugin, %s" % [get_editor_interface().get_editor_main_screen().get_child(0)]);
+		print_debug("disable plugin, %s" % [get_viewport().gui_get_focus_owner().name]);
+#		print_debug("disable plugin, %s" % [get_editor_interface().get_editor_main_screen().get_child(0)]);
 #		var curr := get_viewport().gui_get_focus_owner();
 ##		curr.visible = false;
 #		curr.release_focus();

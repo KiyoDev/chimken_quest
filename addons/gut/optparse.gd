@@ -194,7 +194,7 @@ func get_value(name):
 	if(found):
 		return options[idx].value
 	else:
-		print("COULD NOT FIND OPTION " + name)
+		print_debug("COULD NOT FIND OPTION " + name)
 		return null
 
 func set_banner(banner):
@@ -206,13 +206,13 @@ func print_help():
 		if(options[i].option_name.length() > longest):
 			longest = options[i].option_name.length()
 
-	print('---------------------------------------------------------')
+	print_debug('---------------------------------------------------------')
 	print(_banner)
 
-	print("\nOptions\n-------")
+	print_debug("\nOptions\n-------")
 	for i in range(options.size()):
-		print('  ' + options[i].to_s(longest + 2))
-	print('---------------------------------------------------------')
+		print_debug('  ' + options[i].to_s(longest + 2))
+	print_debug('---------------------------------------------------------')
 
 func print_options():
 	for i in range(options.size()):
@@ -246,7 +246,7 @@ func parse():
 
 	var unused = parser.get_unused_options()
 	if(unused.size() > 0):
-		print("Unrecognized options:  ", unused)
+		print_debug("Unrecognized options:  ", unused)
 		return false
 
 	return true

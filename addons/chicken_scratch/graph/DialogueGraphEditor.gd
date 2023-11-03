@@ -6,6 +6,7 @@ class_name DialogueGraphEditor extends Control
 #@export var dialogue_node_template : PackedScene;
 @export var Graph : DialogueGraph;
 @export var FileMenu : MenuButton;
+@export var Filename : Label;
 
 @export var root_node_scn : PackedScene;
 @export var dialogue_node : PackedScene;
@@ -121,9 +122,8 @@ func new_dialogue_graph():
 # from graph to json
 func graph_to_json(indent := ""):
 	# TODO: have a DialogueGraphFile extends RefCounted that keeps track of currently loaded file?
-#	print("Graph %s, %s" % [Graph, JSON.stringify(connection_dict(), "\t", false)]);
+#	print_debug("Graph %s, %s" % [Graph, JSON.stringify(connection_dict(), "\t", false)]);
 	var graph := {
-		"file_name": current_dialogue_file.name if current_dialogue_file else "",
 		"connections": Graph.get_connection_list(),
 #		"connections": connection_dict(),
 		"root_node": root_node.to_dict(),
@@ -154,13 +154,12 @@ func connection_dict() -> Dictionary:
 	var connections := {};
 	for connection in Graph.get_connection_list():
 		if(!connections.has(connection.from)):
-#			print("add new connection to dict");
+#			print_debug("add new connection to dict");
 			connections[connection.from] = {};
 		# support multiple connections at same "from_port"?
 		connections[connection.from][connection.from_port] = {"to": connection.to, "to_port": connection.to_port};
 	
 	return connections;
-			
 
 
 func get_graph_node_dicts() ->  Array[Dictionary]:
@@ -175,12 +174,12 @@ func get_graph_node_dicts() ->  Array[Dictionary]:
 func add_new_node(position := Vector2(0, 0)) -> DialogueNode:
 	var new_node : DialogueNode = dialogue_node.instantiate().clone_from_template();
 #	var new_node : DialogueNode = dialogue_node.instantiate().duplicate(0b0111).empty();
-#	print("asf %s" % [str(new_node.name).replace("@", "_")]);
+#	print_debug("asf %s" % [str(new_node.name).replace("@", "_")]);
 	new_node.node_close_request.connect(_on_graph_node_close_request);
 	new_node.slots_removed.connect(_on_graph_node_slots_removed);
 	Graph.add_child(new_node);
 	new_node.name = new_node.name.replace("@", "_");
-	print_debug("add new node=%s, %s" % [position, new_node]);
+#	print_debug("add new node=%s, %s" % [position, new_node]);
 #	new_node.global_position = position;
 	new_node.position_offset = position;
 	node_dict[new_node.name] = new_node; # cache node names
@@ -193,6 +192,10 @@ func add_new_node(position := Vector2(0, 0)) -> DialogueNode:
 func init_nodes_from_json(dict : Dictionary):
 	print_debug("json %s" % [dict]);
 	node_dict.clear();
+	file_menu_items.clear();
+	nodes_to_delete.clear();
+	Graph.clear_connections();
+	
 	for child in Graph.get_children():
 		child.free();
 
@@ -201,10 +204,8 @@ func init_nodes_from_json(dict : Dictionary):
 	for node in dict.nodes:
 		node_from_dict(node);
 	
-
-	Graph.clear_connections();
 	for connection in dict.connections:
-		print_debug("reconnect - [%s, %s] -> [%s, %s]" % [connection.from, connection.from_port, connection.to, connection.to_port]);
+#		print_debug("reconnect - [%s, %s] -> [%s, %s]" % [connection.from, connection.from_port, connection.to, connection.to_port]);
 		await get_tree().create_timer(0.001).timeout
 		Graph.connect_node(connection.from, connection.from_port, connection.to, connection.to_port);
 
@@ -243,6 +244,7 @@ func _on_open_file(path : String):
 	print_debug("dialogue(%s)" % JSON.stringify(dict, "\t", false));
 	
 	init_nodes_from_json(dict);
+	Filename.text = path.get_file();
 	
 #	print_debug("root[%s] - %s" % [dict.root_node.name, dict.root_node.metadata.position]);
 #	for node in dict.nodes:
@@ -343,14 +345,12 @@ func _on_graph_gui_input(event):
 				right_click_menu.hide();
 
 
-# TODO: add confirmation request function
 func _on_graph_delete_nodes_request(nodes):
 	print_debug("graph delete request - %s" % [nodes]);
 	nodes_to_delete = nodes;
 	delete_confirmation.show();
-#	for name in nodes:
-#		var node = node_dict[name];
-#		node._on_close_request();
+
+# TODO: undoredo
 
 # TODO: graph copy request
 func _on_graph_copy_nodes_request():
@@ -365,7 +365,6 @@ func _on_graph_tree_exited():
 	print_debug("exiting graph");
 
 
-
 func _on_root_node_scn_pressed():
 	print_debug("Add root node");
 
@@ -375,7 +374,6 @@ func _on_print_pressed():
 
 
 func _on_delete_confirmation_dialog_confirmed():
-	print("confirm delete - %s" % [nodes_to_delete]);
 	for name in nodes_to_delete:
 		var node = node_dict[name];
 		close_node(node);

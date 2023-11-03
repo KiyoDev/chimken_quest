@@ -74,7 +74,7 @@ func _load_options_from_config_file(file_path, into):
 	# SHORTCIRCUIT
 	if(!FileAccess.file_exists(file_path)):
 		if(file_path != 'res://.gutconfig.json'):
-			print('ERROR:  Config File "', file_path, '" does not exist.')
+			print_debug('ERROR:  Config File "', file_path, '" does not exist.')
 			return -1
 		else:
 			return 1
@@ -93,9 +93,9 @@ func _load_options_from_config_file(file_path, into):
 	var results = test_json_conv.get_data()
 	# SHORTCIRCUIT
 	if(results == null):
-		print("\n\n",'!! ERROR parsing file:  ', file_path)
-		print('    at line ', results.error_line, ':')
-		print('    ', results.error_string)
+		print_debug("\n\n",'!! ERROR parsing file:  ', file_path)
+		print_debug('    at line ', results.error_line, ':')
+		print_debug('    ', results.error_string)
 		return -1
 
 	# Get all the options out of the config file using the option name.  The
@@ -161,7 +161,7 @@ func write_options(path):
 		f.store_string(content)
 		f = null # closes file
 	else:
-		print('ERROR:  could not open file ', path, ' ', result)
+		print_debug('ERROR:  could not open file ', path, ' ', result)
 	return result
 
 

@@ -74,7 +74,7 @@ func _update_min_width():
 
 func _open_script_in_editor(path, line_number):
 	if(_interface == null):
-		print('Too soon, wait a bit and try again.')
+		print_debug('Too soon, wait a bit and try again.')
 		return
 	
 	var r = load(path)
@@ -95,7 +95,7 @@ func _open_script_in_editor(path, line_number):
 # inner class)
 func _get_line_number_for_seq_search(search_strings, te):
 	if(te == null):
-		print("No Text editor to get line number for")
+		print_debug("No Text editor to get line number for")
 		return 0;
 
 	var result = null
@@ -117,7 +117,7 @@ func _get_line_number_for_seq_search(search_strings, te):
 
 func _goto_code(path, line, method_name='', inner_class =''):
 	if(_interface == null):
-		print('going to ', [path, line, method_name, inner_class])
+		print_debug('going to ', [path, line, method_name, inner_class])
 		return
 
 	_open_script_in_editor(path, line)

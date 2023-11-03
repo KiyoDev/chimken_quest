@@ -425,7 +425,7 @@ func set_options(options):
 	_cfg_ctrls.paint_after.step = .05
 	_cfg_ctrls.paint_after.value = options.paint_after
 
-	print('GUT config loaded')
+	print_debug('GUT config loaded')
 
 
 func get_options(base_opts):

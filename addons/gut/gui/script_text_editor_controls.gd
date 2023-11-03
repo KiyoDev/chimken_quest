@@ -10,7 +10,7 @@ class ScriptEditorControlRef:
 	func _init(script_edit):
 		_script_editor = weakref(script_edit)
 		_populate_controls()
-		# print("_script_editor = ", script_edit, ' vis = ', is_visible())
+		# print_debug("_script_editor = ", script_edit, ' vis = ', is_visible())
 
 
 	func _populate_controls():
@@ -110,7 +110,7 @@ func _populate_editors():
 # easier than trying to find a place where it could be used by both.
 func _get_first_child_of_type_name(obj_name, parent_obj):
 	if(parent_obj == null):
-		# print('aborting search for ', obj_name, ' parent is null')
+		# print_debug('aborting search for ', obj_name, ' parent is null')
 		return null
 
 	var kids = parent_obj.get_children()
@@ -118,7 +118,7 @@ func _get_first_child_of_type_name(obj_name, parent_obj):
 	var to_return = null
 
 	var search_for = str("<", obj_name)
-	# print('searching for ', search_for, ' in ', parent_obj, ' kids ', kids.size())
+	# print_debug('searching for ', search_for, ' in ', parent_obj, ' kids ', kids.size())
 	while(index < kids.size() and to_return == null):
 		var this_one = str(kids[index])
 		# print(search_for, ' :: ', this_one)
@@ -148,12 +148,12 @@ func _get_class_name_from_line(text):
 func refresh():
 	if(_script_editors_parent == null):
 		_find_script_editors_parent()
-		# print("script editors parent = ", _script_editors_parent)
+		# print_debug("script editors parent = ", _script_editors_parent)
 
 	if(_script_editors_parent != null):
 		_populate_editors()
 
-	# print("script editor controls = ", _script_editor_controls)
+	# print_debug("script editor controls = ", _script_editor_controls)
 
 
 func get_current_text_edit():

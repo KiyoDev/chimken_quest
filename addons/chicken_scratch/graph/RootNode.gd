@@ -54,10 +54,10 @@ func to_dict() -> Dictionary:
 	# TODO: add connections; but maybe is just managed by the graph editor itself
 	# response index = node port for the editor connections
 	dict["conditions"] = [];
-	print("hhh '%s'" % [get_children()]);
+#	print_debug("hhh '%s'" % [get_children()]);
 	for index in range(ConditionConfig.get_index() + 1, get_child_count()):
 		var child : ConditionElement = get_child(index);
-		print("lakdhgjklad '%s', '%s'" % [child.condition.name, child.condition.text]);
+#		print_debug("lakdhgjklad '%s', '%s'" % [child.condition.name, child.condition.text]);
 		dict["conditions"].append({
 			"condition": child.condition.text
 		});
@@ -76,7 +76,7 @@ func _clone(flags := 0b0111):
 
 
 func _on_resize_request(new_minsize):
-#	print("new_minsize - %s" % [new_minsize]);
+#	print_debug("new_minsize - %s" % [new_minsize]);
 	custom_minimum_size = new_minsize;
 	reset_size(); # ensures window size updates to correct minimum, even if it gets resized from adding/removing children
 
@@ -91,14 +91,14 @@ func _on_dragged(from, to):
 
 
 func _on_count_value_changed(value):
-	print("change condition count");
+	print_debug("change condition count");
 	print_debug("v=%s, c=%s, %s" % [value, curr_condition_count, ConditionConfig.get_index()]);
 	if(value > curr_condition_count):
 		# ignore base ele and slot config ele
 		var curr_last_index := curr_condition_count + ConditionConfig.get_index() + 1;
 #		for i in value - curr_resp_slots:
 		for i in range(curr_last_index, value + ConditionConfig.get_index() + 1):
-			print("5 - %s=%s" % [curr_last_index + i, is_slot_enabled_right(curr_last_index + i)]);
+			print_debug("5 - %s=%s" % [curr_last_index + i, is_slot_enabled_right(curr_last_index + i)]);
 #			print_debug("value > curr [count=%s, i=%s, last=%s, slot_config=%s, rsp=%s]" % [get_child_count(), i, curr_last_index, response_config.get_index(), response_elements]);
 			var new_condition = condition_element.instantiate();
 			condition_elements.append(new_condition);

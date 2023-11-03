@@ -146,7 +146,7 @@ static func print_properties(props, thing, print_all_meta=false):
 
 		print(prop_name, ' = ', print_value)
 		if(print_all_meta):
-			print('  ', props[i])
+			print_debug('  ', props[i])
 
 
 

@@ -226,7 +226,7 @@ func from_dict(dict : Dictionary):
 func to_dict() -> Dictionary:
 	var dict := {};
 	
-#	print("a - %s" % [Speaker.text]);
+#	print_debug("a - %s" % [Speaker.text]);
 	
 #	dict["name"] = str(name).replace("@", "_");
 	dict["name"] = name;
@@ -359,7 +359,7 @@ func update_response_slots(value):
 		var curr_last_index := curr_resp_slots + response_config.get_index() + 1;
 #		for i in value - curr_resp_slots:
 		for i in range(curr_last_index, value + response_config.get_index() + 1):
-			print("5 - %s=%s" % [curr_last_index + i, is_slot_enabled_right(curr_last_index + i)]);
+			print_debug("5 - %s=%s" % [curr_last_index + i, is_slot_enabled_right(curr_last_index + i)]);
 			print_debug("value > curr [count=%s, i=%s, last=%s, slot_config=%s, rsp=%s]" % [get_child_count(), i, curr_last_index, response_config.get_index(), response_elements]);
 			var new_resp = response_element.instantiate();
 			response_elements.append(new_resp);
@@ -427,7 +427,7 @@ func _clone(flags := 0b0111):
 
 
 func _on_resize_request(new_minsize):
-#	print("new_minsize - %s" % [new_minsize]);
+#	print_debug("new_minsize - %s" % [new_minsize]);
 	custom_minimum_size = new_minsize;
 	reset_size(); # ensures window size updates to correct minimum, even if it gets resized from adding/removing children
 

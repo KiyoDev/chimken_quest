@@ -72,7 +72,7 @@ func _ready():
 	var check_import = load('res://addons/gut/images/red.png')
 	if(check_import == null):
 		_ctrls.run_results.add_centered_text("GUT got some new images that are not imported yet.  Please restart Godot.")
-		print('GUT got some new images that are not imported yet.  Please restart Godot.')
+		print_debug('GUT got some new images that are not imported yet.  Please restart Godot.')
 	else:
 		_ctrls.run_results.add_centered_text("Let's run some tests!")
 

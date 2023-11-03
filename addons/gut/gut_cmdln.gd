@@ -233,20 +233,20 @@ func _print_gutconfigs(values):
 You do not need to specify all values in your own file.  The values supplied in
 this sample are what would be used if you ran gut w/o the -gprint_gutconfig_sample
 option (option priority:  command-line, .gutconfig, default)."""
-	print("\n", header.replace("\n", ' '), "\n\n")
+	print_debug("\n", header.replace("\n", ' '), "\n\n")
 	var resolved = values
 
 	# remove_at some options that don't make sense to be in config
 	resolved.erase("config_file")
 	resolved.erase("show_help")
 
-	print("Here's a config with all the properties set based off of your current command and config.")
+	print_debug("Here's a config with all the properties set based off of your current command and config.")
 	print(json.stringify(resolved, '  '))
 
 	for key in resolved:
 		resolved[key] = null
 
-	print("\n\nAnd here's an empty config for you fill in what you want.")
+	print_debug("\n\nAnd here's an empty config for you fill in what you want.")
 	print(json.stringify(resolved, ' '))
 
 
@@ -255,7 +255,7 @@ func _run_gut():
 	var opt_resolver = OptionResolver.new()
 	opt_resolver.set_base_opts(_gut_config.default_options)
 
-	print("\n\n", ' ---  Gut  ---')
+	print_debug("\n\n", ' ---  Gut  ---')
 	var o = setup_options(_gut_config.default_options, _gut_config.valid_fonts)
 
 	var all_options_valid = o.parse()
@@ -275,7 +275,7 @@ func _run_gut():
 			o.print_help()
 			quit()
 		elif(o.get_value('-gpo')):
-			print('All command line options and where they are specified.  ' +
+			print_debug('All command line options and where they are specified.  ' +
 				'The "final" value shows which value will actually be used ' +
 				'based on order of precedence (default < .gutconfig < cmd line).' + "\n")
 			print(opt_resolver.to_s_verbose())
@@ -318,7 +318,7 @@ func _on_tests_finished(should_exit, should_exit_on_success):
 	if(should_exit or (should_exit_on_success and _tester.get_fail_count() == 0)):
 		quit(exit_code)
 	else:
-		print("Tests finished, exit manually")
+		print_debug("Tests finished, exit manually")
 
 
 # ------------------------------------------------------------------------------
@@ -326,7 +326,7 @@ func _on_tests_finished(should_exit, should_exit_on_success):
 # ------------------------------------------------------------------------------
 func _init():
 	if(!_utils.is_version_ok()):
-		print("\n\n", _utils.get_version_text())
+		print_debug("\n\n", _utils.get_version_text())
 		push_error(_utils.get_bad_version_text())
 		quit(1)
 	else:

@@ -33,7 +33,7 @@ func _does_inherit_from_test(thing):
 func _populate_tests(test_script):
 	var script =  test_script.load_script()
 	if(script == null):
-		print('  !!! ', test_script.path, ' could not be loaded')
+		print_debug('  !!! ', test_script.path, ' could not be loaded')
 		return false
 
 	test_script.is_loaded = true

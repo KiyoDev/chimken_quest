@@ -5,13 +5,14 @@
 [ext_resource type="PackedScene" uid="uid://dgeynvwx2mhg5" path="res://addons/chicken_scratch/graph/root_node.tscn" id="2_7o4b3"]
 [ext_resource type="Script" path="res://scripts/dialogue/graph/DialogueGraph.gd" id="3_1gqce"]
 
-[node name="ChickenScratch" type="Control" node_paths=PackedStringArray("Graph", "FileMenu", "right_click_menu", "delete_confirmation")]
+[node name="ChickenScratch" type="Control" node_paths=PackedStringArray("Graph", "FileMenu", "Filename", "right_click_menu", "delete_confirmation")]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1584.0
 script = ExtResource("1_x85w6")
 Graph = NodePath("VBoxContainer/Graph")
 FileMenu = NodePath("VBoxContainer/HBoxContainer/FileMenu")
+Filename = NodePath("VBoxContainer/HBoxContainer/Filename")
 root_node_scn = ExtResource("2_7o4b3")
 dialogue_node = ExtResource("2_1eaom")
 right_click_menu = NodePath("RightClickMenu")
@@ -59,7 +60,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "new_file"
+text = "[empty]"
 horizontal_alignment = 1
 
 [node name="Control2" type="Control" parent="VBoxContainer/HBoxContainer"]
@@ -99,7 +100,6 @@ layout_mode = 2
 [node name="NewNode" type="Button" parent="RightClickMenu/VBoxContainer"]
 layout_mode = 2
 text = "Add Dialogue Node"
-alignment = 0
 
 [node name="DeleteConfirmationDialog" type="ConfirmationDialog" parent="."]
 initial_position = 4

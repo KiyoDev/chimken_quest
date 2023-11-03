@@ -17,11 +17,11 @@ func _ready():
 # curr / columns = row#
 # curr + 1 % (columns) + ((curr / columns) * columns)
 func test_main():
-	print("11/6=%s" % [11 / 6]);
+	print_debug("11/6=%s" % [11 / 6]);
 	var rows := 3;
 	var columns := 6;
 	var curr = 17;
 	
-	print("before:%s" % [curr]);
+	print_debug("before:%s" % [curr]);
 	curr = (curr + 1) % columns + ((curr / columns) * columns);
-	print("curr -> :%s" % [curr]);
+	print_debug("curr -> :%s" % [curr]);

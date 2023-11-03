@@ -296,7 +296,7 @@ func _ready():
 	if(!_utils.is_version_ok()):
 		_print_versions()
 		push_error(_utils.get_bad_version_text())
-		print('Error:  ', _utils.get_bad_version_text())
+		print_debug('Error:  ', _utils.get_bad_version_text())
 		get_tree().quit()
 		return
 

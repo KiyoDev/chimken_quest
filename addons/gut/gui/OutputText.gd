@@ -44,7 +44,7 @@ class TextEditSearcher:
 				pos.x -= 1
 
 		var result = te.search(term, search_flags, pos.y, pos.x)
-#		print('searching from ', pos, ' for "', term, '" = ', result)
+#		print_debug('searching from ', pos, ' for "', term, '" = ', result)
 		if(result.y != -1):
 			_ignore_caret_change = true
 			_set_caret_and_sel(result, term.length())
