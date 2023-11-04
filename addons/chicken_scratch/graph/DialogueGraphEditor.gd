@@ -1,5 +1,5 @@
 @tool
-class_name DialogueGraphEditor extends Control
+class_name DialogueGraphEditor extends VBoxContainer
 
 
 
@@ -10,7 +10,7 @@ class_name DialogueGraphEditor extends Control
 
 @export var root_node_scn : PackedScene;
 @export var dialogue_node : PackedScene;
-@export var right_click_menu : Container;
+@export var right_click_menu : PopupMenu;
 @export var delete_confirmation : ConfirmationDialog;
 
 var root_node : RootNode;
@@ -24,10 +24,10 @@ var to_copy : Array[Dictionary] = [];
 
 var current_file_path : String = "";
 
+var new_node_position := Vector2();
+
 static var OpenFileDialog : EditorFileDialog;
 static var SaveFileDialog : EditorFileDialog;
-
-static var right_click_menu_open := false;
 
 # TODO: open DialogueFile from disk and populate graph (adding nodes, adding connections, etc)
 static var current_dialogue_file : DialogueFile;
@@ -328,19 +328,21 @@ func _on_graph_node_slots_removed(node : DialogueNode, from_port : int):
 
 ## Right click menu
 func _on_graph_popup_request(position):
-	print_debug("_on_graph_popup_request - %s, %s" % [position, right_click_menu_open]);
-	if(right_click_menu_open):
-		right_click_menu.set_position(position);
-		right_click_menu.show();
+	print_debug("_on_graph_popup_request - %s" % [position]);
+#	if(!right_click_menu_open):
+#	right_click_menu.set_position(position);
+	new_node_position = Vector2i(position);
+	right_click_menu.set_position(Vector2(position.x + 302, position.y + 142));
+	right_click_menu.show();
 
 
 ## Add new node from menu
-func _on_new_node_pressed():
-	print_debug("_on_new_node_pressed - %s" % [right_click_menu.position]);
-	# Add scroll offset and apply zoom value to position
-	add_new_node((right_click_menu.position + Graph.scroll_offset) / Graph.zoom);
-	right_click_menu_open = false;
-	right_click_menu.hide();
+#func _on_new_node_pressed():
+#	print_debug("_on_new_node_pressed - %s" % [right_click_menu.position]);
+#	# Add scroll offset and apply zoom value to position
+#	add_new_node((right_click_menu.position + Vector2i(Graph.scroll_offset)) / Graph.zoom);
+#	right_click_menu_open = false;
+#	right_click_menu.hide();
 
 
 func _on_right_click_menu_gui_input(event):
@@ -350,19 +352,20 @@ func _on_right_click_menu_gui_input(event):
 
 
 func _on_graph_gui_input(event):
-	if(event is InputEventMouseButton):
-		if(event.is_pressed() && event.button_index == MOUSE_BUTTON_LEFT):
-#			print_debug("own left click %s, %s" % [event, right_click_menu_open]);
-			if(right_click_menu_open):
-				right_click_menu_open = false;
-				right_click_menu.hide();
-		if(event.is_pressed() && event.button_index == MOUSE_BUTTON_RIGHT):
-#			print_debug("own right click %s, %s" % [event, right_click_menu_open]);
-			if(!right_click_menu_open):
-				right_click_menu_open = true;
-			else:
-				right_click_menu_open = false;
-				right_click_menu.hide();
+	pass;
+#	if(event is InputEventMouseButton):
+#		if(event.is_pressed() && event.button_index == MOUSE_BUTTON_LEFT):
+##			print_debug("own left click %s, %s" % [event, right_click_menu_open]);
+#			if(right_click_menu_open):
+#				right_click_menu_open = false;
+#				right_click_menu.hide();
+#		if(event.is_pressed() && event.button_index == MOUSE_BUTTON_RIGHT):
+##			print_debug("own right click %s, %s" % [event, right_click_menu_open]);
+#			if(!right_click_menu_open):
+#				right_click_menu_open = true;
+#			else:
+#				right_click_menu_open = false;
+#				right_click_menu.hide();
 
 
 func _on_graph_delete_nodes_request(nodes):
@@ -431,3 +434,13 @@ func _on_graph_paste_nodes_request():
 
 func _on_graph_duplicate_nodes_request():
 	print_debug("Duplcate requested");
+
+
+func _on_right_click_menu_id_pressed(id : int):
+	print_debug("opening file menu - %s" % [id]);
+	match id:
+		0: # New Graph
+			print_debug("new_node_pressed - %s" % [right_click_menu.position]);
+			# Add scroll offset and apply zoom value to position
+			add_new_node((new_node_position + Graph.scroll_offset) / Graph.zoom);
+			right_click_menu.hide();

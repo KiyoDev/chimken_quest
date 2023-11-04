@@ -173,6 +173,7 @@ static func new_from_dict(scn : PackedScene, dict : Dictionary, graph : GraphEdi
 	node.Speaker.text = dict.speaker;
 	node.Text.text = dict.text;
 #	print_debug("add new node=%s, %s" % [position, node]);
+	node.size = Vector2(dict.metadata.size.x, dict.metadata.size.y);
 	var pos := Vector2(dict.metadata.position.x, dict.metadata.position.y);
 	node.position_offset = pos;
 #	node.position_offset = Vector2(dict.metadata.position.x, dict.metadata.position.y);
@@ -262,6 +263,7 @@ func to_dict() -> Dictionary:
 #	return "{\"name\":\"%s\"}" % [];
 	dict["metadata"] = {
 		"position": {"x": position_offset.x, "y": position_offset.y},
+		"size": {"x": size.x, "y": size.y},
 		"custom_minimum_size": {"x": custom_minimum_size.x, "y": custom_minimum_size.y}
 	};
 	return dict;

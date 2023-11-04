@@ -5,10 +5,11 @@
 [ext_resource type="PackedScene" uid="uid://dgeynvwx2mhg5" path="res://addons/chicken_scratch/graph/root_node.tscn" id="2_7o4b3"]
 [ext_resource type="Script" path="res://scripts/dialogue/graph/DialogueGraph.gd" id="3_1gqce"]
 
-[node name="ChickenScratch" type="Control" node_paths=PackedStringArray("Graph", "FileMenu", "Filename", "right_click_menu", "delete_confirmation")]
-layout_mode = 3
-anchors_preset = 0
+[node name="ChickenScratch" type="VBoxContainer" node_paths=PackedStringArray("Graph", "FileMenu", "Filename", "right_click_menu", "delete_confirmation")]
 offset_right = 1584.0
+offset_bottom = 942.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_x85w6")
 Graph = NodePath("VBoxContainer/Graph")
 FileMenu = NodePath("VBoxContainer/HBoxContainer/FileMenu")
@@ -21,9 +22,7 @@ delete_confirmation = NodePath("DeleteConfirmationDialog")
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 texture_filter = 1
 clip_contents = true
-layout_mode = 0
-offset_right = 1584.0
-offset_bottom = 1040.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -84,31 +83,22 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 right_disconnects = true
+scroll_offset = Vector2(-513, -417)
 show_zoom_label = true
 script = ExtResource("3_1gqce")
-
-[node name="RightClickMenu" type="PanelContainer" parent="."]
-visible = false
-layout_mode = 2
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 35.0
-offset_right = -1399.0
-offset_bottom = 66.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="RightClickMenu"]
-layout_mode = 2
-
-[node name="NewNode" type="Button" parent="RightClickMenu/VBoxContainer"]
-layout_mode = 2
-text = "Add Dialogue Node"
 
 [node name="DeleteConfirmationDialog" type="ConfirmationDialog" parent="."]
 initial_position = 4
 ok_button_text = "Yes"
 dialog_text = "Do you want to delete the node(s)?"
+
+[node name="RightClickMenu" type="PopupMenu" parent="."]
+size = Vector2i(176, 35)
+unresizable = false
+submenu_popup_delay = 0.01
+item_count = 1
+item_0/text = "Add Dialogue Node"
+item_0/id = 0
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Print" to="." method="_on_print_pressed"]
 [connection signal="connection_request" from="VBoxContainer/Graph" to="." method="_on_graph_connection_request"]
@@ -123,7 +113,6 @@ dialog_text = "Do you want to delete the node(s)?"
 [connection signal="popup_request" from="VBoxContainer/Graph" to="." method="_on_graph_popup_request"]
 [connection signal="tree_entered" from="VBoxContainer/Graph" to="." method="_on_graph_tree_entered"]
 [connection signal="tree_exited" from="VBoxContainer/Graph" to="." method="_on_graph_tree_exited"]
-[connection signal="gui_input" from="RightClickMenu" to="." method="_on_right_click_menu_gui_input"]
-[connection signal="pressed" from="RightClickMenu/VBoxContainer/NewNode" to="." method="_on_new_node_pressed"]
 [connection signal="canceled" from="DeleteConfirmationDialog" to="." method="_on_delete_confirmation_dialog_canceled"]
 [connection signal="confirmed" from="DeleteConfirmationDialog" to="." method="_on_delete_confirmation_dialog_confirmed"]
+[connection signal="id_pressed" from="RightClickMenu" to="." method="_on_right_click_menu_id_pressed"]
