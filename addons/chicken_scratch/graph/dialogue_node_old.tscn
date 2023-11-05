@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueNode.gd" id="2_qpaxv"]
 [ext_resource type="Script" path="res://addons/chicken_scratch/Dialogue.gd" id="3_0a0po"]
-[ext_resource type="PackedScene" uid="uid://2878ebeahf7g" path="res://addons/chicken_scratch/graph/offer_element.tscn" id="3_amdp0"]
+[ext_resource type="PackedScene" uid="uid://2878ebeahf7g" path="res://addons/chicken_scratch/graph/offering_element.tscn" id="3_amdp0"]
 [ext_resource type="PackedScene" uid="uid://dv8pk15nx1s0w" path="res://addons/chicken_scratch/graph/response_element.tscn" id="4_jhsr8"]
-[ext_resource type="PackedScene" uid="uid://j4i1b4cdlcrs" path="res://addons/chicken_scratch/graph/offering_config.tscn" id="6_uatgp"]
+[ext_resource type="PackedScene" uid="uid://j4i1b4cdlcrs" path="res://addons/chicken_scratch/graph/offerings_config.tscn" id="6_uatgp"]
 [ext_resource type="PackedScene" uid="uid://nhonh44age0u" path="res://addons/chicken_scratch/graph/offering_fail.tscn" id="7_tugy6"]
 [ext_resource type="PackedScene" uid="uid://r7ibrepvtebn" path="res://addons/chicken_scratch/graph/slots_config.tscn" id="8_gtsrh"]
 

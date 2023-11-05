@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://2878ebeahf7g"]
 
-[ext_resource type="Script" path="res://addons/chicken_scratch/graph/OfferElement.gd" id="1_ry0pt"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/OfferingElement.gd" id="1_ry0pt"]
 
 [node name="Offer" type="VBoxContainer"]
 offset_right = 155.0

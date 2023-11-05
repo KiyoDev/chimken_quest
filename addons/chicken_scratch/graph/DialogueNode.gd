@@ -13,7 +13,7 @@ signal type_changed(type : Type);
 
 enum Type {
 	Dialogue,
-	Offer,
+	Offering,
 	Response
 }
 
@@ -29,9 +29,9 @@ enum Type {
 #@export var Text : TextEdit;
 #@export var Hidden : Control;
 
-var offer_config : OfferConfig;
+var offer_config : OfferingsConfig;
 var item_offerings : VBoxContainer;
-var offer_element : OfferElement;
+var offer_element : OfferingElement;
 var offering_fail : HBoxContainer;
 var response_config : ResponseConfig;
 
@@ -119,7 +119,7 @@ func clone_from_template() -> DialogueNode:
 	curr_resp_slots = 1;
 	curr_item_count = 1;
 	
-	var off_cfg : OfferConfig = tmp._OfferConfig;
+	var off_cfg : OfferingsConfig = tmp.OfferingsConfig;
 	off_cfg.reparent(self);
 	offer_config = off_cfg;
 	item_offerings = off_cfg.Offerings;
@@ -181,13 +181,13 @@ static func new_from_dict(scn : PackedScene, dict : Dictionary, graph : GraphEdi
 	match(node.type):
 		Type.Dialogue:
 			pass;
-		Type.Offer:
+		Type.Offering:
 			var count = dict.properties.offerings.size();
 			node.offer_config.set_item_count(count);
 			# Update node's properties to saved properties
 			var index := 0;
 			for offering in dict.properties.offerings:
-				var off : OfferElement = node.item_offerings.get_child(index);
+				var off : OfferingElement = node.item_offerings.get_child(index);
 				off.ItemName.text = offering.item_name;
 				off.ItemType.text = offering.item_type;
 				off.Quantity.value = offering.quantity;
@@ -213,7 +213,7 @@ func from_dict(dict : Dictionary):
 	match(type):
 		Type.Dialogue:
 			pass;
-		Type.Offer:
+		Type.Offering:
 			for offering in dict.properties.offerings:
 				pass;
 			pass;
@@ -239,7 +239,7 @@ func to_dict() -> Dictionary:
 		Type.Dialogue:
 			# TODO: add connections?
 			pass;
-		Type.Offer:
+		Type.Offering:
 			dict["properties"]["offerings"] = [];
 			for offer in offer_config.get_offers():
 				var item := {}
@@ -281,7 +281,7 @@ func update_node_options():
 	match(type):
 		Type.Dialogue:
 			set_slot_enabled_right(0, true);
-		Type.Offer:
+		Type.Offering:
 #			set_slot_enabled_right(0, false);
 			offer_config.reparent(self);
 			offering_fail.reparent(self);
@@ -320,7 +320,7 @@ func hide_previous_options(type : Type):
 		Type.Dialogue:
 			set_slot_enabled_right(0, false);
 			slots_removed.emit(self, 0);
-		Type.Offer:
+		Type.Offering:
 			hide_offer_slots();
 		Type.Response:
 			hide_response_slots();

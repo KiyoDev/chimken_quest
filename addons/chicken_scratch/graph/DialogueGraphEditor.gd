@@ -35,37 +35,14 @@ static var current_dialogue_file : DialogueFile;
 
 func _ready():
 	print_debug("ready");
-#	var popup := FileMenu.get_popup();
-#	if(!popup.id_pressed.is_connected(_on_file_menu_opened)):
-#		popup.id_pressed.connect(_on_file_menu_opened);
-#	for i in popup.item_count:
-#		file_menu_items[i] = popup.get_item_text(i);
-#	print_debug("file_menu_items=%s" % [file_menu_items]);
-#
-#	new_dialogue_graph();
-#
-#	OpenFileDialog = EditorFileDialog.new();
-#	OpenFileDialog.title = "Open a DialogueNode graph";
-#	OpenFileDialog.size = Vector2i(800, 400);
-#	OpenFileDialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE;
-#	OpenFileDialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS;
-##	OpenFileDialog.transient = true;
-#	OpenFileDialog.add_filter("*.dngraph", "DialogueNode Graph");
-#	OpenFileDialog.file_selected.connect(_on_open_file);
-#	add_child(OpenFileDialog);
-#
-#	SaveFileDialog = EditorFileDialog.new();
-#	SaveFileDialog.size = Vector2i(800, 400);
-#	SaveFileDialog.file_mode = EditorFileDialog.FILE_MODE_SAVE_FILE;
-#	SaveFileDialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS;
-##	SaveFileDialog.transient = true;
-#	SaveFileDialog.add_filter("*.dngraph", "DialogueNode Graph");
-#	SaveFileDialog.file_selected.connect(_on_save_file);
-#	add_child(SaveFileDialog);
 
 
 func _enter_tree():
 	print_debug("enter tree");
+
+
+func _exit_tree():
+	right_click_menu.hide();
 
 
 func _notification(what):
@@ -80,15 +57,9 @@ func _notification(what):
 
 
 func on_plugin_start():
-	var popup := FileMenu.get_popup();
-	if(!popup.id_pressed.is_connected(_on_file_menu_opened)):
-		popup.id_pressed.connect(_on_file_menu_opened);
-	for i in popup.item_count:
-		file_menu_items[i] = popup.get_item_text(i);
-	print_debug("file_menu_items=%s" % [file_menu_items]);
-	
 	new_dialogue_graph();
 	
+	# init EditorFileDialogs
 	OpenFileDialog = EditorFileDialog.new();
 	OpenFileDialog.title = "Open a DialogueNode graph";
 	OpenFileDialog.size = Vector2i(800, 400);
@@ -109,7 +80,6 @@ func on_plugin_start():
 	add_child(SaveFileDialog);
 
 
-
 func _set_root_node(node):
 	if(root_node != null) :
 		push_warning("Root node already set - [%s]" % [root_node]);
@@ -119,6 +89,14 @@ func _set_root_node(node):
 
 
 func new_dialogue_graph():
+	right_click_menu.hide();
+	var popup := FileMenu.get_popup();
+	if(!popup.id_pressed.is_connected(_on_file_menu_opened)):
+		popup.id_pressed.connect(_on_file_menu_opened);
+	for i in popup.item_count:
+		file_menu_items[i] = popup.get_item_text(i);
+	print_debug("file_menu_items=%s" % [file_menu_items]);
+	
 	node_dict.clear();
 	nodes_to_delete.clear();
 	selected_nodes.clear();
@@ -139,7 +117,6 @@ func graph_to_json(indent := ""):
 #	print_debug("Graph %s, %s" % [Graph, JSON.stringify(connection_dict(), "\t", false)]);
 	var graph := {
 		"connections": Graph.get_connection_list(),
-#		"connections": connection_dict(),
 		"root_node": root_node.to_dict(),
 		"nodes": get_graph_node_dicts()
 	};
@@ -158,7 +135,7 @@ func from_json(text : String):
 	var data = json.data;
 	if(typeof(data) != TYPE_DICTIONARY):
 		push_error("Incoming file must be a dictionary, was '%s'" % [typeof(data)]);
-		return;
+		return; 
 	
 #	print_debug("dialogue(%s)" % JSON.stringify(data, "\t", false));
 	return data as Dictionary;
@@ -336,15 +313,6 @@ func _on_graph_popup_request(position):
 	right_click_menu.show();
 
 
-## Add new node from menu
-#func _on_new_node_pressed():
-#	print_debug("_on_new_node_pressed - %s" % [right_click_menu.position]);
-#	# Add scroll offset and apply zoom value to position
-#	add_new_node((right_click_menu.position + Vector2i(Graph.scroll_offset)) / Graph.zoom);
-#	right_click_menu_open = false;
-#	right_click_menu.hide();
-
-
 func _on_right_click_menu_gui_input(event):
 	if(event is InputEventMouseButton):
 		if(event.is_pressed()):
@@ -355,17 +323,6 @@ func _on_graph_gui_input(event):
 	pass;
 #	if(event is InputEventMouseButton):
 #		if(event.is_pressed() && event.button_index == MOUSE_BUTTON_LEFT):
-##			print_debug("own left click %s, %s" % [event, right_click_menu_open]);
-#			if(right_click_menu_open):
-#				right_click_menu_open = false;
-#				right_click_menu.hide();
-#		if(event.is_pressed() && event.button_index == MOUSE_BUTTON_RIGHT):
-##			print_debug("own right click %s, %s" % [event, right_click_menu_open]);
-#			if(!right_click_menu_open):
-#				right_click_menu_open = true;
-#			else:
-#				right_click_menu_open = false;
-#				right_click_menu.hide();
 
 
 func _on_graph_delete_nodes_request(nodes):
@@ -405,7 +362,7 @@ func _on_delete_confirmation_dialog_canceled():
 
 func _on_graph_node_selected(node):
 	selected_nodes[node] = true;
-#	print_debug("Selected '%s' - %s" % [node.name, selected_nodes]);
+	print_debug("Selected '%s' - %s" % [node.name, selected_nodes]);
 
 
 func _on_graph_node_deselected(node):
@@ -427,9 +384,17 @@ func _on_graph_copy_nodes_request():
 # TODO: take node.to_dict() array and instantiate new node from dict
 func _on_graph_paste_nodes_request():
 	print_debug("graph paste request: trying to paste nodes - %s" % [to_copy]);
+	
+	for node in selected_nodes.keys():
+		node.selected = false;
+		node.node_deselected.emit();
+		selected_nodes.erase(node);
+		
 	for dict in to_copy:
 		var node := node_from_dict(dict);
-		node.position_offset = Vector2(node.position_offset.x + 20, node.position_offset.y + 20);
+		node.position_offset = Vector2(node.position_offset.x + Graph.snap_distance, node.position_offset.y + Graph.snap_distance);
+		node.selected = true;
+		node.node_selected.emit();
 
 
 func _on_graph_duplicate_nodes_request():

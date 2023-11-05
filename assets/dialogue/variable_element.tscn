@@ -1,0 +1,61 @@
+[gd_scene load_steps=2 format=3 uid="uid://dttyij5w5h0nc"]
+
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/VariableElement.gd" id="1_phu2d"]
+
+[node name="VariableElement" type="HBoxContainer" node_paths=PackedStringArray("variable_name", "type_button", "value_container", "string_value", "int_value", "float_value", "bool_value")]
+offset_right = 388.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+script = ExtResource("1_phu2d")
+variable_name = NodePath("Variable")
+type_button = NodePath("MenuButton")
+value_container = NodePath("ValueContainer")
+string_value = NodePath("ValueContainer/StringValue")
+int_value = NodePath("ValueContainer/IntValue")
+float_value = NodePath("ValueContainer/FloatValue")
+bool_value = NodePath("ValueContainer/BoolValue")
+
+[node name="MenuButton" type="OptionButton" parent="."]
+layout_mode = 2
+item_count = 4
+selected = 0
+popup/item_0/text = "String"
+popup/item_0/id = 0
+popup/item_1/text = "Int"
+popup/item_1/id = 1
+popup/item_2/text = "Float"
+popup/item_2/id = 2
+popup/item_3/text = "Bool"
+popup/item_3/id = 3
+
+[node name="Variable" type="LineEdit" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "<variable_name>"
+alignment = 1
+
+[node name="ValueContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StringValue" type="LineEdit" parent="ValueContainer"]
+visible = false
+layout_mode = 2
+placeholder_text = "text"
+
+[node name="IntValue" type="SpinBox" parent="ValueContainer"]
+visible = false
+layout_mode = 2
+min_value = -2.14748e+09
+max_value = 2.14748e+09
+rounded = true
+
+[node name="FloatValue" type="SpinBox" parent="ValueContainer"]
+visible = false
+layout_mode = 2
+
+[node name="BoolValue" type="CheckBox" parent="ValueContainer"]
+visible = false
+layout_mode = 2
+
+[connection signal="item_selected" from="MenuButton" to="." method="_on_menu_button_item_selected"]

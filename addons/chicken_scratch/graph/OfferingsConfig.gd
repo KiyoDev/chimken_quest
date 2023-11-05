@@ -1,5 +1,5 @@
 @tool
-class_name OfferConfig extends VBoxContainer
+class_name OfferingsConfig extends VBoxContainer
 
 
 @export var Offerings : VBoxContainer;
@@ -10,8 +10,8 @@ func set_item_count(value : int):
 	ItemCount.value = value;
 
 
-func get_offers() -> Array[OfferElement]:
-	var offerings : Array[OfferElement] = [];
+func get_offers() -> Array[OfferingElement]:
+	var offerings : Array[OfferingElement] = [];
 	
 	for offering in Offerings.get_children():
 		offerings.append(offering);

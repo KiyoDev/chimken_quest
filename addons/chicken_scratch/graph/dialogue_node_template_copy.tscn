@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://caw8cj6fn0ysv"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueNodeTemplate.gd" id="1_56jig"]
-[ext_resource type="Script" path="res://addons/chicken_scratch/graph/OfferConfig.gd" id="2_73g34"]
-[ext_resource type="PackedScene" uid="uid://2878ebeahf7g" path="res://addons/chicken_scratch/graph/offer_element.tscn" id="3_cu8bl"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/OfferingsConfig.gd" id="2_73g34"]
+[ext_resource type="PackedScene" uid="uid://2878ebeahf7g" path="res://addons/chicken_scratch/graph/offering_element.tscn" id="3_cu8bl"]
 [ext_resource type="PackedScene" uid="uid://nhonh44age0u" path="res://addons/chicken_scratch/graph/offering_fail.tscn" id="4_4b34w"]
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/Slotsconfig.gd" id="5_a61wb"]
 [ext_resource type="PackedScene" uid="uid://dv8pk15nx1s0w" path="res://addons/chicken_scratch/graph/response_element.tscn" id="6_tjy3m"]

@@ -1,5 +1,5 @@
 @tool
-class_name OfferElement extends VBoxContainer
+class_name OfferingElement extends VBoxContainer
 
 
 @onready var ItemName : LineEdit = $VBoxContainer/ItemName;
