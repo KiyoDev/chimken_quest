@@ -2,10 +2,17 @@
 class_name OfferingElement extends VBoxContainer
 
 
-@onready var ItemName : LineEdit = $VBoxContainer/ItemName;
-@onready var ItemType : LineEdit = $VBoxContainer/ItemType;
-@onready var Quantity : SpinBox = $HBoxContainer/Quanitity;
+signal delete_pressed(offering : OfferingElement);
+
+
+@export var ItemName : LineEdit;
+@export var ItemType : LineEdit;
+@export var Quantity : SpinBox;
 
 
 func _ready():
 	pass;
+
+
+func _on_delete_pressed():
+	delete_pressed.emit(self);

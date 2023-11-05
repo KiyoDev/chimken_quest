@@ -23,28 +23,21 @@ enum Type {
 @export var Text : TextEdit;
 @export var Hidden : Control;
 
+@export var OfferingsConfig : PackedScene;
+@export var OfferingElement : PackedScene;
+@export var OfferingFail : PackedScene;
+@export var ResponsesConfig : PackedScene;
+@export var ResponseElement : PackedScene;
 
-#@export var TypeOptions : OptionButton;
-#@export var Speaker : LineEdit;
-#@export var Text : TextEdit;
-#@export var Hidden : Control;
+@export var type := Type.Dialogue;
+@export var dialogue : DialogueBase;
 
 var offerings_config : OfferingsConfig;
 var item_offerings : VBoxContainer;
-var offering_element : OfferingElement;
 var offering_fail : HBoxContainer;
 var responses_config : ResponsesConfig;
 
 
-@export var template : PackedScene;
-## Item name from element can be used by front end dialogue manager to grab items it needs
-#@export var offering_element : PackedScene; 
-@export var response_element : PackedScene;
-
-
-@export var type := Type.Dialogue;
-	
-@export var dialogue : DialogueBase;
 
 
 var curr_resp_slots := 1;
@@ -57,35 +50,16 @@ func _init():
 	print_debug("init dialogue node");
 
 
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	print_debug("ready");
+	clean();
+
 
 func _exit_tree():
 	print_debug("'%s' exiting tree..." % [name]);
 	for child in Hidden.get_children():
 		child.reparent(self);
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	print_debug("ready");
-#	type_changed.connect(_on_type_changed);
-#	if(dialogue == null):
-#		dialogue = Dialogue.new();
-#	else:
-#		Speaker.text = dialogue.speaker;
-#		Text.text = dialogue.text;
-	
-	# Set type options to Type enum values
-	
-#	TypeOptions.clear();
-#	for type in Type.keys():
-#		TypeOptions.add_item(type, Type[type]);
-#	type = Type.Dialogue;
-#
-#	response_elements.append(get_child(responses_config.get_index() + 1));
-	
-#	hide_offer_slots();
-#	hide_response_slots();
-#	update_node_options();
 
 
 func set_type(value):
@@ -113,29 +87,19 @@ func set_dialogue(text : String):
 	Text.text = text;
 
 
-func clone_from_template() -> DialogueNode:
-	print_debug("cloning from template");
-	var tmp : DialogueNodeTemplate = template.instantiate();
+func clean() -> DialogueNode:
 	curr_resp_slots = 1;
 	curr_item_count = 1;
 	
-	var off_cfg : OfferingsConfig = tmp.OfferingsConfig;
-	off_cfg.reparent(self);
-	offerings_config = off_cfg;
-	item_offerings = off_cfg.Offerings;
-	offering_element = off_cfg.Offerings.get_child(0);
+	offerings_config = OfferingsConfig.instantiate();
+	offering_fail = OfferingFail.instantiate();
+	responses_config = ResponsesConfig.instantiate();
 	
-	var off_fail = tmp.OfferingFail;
-	off_fail.reparent(self);
-	offering_fail = off_fail;
-	
-	var slots_cfg : ResponsesConfig = tmp.ResponsesConfig;
-	slots_cfg.reparent(self);
-	responses_config = slots_cfg;
-	
-	var resp : ResponseElement = response_element.instantiate();
-	add_child(resp);
-	resp.delete_pressed.connect(_on_delete_response, CONNECT_PERSIST);
+	add_child(offerings_config);
+	add_item_offering();
+	add_child(offering_fail);
+	add_child(responses_config);
+	add_response();
 	
 	on_create();
 	
@@ -151,12 +115,8 @@ func on_create():
 	
 	response_elements.append(get_child(responses_config.get_index() + 1));
 	
-	offerings_config.ItemCount.value_changed.connect(_on_item_count_value_changed, CONNECT_PERSIST);
-#	responses_config.SlotCount.value_changed.connect(_on_slot_count_value_changed, CONNECT_PERSIST);
+	offerings_config.add_offering_button.pressed.connect(_on_add_offering_pressed, CONNECT_PERSIST);
 	responses_config.add_response.pressed.connect(_on_add_response_pressed, CONNECT_PERSIST);
-#	responses_config.connect_to_value_changed(_on_slot_count_value_changed);
-	print_debug("init offers - %s" % [offerings_config.ItemCount.value_changed.get_connections()]);
-	print_debug("init responses - %s" % [responses_config.SlotCount.value_changed.get_connections()]);
 	
 	# enable all slots after adding children nodes
 	for i in get_child_count():
@@ -169,7 +129,7 @@ func on_create():
 
 
 static func new_from_dict(scn : PackedScene, dict : Dictionary, graph : GraphEdit) -> DialogueNode:
-	var node : DialogueNode = scn.instantiate().clone_from_template();
+	var node : DialogueNode = scn.instantiate().clean();
 	node.name = dict.name.replace("@", "_");
 	graph.add_child(node);
 	node.set_type(DialogueNode.Type[dict.type]);
@@ -185,19 +145,17 @@ static func new_from_dict(scn : PackedScene, dict : Dictionary, graph : GraphEdi
 		Type.Dialogue:
 			pass;
 		Type.Offering:
-			var count = dict.properties.offerings.size();
-			node.offerings_config.set_item_count(count);
 			# Update node's properties to saved properties
 			var index := 0;
 			for offering in dict.properties.offerings:
-				var off : OfferingElement = node.item_offerings.get_child(index);
+				if(index >= node.offerings_config.offering_count()):
+					node.add_item_offering();
+				var off : OfferingElement = node.offerings_config.get_offering(index);
 				off.ItemName.text = offering.item_name;
 				off.ItemType.text = offering.item_type;
 				off.Quantity.value = offering.quantity;
 				index += 1;
 		Type.Response:
-#			var count = dict.properties.responses.size();
-#			node.responses_config.set_response_count(count);
 			# Update node's properties to saved properties
 			var index := node.responses_config.get_index() + 1;
 			for response in dict.properties.responses:
@@ -234,7 +192,6 @@ func to_dict() -> Dictionary:
 	
 #	print_debug("a - %s" % [Speaker.text]);
 	
-#	dict["name"] = str(name).replace("@", "_");
 	dict["name"] = name;
 	dict["type"] = Type.keys()[type];
 	dict["speaker"] = Speaker.text;
@@ -265,7 +222,7 @@ func to_dict() -> Dictionary:
 				dict["properties"]["responses"].append(response);
 #			print_debug("responses - %s" % [get_responses()]);
 			pass;
-#	return "{\"name\":\"%s\"}" % [];
+
 	dict["metadata"] = {
 		"position": {"x": position_offset.x, "y": position_offset.y},
 		"size": {"x": size.x, "y": size.y},
@@ -287,7 +244,6 @@ func update_node_options():
 		Type.Dialogue:
 			set_slot_enabled_right(0, true);
 		Type.Offering:
-#			set_slot_enabled_right(0, false);
 			offerings_config.reparent(self);
 			offering_fail.reparent(self);
 			offerings_config.show();
@@ -299,26 +255,16 @@ func update_node_options():
 			responses_config.reparent(self);
 			responses_config.show();
 			set_slot_enabled_right(responses_config.get_index(), false); # config index = first response slot
-#			for index in range(responses_config.get_index() + 1, get_child_count()):
-			# TODO: GraphNode slot count changes depending on visible children
-#			for index in range(responses_config.get_index() + 1, get_child_count()):
 			print_debug("switching to  resp - [%s, %s]" % [get_connection_output_count(), response_elements]);
-#			for index in range(Hidden.get_child_count() - 1, -1, -1):
 			var index := 0;
 			for child in response_elements:
-#				var child := Hidden.get_child(index);
-#				if(!(child is ResponseElement)): continue;
 				child.reparent(self);
 				child.show();
 				set_slot_enabled_right(index + responses_config.get_index() + 1, true);
-#				set_slot_enabled_right(index - 2, true); # TODO: depends on if offer nodes are showing or not
 				print_debug("resp - child[%s]=%s" % [index, child]);
 #	print_debug("slo - count=%s, curr=%s" % [get_connection_output_count(), curr_resp_slots]);
 	reset_size();
-	
-	
-# fixed: response slot connections keep showing up below their actual spots
-# - hidden controls before a node will mess with the slot position
+
 
 func hide_previous_options(type : Type):
 	match(type):
@@ -329,7 +275,7 @@ func hide_previous_options(type : Type):
 			hide_offer_slots();
 		Type.Response:
 			hide_response_slots();
-			
+
 
 func hide_offer_slots():
 	if(!offerings_config.visible || !offering_fail.visible): return;
@@ -363,64 +309,30 @@ func add_response():
 	curr_resp_slots += 1;
 #	print_debug("5 - %s=%s" % [curr_last_index + i, is_slot_enabled_right(curr_last_index + i)]);
 #	print_debug("value > curr [count=%s, i=%s, last=%s, slot_config=%s, rsp=%s]" % [get_child_count(), i, curr_last_index, responses_config.get_index(), response_elements]);
-	var new_resp = response_element.instantiate();
+	var new_resp = ResponseElement.instantiate();
 	response_elements.append(new_resp);
 	new_resp.delete_pressed.connect(_on_delete_response, CONNECT_PERSIST);
 	add_child(new_resp);
 	set_slot_enabled_right(curr_resp_slots + responses_config.get_index() + 1, true);
 
 
-func delete_response(node : Node):
-	slots_removed.emit(self, node.get_index() - 2);
-	remove_child(node);
-	response_elements.erase(node);
-#	response_elements.pop_back(); # -(text.index + config.index)
+func delete_response(response : ResponseElement):
+	slots_removed.emit(self, response.get_index() - 2);
+	remove_child(response);
+	response_elements.erase(response);
 	curr_resp_slots -= 1;
 
 
-func update_response_slots(value):
-	print_debug("v=%s, c=%s, %s" % [value, curr_resp_slots, responses_config.get_index()]);
-	if(value > curr_resp_slots):
-		# ignore base ele and slot config ele
-		var curr_last_index := curr_resp_slots + responses_config.get_index() + 1;
-#		for i in value - curr_resp_slots:
-		for i in range(curr_last_index, value + responses_config.get_index() + 1):
-			print_debug("5 - %s=%s" % [curr_last_index + i, is_slot_enabled_right(curr_last_index + i)]);
-			print_debug("value > curr [count=%s, i=%s, last=%s, slot_config=%s, rsp=%s]" % [get_child_count(), i, curr_last_index, responses_config.get_index(), response_elements]);
-			var new_resp = response_element.instantiate();
-			response_elements.append(new_resp);
-			add_child(new_resp);
-			set_slot_enabled_right(i, true);
-#			set_slot_enabled_right(curr_last_index + i, true);
-	elif(value < curr_resp_slots):
-		for i in range(get_child_count() - 1, responses_config.get_index() + value, -1):
-			print_debug("value < curr [%s, %s]" % [get_child_count(), i]);
-			slots_removed.emit(self, i - 2);
-			remove_child(get_child(i));
-			response_elements.pop_back(); # -(text.index + config.index)
-	curr_resp_slots = value;
-	print_debug("slot count = %s, %s" % [value, response_elements]);
+func add_item_offering():
+	curr_item_count += 1;
+	var new_offering := OfferingElement.instantiate();
+	new_offering.delete_pressed.connect(_on_delete_offering, CONNECT_PERSIST);
+	offerings_config.add_offering(new_offering);
 
 
-func update_item_count(value):
-	print_debug("v=%s, c=%s" % [value, curr_item_count]);
-	if(value > curr_item_count):
-		for i in value - curr_item_count:
-			var new_offer = offering_element.duplicate(0b0111);
-			print_debug("new offer - %s" % [new_offer]);
-#			item_offerings.append(new_offer);
-			item_offerings.add_child(new_offer);
-	elif(value < curr_item_count):
-		for i in range(curr_item_count - 1, value - 1, -1):
-			print_debug("value < curr [%s, %s]" % [get_child_count(), i]);
-			item_offerings.remove_child(item_offerings.get_child(i));
-	curr_item_count = value;
-	print_debug("curr_item_count count = %s" % [curr_item_count]);
-
-
-func slot_node_index(slot : int) -> int:
-	# -1 since hiding elements changes slot indices
-	return responses_config.get_index() + slot;
+func delete_item_offering(offering : OfferingElement):
+	curr_item_count -= 1;
+	offerings_config.remove_offering(offering);
 
 
 func empty() -> DialogueNode:
@@ -485,9 +397,6 @@ func _on_dragged(from, to):
 func _on_type_options_item_selected(index):
 #	var key = Type.keys()[index];
 #	print_debug("on type option - %s" % [Type.get(key)]);
-#	type = Type.get(key);
-	# TODO: hide previous options
-#	type_changed.emit(index);
 	
 	print_debug("type change - %s->%s" % [Type.keys()[type], Type.keys()[index]]);
 	hide_previous_options(type);
@@ -499,12 +408,6 @@ func _on_type_options_item_selected(index):
 	reset_size();
 
 
-func _on_slot_count_value_changed(value):
-#	print_debug("on slot count change");
-	update_response_slots(value);
-	reset_size();
-
-
 func _on_button_up():
 	print_debug("button up");
 
@@ -513,20 +416,25 @@ func _on_button_down():
 	print_debug("button down");
 
 
+func _on_add_offering_pressed():
+	print_debug("on add offering");
+	add_item_offering();
+	reset_size();
+
+
+func _on_delete_offering(offering : OfferingElement):
+	print_debug("on delete offering");
+	delete_item_offering(offering);
+	reset_size();
+
+
 func _on_add_response_pressed():
 	print_debug("on add response");
 	add_response();
 	reset_size();
 	
 	
-func _on_delete_response(node : Node):
-	print_debug("on delete response - %s" % [node]);
-	delete_response(node);
+func _on_delete_response(response : ResponseElement):
+	print_debug("on delete response - %s" % [response]);
+	delete_response(response);
 	reset_size();
-
-
-func _on_item_count_value_changed(value):
-#	print_debug("on item count change");
-	update_item_count(value);
-	reset_size();
-

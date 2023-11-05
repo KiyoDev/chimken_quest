@@ -1,11 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://fwjoo44qkksu"]
+[gd_scene load_steps=2 format=3 uid="uid://ih3yfqb8gnxb"]
 
-[ext_resource type="Script" path="res://addons/chicken_scratch/graph/VariableElement.gd" id="1_eelkj"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/VariableCondition.gd" id="1_18o8g"]
 
-[node name="VariabelElement" type="HBoxContainer" node_paths=PackedStringArray("type_menu", "op_menu", "value_container", "string_value", "int_value", "float_value", "bool_value")]
+[node name="VariableCondition" type="HBoxContainer" node_paths=PackedStringArray("type_menu", "op_menu", "value_container", "string_value", "int_value", "float_value", "bool_value")]
 offset_right = 306.0
 offset_bottom = 40.0
-script = ExtResource("1_eelkj")
+script = ExtResource("1_18o8g")
 type_menu = NodePath("TypeMenu")
 op_menu = NodePath("OpMenu")
 value_container = NodePath("ValueContainer")

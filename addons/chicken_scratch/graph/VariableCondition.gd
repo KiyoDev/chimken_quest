@@ -1,5 +1,5 @@
 @tool
-class_name VariabelElement extends HBoxContainer
+class_name VariableCondition extends HBoxContainer
 
 #	var variable_match = RegEx.new()
 #	variable_match.compile("\\${\\w+}");

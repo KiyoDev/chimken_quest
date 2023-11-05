@@ -163,8 +163,7 @@ func get_graph_node_dicts() ->  Array[Dictionary]:
 
 
 func add_new_node(position := Vector2(0, 0)) -> DialogueNode:
-	var new_node : DialogueNode = dialogue_node.instantiate().clone_from_template();
-#	var new_node : DialogueNode = dialogue_node.instantiate().duplicate(0b0111).empty();
+	var new_node : DialogueNode = dialogue_node.instantiate();
 #	print_debug("asf %s" % [str(new_node.name).replace("@", "_")]);
 	new_node.node_close_request.connect(_on_graph_node_close_request);
 	new_node.slots_removed.connect(_on_graph_node_slots_removed);

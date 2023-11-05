@@ -1,8 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://542bcl844gbm"]
+[gd_scene load_steps=10 format=3 uid="uid://542bcl844gbm"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueNode.gd" id="1_dm8qm"]
-[ext_resource type="PackedScene" uid="uid://qxsqh32rr507" path="res://addons/chicken_scratch/graph/dialogue_node_template.tscn" id="2_1q038"]
+[ext_resource type="PackedScene" uid="uid://j4i1b4cdlcrs" path="res://addons/chicken_scratch/graph/offerings_config.tscn" id="2_gb7sj"]
+[ext_resource type="PackedScene" uid="uid://2878ebeahf7g" path="res://addons/chicken_scratch/graph/offering_element.tscn" id="3_8bo6u"]
+[ext_resource type="PackedScene" uid="uid://nhonh44age0u" path="res://addons/chicken_scratch/graph/offering_fail.tscn" id="4_krwmt"]
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/SpeakerEdit.gd" id="5_35nv3"]
+[ext_resource type="PackedScene" uid="uid://r7ibrepvtebn" path="res://addons/chicken_scratch/graph/responses_config.tscn" id="5_aiqi7"]
 [ext_resource type="PackedScene" uid="uid://dv8pk15nx1s0w" path="res://addons/chicken_scratch/graph/response_element.tscn" id="5_dsjvb"]
 [ext_resource type="Script" path="res://addons/chicken_scratch/Dialogue.gd" id="7_607fp"]
 
@@ -34,8 +37,11 @@ TypeOptions = NodePath("BaseElements/HBoxContainer/TypeOptions")
 Speaker = NodePath("BaseElements/Speaker")
 Text = NodePath("BaseElements/ScrollContainer/Dialogue")
 Hidden = NodePath("BaseElements/Hidden")
-template = ExtResource("2_1q038")
-response_element = ExtResource("5_dsjvb")
+OfferingsConfig = ExtResource("2_gb7sj")
+OfferingElement = ExtResource("3_8bo6u")
+OfferingFail = ExtResource("4_krwmt")
+ResponsesConfig = ExtResource("5_aiqi7")
+ResponseElement = ExtResource("5_dsjvb")
 dialogue = SubResource("Resource_8015f")
 
 [node name="BaseElements" type="VBoxContainer" parent="."]
