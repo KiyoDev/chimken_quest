@@ -231,14 +231,6 @@ func to_dict() -> Dictionary:
 	return dict;
 
 
-func to_string_pretty() -> String:
-	return JSON.stringify(to_dict(), "\t", false);
-
-
-func _to_string():
-	return JSON.stringify(to_dict(), "", false);
-
-
 func update_node_options():
 	match(type):
 		Type.Dialogue:
@@ -311,7 +303,7 @@ func add_response():
 #	print_debug("value > curr [count=%s, i=%s, last=%s, slot_config=%s, rsp=%s]" % [get_child_count(), i, curr_last_index, responses_config.get_index(), response_elements]);
 	var new_resp = ResponseElement.instantiate();
 	response_elements.append(new_resp);
-	new_resp.delete_pressed.connect(_on_delete_response, CONNECT_PERSIST);
+	new_resp.delete_requested.connect(_on_delete_response, CONNECT_PERSIST);
 	add_child(new_resp);
 	set_slot_enabled_right(curr_resp_slots + responses_config.get_index() + 1, true);
 
@@ -326,7 +318,7 @@ func delete_response(response : ResponseElement):
 func add_item_offering():
 	curr_item_count += 1;
 	var new_offering := OfferingElement.instantiate();
-	new_offering.delete_pressed.connect(_on_delete_offering, CONNECT_PERSIST);
+	new_offering.delete_requested.connect(_on_delete_offering, CONNECT_PERSIST);
 	offerings_config.add_offering(new_offering);
 
 
@@ -358,10 +350,12 @@ func close_node():
 	queue_free();
 
 
-func _clone(flags := 0b0111):
-	var node := super.duplicate(flags);
-	node.dialogue = dialogue.duplicate();
-	return node;
+func to_string_pretty() -> String:
+	return JSON.stringify(to_dict(), "\t", false);
+
+
+func _to_string():
+	return JSON.stringify(to_dict(), "", false);
 
 
 func _on_resize_request(new_minsize):
@@ -397,7 +391,6 @@ func _on_dragged(from, to):
 func _on_type_options_item_selected(index):
 #	var key = Type.keys()[index];
 #	print_debug("on type option - %s" % [Type.get(key)]);
-	
 	print_debug("type change - %s->%s" % [Type.keys()[type], Type.keys()[index]]);
 	hide_previous_options(type);
 	reset_size();
@@ -406,14 +399,6 @@ func _on_type_options_item_selected(index):
 	TypeOptions.select(index);
 	update_node_options();
 	reset_size();
-
-
-func _on_button_up():
-	print_debug("button up");
-
-
-func _on_button_down():
-	print_debug("button down");
 
 
 func _on_add_offering_pressed():

@@ -3,13 +3,14 @@
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/OfferingElement.gd" id="1_ry0pt"]
 [ext_resource type="Texture2D" uid="uid://d28uo12v6av0s" path="res://addons/chicken_scratch/icons/trash.svg" id="2_bluii"]
 
-[node name="Offer" type="VBoxContainer" node_paths=PackedStringArray("ItemName", "ItemType", "Quantity")]
+[node name="Offer" type="VBoxContainer" node_paths=PackedStringArray("ItemName", "ItemType", "Quantity", "delete_confirmation")]
 offset_right = 155.0
 offset_bottom = 101.0
 script = ExtResource("1_ry0pt")
 ItemName = NodePath("VBoxContainer/ItemName")
 ItemType = NodePath("VBoxContainer/ItemType")
 Quantity = NodePath("HBoxContainer/Quanitity")
+delete_confirmation = NodePath("ConfirmationDialog")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -46,4 +47,10 @@ placeholder_text = "<item_type>"
 [node name="HSeparator" type="HSeparator" parent="."]
 layout_mode = 2
 
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
+initial_position = 4
+dialog_text = "Delete item offering?"
+
 [connection signal="pressed" from="HBoxContainer/Delete" to="." method="_on_delete_pressed"]
+[connection signal="canceled" from="ConfirmationDialog" to="." method="_on_confirmation_dialog_canceled"]
+[connection signal="confirmed" from="ConfirmationDialog" to="." method="_on_confirmation_dialog_confirmed"]

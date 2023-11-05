@@ -5,7 +5,7 @@
 
 [sub_resource type="SyntaxHighlighter" id="SyntaxHighlighter_mdfs5"]
 
-[node name="Response" type="VBoxContainer" node_paths=PackedStringArray("delete_button", "Text")]
+[node name="Response" type="VBoxContainer" node_paths=PackedStringArray("delete_button", "Text", "delete_confirmation")]
 custom_minimum_size = Vector2(108, 64)
 offset_right = 108.0
 offset_bottom = 64.0
@@ -14,6 +14,7 @@ size_flags_vertical = 3
 script = ExtResource("1_rsr8q")
 delete_button = NodePath("HBoxContainer/Delete")
 Text = NodePath("HBoxContainer/ScrollContainer/ResponseText")
+delete_confirmation = NodePath("ConfirmationDialog")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -42,4 +43,10 @@ syntax_highlighter = SubResource("SyntaxHighlighter_mdfs5")
 [node name="HSeparator" type="HSeparator" parent="."]
 layout_mode = 2
 
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
+initial_position = 4
+dialog_text = "Delete response?"
+
 [connection signal="pressed" from="HBoxContainer/Delete" to="." method="_on_delete_pressed"]
+[connection signal="canceled" from="ConfirmationDialog" to="." method="_on_confirmation_dialog_canceled"]
+[connection signal="confirmed" from="ConfirmationDialog" to="." method="_on_confirmation_dialog_confirmed"]
