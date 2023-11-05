@@ -1,12 +1,12 @@
 [gd_scene load_steps=2 format=3 uid="uid://dttyij5w5h0nc"]
 
-[ext_resource type="Script" path="res://addons/chicken_scratch/graph/VariableElement.gd" id="1_phu2d"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/VariableValue.gd" id="1_0xd0h"]
 
-[node name="VariableElement" type="HBoxContainer" node_paths=PackedStringArray("variable_name", "type_button", "value_container", "string_value", "int_value", "float_value", "bool_value")]
+[node name="VariableValue" type="HBoxContainer" node_paths=PackedStringArray("variable_name", "type_button", "value_container", "string_value", "int_value", "float_value", "bool_value")]
 offset_right = 388.0
 offset_bottom = 40.0
 size_flags_horizontal = 3
-script = ExtResource("1_phu2d")
+script = ExtResource("1_0xd0h")
 variable_name = NodePath("Variable")
 type_button = NodePath("MenuButton")
 value_container = NodePath("ValueContainer")

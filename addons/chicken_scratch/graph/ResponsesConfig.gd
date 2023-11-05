@@ -1,8 +1,9 @@
 @tool
-class_name ResponseConfig extends VBoxContainer
+class_name ResponsesConfig extends VBoxContainer
 
 
 @export var SlotCount : SpinBox;
+@export var add_response : Button;
 
 
 func set_response_count(value : int):

@@ -32,7 +32,6 @@ window/size/viewport_width=1600
 window/size/viewport_height=900
 window/size/resizable=false
 window/stretch/mode="viewport"
-window/stretch/scale=4.0
 
 [editor_plugins]
 

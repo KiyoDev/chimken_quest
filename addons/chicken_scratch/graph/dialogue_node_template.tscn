@@ -4,10 +4,10 @@
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/OfferingsConfig.gd" id="2_hc8xi"]
 [ext_resource type="PackedScene" uid="uid://nhonh44age0u" path="res://addons/chicken_scratch/graph/offering_fail.tscn" id="3_a73rs"]
 [ext_resource type="PackedScene" uid="uid://2878ebeahf7g" path="res://addons/chicken_scratch/graph/offering_element.tscn" id="4_6kocs"]
-[ext_resource type="Script" path="res://addons/chicken_scratch/graph/SlotsConfig.gd" id="5_4nfum"]
+[ext_resource type="PackedScene" uid="uid://r7ibrepvtebn" path="res://addons/chicken_scratch/graph/responses_config.tscn" id="5_0gn8h"]
 [ext_resource type="PackedScene" uid="uid://dv8pk15nx1s0w" path="res://addons/chicken_scratch/graph/response_element.tscn" id="6_6wwvp"]
 
-[node name="DialogueNodeTemplate" type="Control" node_paths=PackedStringArray("OfferingsConfig", "OfferingElement", "OfferingFail", "ResponseConfig", "Response")]
+[node name="DialogueNodeTemplate" type="Control" node_paths=PackedStringArray("OfferingsConfig", "OfferingElement", "OfferingFail", "ResponsesConfig", "Response")]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -16,7 +16,7 @@ script = ExtResource("1_yf58m")
 OfferingsConfig = NodePath("OfferingsConfig")
 OfferingElement = NodePath("Offering")
 OfferingFail = NodePath("OfferingingFail")
-ResponseConfig = NodePath("ResponseConfig")
+ResponsesConfig = NodePath("ResponsesConfig")
 Response = NodePath("Response")
 
 [node name="OfferingsConfig" type="VBoxContainer" parent="." node_paths=PackedStringArray("Offerings", "ItemCount")]
@@ -51,29 +51,8 @@ layout_mode = 0
 [node name="Offering" parent="." instance=ExtResource("4_6kocs")]
 layout_mode = 0
 
-[node name="ResponseConfig" type="VBoxContainer" parent="." node_paths=PackedStringArray("SlotCount")]
+[node name="ResponsesConfig" parent="." instance=ExtResource("5_0gn8h")]
 layout_mode = 0
-script = ExtResource("5_4nfum")
-SlotCount = NodePath("HBoxContainer/SlotCount")
-
-[node name="HSeparator" type="HSeparator" parent="ResponseConfig"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="ResponseConfig"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="ResponseConfig/HBoxContainer"]
-layout_mode = 2
-text = "Slots"
-
-[node name="SlotCount" type="SpinBox" parent="ResponseConfig/HBoxContainer"]
-layout_mode = 2
-min_value = 1.0
-value = 1.0
-rounded = true
-
-[node name="Control" type="Control" parent="ResponseConfig/HBoxContainer"]
-layout_mode = 2
 
 [node name="Response" parent="." instance=ExtResource("6_6wwvp")]
 layout_mode = 0

@@ -1,8 +1,6 @@
 @tool
-class_name VariabelElement extends HBoxContainer
+class_name VariableValue extends HBoxContainer
 
-#	var variable_match = RegEx.new()
-#	variable_match.compile("\\${\\w+}");
 
 enum Type {
 	STRING,
@@ -20,35 +18,31 @@ enum Op {
 	GREATER_THAN_OR_EQUAL_TO
 }
 
-
-@export var type_menu : OptionButton;
-@export var op_menu : OptionButton;
-
+@export var variable_name : LineEdit;
+@export var type_button : OptionButton;
 @export var value_container : MarginContainer;
 @export var string_value : LineEdit;
 @export var int_value : SpinBox;
 @export var float_value : SpinBox;
 @export var bool_value : CheckBox;
 
+
 @export var type := Type.STRING;
 
 
-func _read():
-	for child in value_container.get_children():
-		child.hide();
-	match(type):
+func value():
+	match(type_button.selected):
 		Type.STRING:
-			string_value.show();
+			return string_value.text;
 		Type.INT:
-			int_value.show();
+			return int_value.value;
 		Type.FLOAT:
-			float_value.show();
+			return float_value.value;
 		Type.BOOL:
-			bool_value.show();
+			return bool_value.button_pressed;
 
 
 func _on_menu_button_item_selected(index):
-	print_debug("index[%s]=%s" % [index, Type.keys()[index]]);
 	type = index;
 	for child in value_container.get_children():
 		child.hide();

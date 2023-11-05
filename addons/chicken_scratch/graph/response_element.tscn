@@ -1,24 +1,45 @@
-[gd_scene load_steps=2 format=3 uid="uid://dv8pk15nx1s0w"]
+[gd_scene load_steps=4 format=3 uid="uid://dv8pk15nx1s0w"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/ResponseElement.gd" id="1_rsr8q"]
+[ext_resource type="Texture2D" uid="uid://d28uo12v6av0s" path="res://addons/chicken_scratch/icons/trash.svg" id="2_15tr0"]
 
-[node name="Response" type="VBoxContainer"]
+[sub_resource type="SyntaxHighlighter" id="SyntaxHighlighter_mdfs5"]
+
+[node name="Response" type="VBoxContainer" node_paths=PackedStringArray("delete_button", "Text")]
 custom_minimum_size = Vector2(108, 64)
 offset_right = 108.0
 offset_bottom = 64.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_rsr8q")
+delete_button = NodePath("HBoxContainer/Delete")
+Text = NodePath("HBoxContainer/ScrollContainer/ResponseText")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Delete" type="Button" parent="HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+icon = ExtResource("2_15tr0")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 horizontal_scroll_mode = 3
 
-[node name="ResponseText" type="TextEdit" parent="ScrollContainer"]
+[node name="ResponseText" type="TextEdit" parent="HBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "Placeholder"
 wrap_mode = 1
+syntax_highlighter = SubResource("SyntaxHighlighter_mdfs5")
 
 [node name="HSeparator" type="HSeparator" parent="."]
 layout_mode = 2
+
+[connection signal="pressed" from="HBoxContainer/Delete" to="." method="_on_delete_pressed"]
