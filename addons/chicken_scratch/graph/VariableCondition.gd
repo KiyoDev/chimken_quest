@@ -47,6 +47,18 @@ func _read():
 			bool_value.show();
 
 
+func value():
+	match(type_menu.selected):
+		Type.STRING:
+			return string_value.text;
+		Type.INT:
+			return int_value.value;
+		Type.FLOAT:
+			return float_value.value;
+		Type.BOOL:
+			return bool_value.button_pressed;
+
+
 func _on_menu_button_item_selected(index):
 	print_debug("index[%s]=%s" % [index, Type.keys()[index]]);
 	type = index;

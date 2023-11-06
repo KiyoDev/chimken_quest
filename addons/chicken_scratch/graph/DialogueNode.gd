@@ -30,7 +30,7 @@ enum Type {
 @export var ResponseElement : PackedScene;
 
 @export var type := Type.Dialogue;
-@export var dialogue : DialogueBase;
+#@export var dialogue : DialogueBase;
 
 var offerings_config : OfferingsConfig;
 var item_offerings : VBoxContainer;
@@ -88,6 +88,7 @@ func set_dialogue(text : String):
 
 
 func clean() -> DialogueNode:
+	Text.syntax_highlighter = DialogueEditHighlighter.new();
 	curr_resp_slots = 1;
 	curr_item_count = 1;
 	

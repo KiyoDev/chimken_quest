@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://542bcl844gbm"]
+[gd_scene load_steps=10 format=3 uid="uid://542bcl844gbm"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueNode.gd" id="1_dm8qm"]
 [ext_resource type="PackedScene" uid="uid://j4i1b4cdlcrs" path="res://addons/chicken_scratch/graph/offerings_config.tscn" id="2_gb7sj"]
@@ -7,23 +7,20 @@
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/SpeakerEdit.gd" id="5_35nv3"]
 [ext_resource type="PackedScene" uid="uid://r7ibrepvtebn" path="res://addons/chicken_scratch/graph/responses_config.tscn" id="5_aiqi7"]
 [ext_resource type="PackedScene" uid="uid://dv8pk15nx1s0w" path="res://addons/chicken_scratch/graph/response_element.tscn" id="5_dsjvb"]
-[ext_resource type="Script" path="res://addons/chicken_scratch/Dialogue.gd" id="7_607fp"]
 [ext_resource type="Script" path="res://addons/chicken_scratch/DialogueEditHighlighter.gd" id="9_wtywx"]
 
-[sub_resource type="Resource" id="Resource_8015f"]
-resource_local_to_scene = true
-script = ExtResource("7_607fp")
-speaker = ""
-lines = Array[Resource("res://addons/chicken_scratch/DialogueLine.gd")]([])
-
-[sub_resource type="SyntaxHighlighter" id="SyntaxHighlighter_sx8y6"]
+[sub_resource type="CodeHighlighter" id="CodeHighlighter_00yfy"]
+number_color = Color(0.52549, 0.827451, 0.733333, 1)
+symbol_color = Color(0.94902, 0.662745, 0.435294, 1)
 script = ExtResource("9_wtywx")
 
 [node name="GraphNode" type="GraphNode" node_paths=PackedStringArray("TypeOptions", "Speaker", "Text", "Hidden")]
 texture_filter = 1
 custom_minimum_size = Vector2(240, 0)
-offset_right = 240.0
-offset_bottom = 280.0
+offset_left = 39.0
+offset_top = 60.0
+offset_right = 279.0
+offset_bottom = 377.0
 title = "Dialogue Node"
 show_close = true
 resizable = true
@@ -46,7 +43,6 @@ OfferingElement = ExtResource("3_8bo6u")
 OfferingFail = ExtResource("4_krwmt")
 ResponsesConfig = ExtResource("5_aiqi7")
 ResponseElement = ExtResource("5_dsjvb")
-dialogue = SubResource("Resource_8015f")
 
 [node name="BaseElements" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -101,14 +97,12 @@ custom_minimum_size = Vector2(180, 100)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "${variable} a ${ asaaah{} ${asfA_Asf} ${}
-asf
-111
-p
-pass"
+text = "@ ${aaa__a_a}a1!!!${aa}
+@ @for( 0xaf2_a122 ) ${aasd}2 3_4 0b0_011aa20a
+`~!@#$%^&*(2)+-=[]\\{}|; ':\"./>?,.235aaaa1"
 placeholder_text = "Dialogue goes here... "
 wrap_mode = 1
-syntax_highlighter = SubResource("SyntaxHighlighter_sx8y6")
+syntax_highlighter = SubResource("CodeHighlighter_00yfy")
 
 [node name="Test Print" type="Button" parent="BaseElements"]
 visible = false
