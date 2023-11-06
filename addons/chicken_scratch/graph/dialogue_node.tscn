@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://542bcl844gbm"]
+[gd_scene load_steps=12 format=3 uid="uid://542bcl844gbm"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueNode.gd" id="1_dm8qm"]
 [ext_resource type="PackedScene" uid="uid://j4i1b4cdlcrs" path="res://addons/chicken_scratch/graph/offerings_config.tscn" id="2_gb7sj"]
@@ -8,12 +8,16 @@
 [ext_resource type="PackedScene" uid="uid://r7ibrepvtebn" path="res://addons/chicken_scratch/graph/responses_config.tscn" id="5_aiqi7"]
 [ext_resource type="PackedScene" uid="uid://dv8pk15nx1s0w" path="res://addons/chicken_scratch/graph/response_element.tscn" id="5_dsjvb"]
 [ext_resource type="Script" path="res://addons/chicken_scratch/Dialogue.gd" id="7_607fp"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/DialogueEditHighlighter.gd" id="9_wtywx"]
 
 [sub_resource type="Resource" id="Resource_8015f"]
 resource_local_to_scene = true
 script = ExtResource("7_607fp")
 speaker = ""
 lines = Array[Resource("res://addons/chicken_scratch/DialogueLine.gd")]([])
+
+[sub_resource type="SyntaxHighlighter" id="SyntaxHighlighter_sx8y6"]
+script = ExtResource("9_wtywx")
 
 [node name="GraphNode" type="GraphNode" node_paths=PackedStringArray("TypeOptions", "Speaker", "Text", "Hidden")]
 texture_filter = 1
@@ -97,8 +101,14 @@ custom_minimum_size = Vector2(180, 100)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-placeholder_text = "Dialogue goes here..."
+text = "${variable} a ${ asaaah{} ${asfA_Asf} ${}
+asf
+111
+p
+pass"
+placeholder_text = "Dialogue goes here... "
 wrap_mode = 1
+syntax_highlighter = SubResource("SyntaxHighlighter_sx8y6")
 
 [node name="Test Print" type="Button" parent="BaseElements"]
 visible = false
