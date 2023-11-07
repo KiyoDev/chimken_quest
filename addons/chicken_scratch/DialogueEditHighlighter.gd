@@ -3,22 +3,27 @@ class_name DialogueEditHighlighter extends CodeHighlighter
 #class_name DialogueEditHighlighter extends CodeHighlighter
 
 var variable_match : RegEx;
+var binary_match : RegEx;
+var hex_match : RegEx;
 var number_match : RegEx;
 var symbol_match : RegEx;
 var text_edit : TextEdit;
 
 var variable_color := Color("ee82ee");
+var binary_color := Color("2c5bf5");
+var hex_color := Color("6d49f2");
 
 var line_cache := {};
 var highlight_cache := {};
 
 func _init():
 	variable_match = RegEx.create_from_string("\\${[a-zA-Z_]+}");
-	number_match = RegEx.create_from_string("(0b[01_]+)|(0x([a-fA-F0-9]+)|[a-fA-F0-9_]+_[a-fA-F0-9_]+)|(([0-9]+)|[0-9]+_[0-9]+)");
+	binary_match = RegEx.create_from_string("0b([01]+_?)+");
+	hex_match = RegEx.create_from_string("0x([0-9a-fA-F]+_?)+");
+	number_match = RegEx.create_from_string("([0-9]+_?)+");
 	symbol_match = RegEx.create_from_string("[`~!@#$%^&*()+\\[\\]\\-=\\{}|;\':\",./<>?]+");
 	number_color = Color("86d3bb");
 	symbol_color = Color("f2a96f");
-
 
 func _get_line_syntax_highlighting(line_number : int):
 #	super.get_line_syntax_highlighting(line);
@@ -36,35 +41,72 @@ func _get_line_syntax_highlighting(line_number : int):
 	
 	print("line[%s]=%s" % [line_number, line]);
 	
-	var v_ranges := {};
+	var color_ranges := {};
 	
+	# variable search
 	var v_found := variable_match.search_all(line);
 	for l in v_found:
 		var start := l.get_start();
 		var end := l.get_end();
 		var str := l.get_string();
 		
-		v_ranges[start] = end;
+		color_ranges[start] = end;
 		cols[start] = {"color":variable_color};
 		if(end < line.length() - 1):
 			cols[end] = {};
 		
-		print("l - (%s, %s), %s, %s" % [start, end, str, cols]);
+#		print("l - (%s, %s), %s, %s" % [start, end, str, cols]);
 
-	print("v_ranges - %s" % [v_ranges]);
-	
+	print("color_ranges - %s" % [color_ranges]);
+	# binary number search
+	var b_found := binary_match.search_all(line);
+	for b in b_found:
+		var start := b.get_start();
+		var end := b.get_end();
+		var str := b.get_string();
+		var after_range_end := start_in_range(start, color_ranges);
+		var before_range_start := end_in_range(end, color_ranges);
+
+#		print("b - %s, %s" % [start, str]);
+		if((after_range_end == -1 && !cols.has(start)) || (cols.has(start) && cols[start].is_empty())):
+			cols[start] = {"color":binary_color};
+			if(!cols.has(end) && before_range_start == -1):
+				cols[end] = {};
+				color_ranges[start] = end;
+			elif(before_range_start > -1):
+				color_ranges[start] = before_range_start;
+				
+	# hex number search
+	var h_found := hex_match.search_all(line);
+	for h in h_found:
+		var start := h.get_start();
+		var end := h.get_end();
+		var str := h.get_string();
+		var after_range_end := start_in_range(start, color_ranges);
+		var before_range_start := end_in_range(end, color_ranges);
+
+#		print("h - %s, %s" % [start, str]);
+		if((after_range_end == -1 && !cols.has(start)) || (cols.has(start) && cols[start].is_empty())):
+			cols[start] = {"color":hex_color};
+			if(!cols.has(end) && before_range_start == -1):
+				cols[end] = {};
+				color_ranges[start] = end;
+			elif(before_range_start > -1):
+				color_ranges[start] = before_range_start;
+				
+	# number search
 	var n_found := number_match.search_all(line);
 	for n in n_found:
 		var start := n.get_start();
 		var end := n.get_end();
 		var str := n.get_string();
-		var start_in_range := in_variable_range(start, v_ranges);
-		var end_in_range := in_variable_range(end, v_ranges);
+		var after_range_end := start_in_range(start, color_ranges);
+		var before_range_start := end_in_range(end, color_ranges);
 
-		print("n - %s, %s" % [start, str]);
-		if(!start_in_range && (!cols.has(start) || cols[start].is_empty())):
+#		print("n - %s, %s" % [start, str]);
+		if((after_range_end == -1 && !cols.has(start)) || (cols.has(start) && cols[start].is_empty())):
 			cols[start] = {"color":number_color};
-			if(!cols.has(end) && !end_in_range):
+			if(!cols.has(end) && before_range_start == -1):
 				cols[end] = {};
 	
 	var s_found := symbol_match.search_all(line);
@@ -72,11 +114,11 @@ func _get_line_syntax_highlighting(line_number : int):
 		var start := s.get_start();
 		var end := s.get_end();
 		var str := s.get_string();
-		var start_in_range := in_variable_range(start, v_ranges);
-		var end_in_range := in_variable_range(end, v_ranges);
-		print("s - %s, %s" % [start, str]);
-				
-		if(!start_in_range && (!cols.has(start) || cols[start].is_empty())):
+		var start_in_range := in_variable_range(start, color_ranges);
+		var end_in_range := in_variable_range(end, color_ranges);
+#		print("s - %s, %s" % [start, str]);
+
+		if((!start_in_range && !cols.has(start)) || (cols.has(start) && cols[start].is_empty())):
 			cols[start] = {"color":symbol_color};
 			if(!cols.has(end) && !end_in_range):
 				cols[end] = {};
@@ -93,17 +135,39 @@ func _get_line_syntax_highlighting(line_number : int):
 	
 	highlight_cache[line_number] = out;
 
-	print("out %s" % [out]);
+#	print("out %s" % [out]);
 	
 	return out;
 
 
-func in_variable_range(num : int, v_ranges : Dictionary) -> bool:
+func in_variable_range(num : int, color_ranges : Dictionary) -> bool:
 	var in_range := false;
 	
-	for r in v_ranges:
-		if(r <= num && num <= v_ranges[r]):
+	for r in color_ranges:
+		if(r <= num && num <= color_ranges[r]):
 			in_range = true;
 			break;
 
 	return in_range;
+
+
+func start_in_range(start : int, color_ranges : Dictionary) -> int:
+	var index := -1;
+	
+	for r in color_ranges:
+		if(r <= start && start <= color_ranges[r]):
+			index = color_ranges[r];
+			break;
+
+	return index;
+
+
+func end_in_range(end : int, color_ranges : Dictionary) -> int:
+	var index := -1;
+	
+	for r in color_ranges:
+		if(r <= end && end <= color_ranges[r]):
+			index = r;
+			break;
+
+	return index;
