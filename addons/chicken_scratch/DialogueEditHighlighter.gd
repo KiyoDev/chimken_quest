@@ -1,6 +1,5 @@
 @tool
-class_name DialogueEditHighlighter extends CodeHighlighter
-#class_name DialogueEditHighlighter extends CodeHighlighter
+class_name DialogueEditHighlighter extends SyntaxHighlighter
 
 var variable_match : RegEx;
 var binary_match : RegEx;
@@ -9,28 +8,28 @@ var number_match : RegEx;
 var symbol_match : RegEx;
 var text_edit : TextEdit;
 
-var variable_color := Color("ee82ee");
-var binary_color := Color("2c5bf5");
-var hex_color := Color("6d49f2");
+@export var variable_color := Color("ee82ee");
+@export var binary_color := Color("2c5bf5");
+@export var hex_color := Color("6d49f2");
+@export var number_color = Color("86d3bb");
+@export var symbol_color = Color("f2a96f");
 
 var line_cache := {};
 var highlight_cache := {};
 
 func _init():
-	variable_match = RegEx.create_from_string("\\${[a-zA-Z_]+}");
+	variable_match = RegEx.create_from_string("\\${[a-zA-Z_]+[\\w]*}");
 	binary_match = RegEx.create_from_string("0b([01]+_?)+");
 	hex_match = RegEx.create_from_string("0x([0-9a-fA-F]+_?)+");
-	number_match = RegEx.create_from_string("([0-9]+_?)+");
-	symbol_match = RegEx.create_from_string("[`~!@#$%^&*()+\\[\\]\\-=\\{}|;\':\",./<>?]+");
-	number_color = Color("86d3bb");
-	symbol_color = Color("f2a96f");
+	number_match = RegEx.create_from_string("([0-9]+\\.[0-9]+)|(([0-9]+_?)+)");
+	symbol_match = RegEx.create_from_string("[`~@#$%^&*()+\\[\\]\\-=\\{}|;\':\"<>]+");
 
 func _get_line_syntax_highlighting(line_number : int):
 #	super.get_line_syntax_highlighting(line);
 	if(text_edit == null):
 		text_edit = get_text_edit();
 #	print("text edit %s" % text_edit);
-
+	
 	var cols := {};
 	var line := text_edit.get_line(line_number);
 	
@@ -39,7 +38,7 @@ func _get_line_syntax_highlighting(line_number : int):
 		
 	line_cache[line_number] = line;
 	
-	print("line[%s]=%s" % [line_number, line]);
+#	print("line[%s]=%s" % [line_number, line]);
 	
 	var color_ranges := {};
 	
@@ -57,7 +56,7 @@ func _get_line_syntax_highlighting(line_number : int):
 		
 #		print("l - (%s, %s), %s, %s" % [start, end, str, cols]);
 
-	print("color_ranges - %s" % [color_ranges]);
+#	print("color_ranges - %s" % [color_ranges]);
 	# binary number search
 	var b_found := binary_match.search_all(line);
 	for b in b_found:

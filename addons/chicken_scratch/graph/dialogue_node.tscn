@@ -9,10 +9,13 @@
 [ext_resource type="PackedScene" uid="uid://dv8pk15nx1s0w" path="res://addons/chicken_scratch/graph/response_element.tscn" id="5_dsjvb"]
 [ext_resource type="Script" path="res://addons/chicken_scratch/DialogueEditHighlighter.gd" id="9_wtywx"]
 
-[sub_resource type="CodeHighlighter" id="CodeHighlighter_txf32"]
+[sub_resource type="SyntaxHighlighter" id="SyntaxHighlighter_qc610"]
+script = ExtResource("9_wtywx")
+variable_color = Color(0.933333, 0.509804, 0.933333, 1)
+binary_color = Color(0.172549, 0.356863, 0.960784, 1)
+hex_color = Color(0.427451, 0.286275, 0.94902, 1)
 number_color = Color(0.52549, 0.827451, 0.733333, 1)
 symbol_color = Color(0.94902, 0.662745, 0.435294, 1)
-script = ExtResource("9_wtywx")
 
 [node name="GraphNode" type="GraphNode" node_paths=PackedStringArray("TypeOptions", "Speaker", "Text", "Hidden")]
 texture_filter = 1
@@ -99,7 +102,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "Dialogue goes here... "
 wrap_mode = 1
-syntax_highlighter = SubResource("CodeHighlighter_txf32")
+syntax_highlighter = SubResource("SyntaxHighlighter_qc610")
 
 [node name="Test Print" type="Button" parent="BaseElements"]
 visible = false
