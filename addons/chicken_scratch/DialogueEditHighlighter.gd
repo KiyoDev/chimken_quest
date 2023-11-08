@@ -1,6 +1,14 @@
 @tool
 class_name DialogueEditHighlighter extends SyntaxHighlighter
 
+
+const VARIABLE_PATTERN := "\\${[a-zA-Z_]+[\\w]*}";
+const BINARY_PATTERN := "0b([01]+_?)+";
+const HEX_PATTERN := "0x([0-9a-fA-F]+_?)+";
+const NUMBER_PATTERN := "([0-9]+\\.[0-9]+)|(([0-9]+_?)+)";
+const SYMBOL_PATTERN := "[`~@#$%^&*()+\\[\\]\\-=\\{}|;\':\"<>]+";
+
+
 var variable_match : RegEx;
 var binary_match : RegEx;
 var hex_match : RegEx;
@@ -18,11 +26,11 @@ var line_cache := {};
 var highlight_cache := {};
 
 func _init():
-	variable_match = RegEx.create_from_string("\\${[a-zA-Z_]+[\\w]*}");
-	binary_match = RegEx.create_from_string("0b([01]+_?)+");
-	hex_match = RegEx.create_from_string("0x([0-9a-fA-F]+_?)+");
-	number_match = RegEx.create_from_string("([0-9]+\\.[0-9]+)|(([0-9]+_?)+)");
-	symbol_match = RegEx.create_from_string("[`~@#$%^&*()+\\[\\]\\-=\\{}|;\':\"<>]+");
+	variable_match = RegEx.create_from_string(VARIABLE_PATTERN);
+	binary_match = RegEx.create_from_string(BINARY_PATTERN);
+	hex_match = RegEx.create_from_string(HEX_PATTERN);
+	number_match = RegEx.create_from_string(NUMBER_PATTERN);
+	symbol_match = RegEx.create_from_string(SYMBOL_PATTERN);
 
 func _get_line_syntax_highlighting(line_number : int):
 #	super.get_line_syntax_highlighting(line);
@@ -51,7 +59,7 @@ func _get_line_syntax_highlighting(line_number : int):
 		
 		color_ranges[start] = end;
 		cols[start] = {"color":variable_color};
-		if(end < line.length() - 1):
+		if(end < line.length()):
 			cols[end] = {};
 		
 #		print("l - (%s, %s), %s, %s" % [start, end, str, cols]);

@@ -10,12 +10,19 @@ signal slots_removed(node : DialogueNode, from_port : int);
 
 signal type_changed(type : Type);
 
+signal preview_pressed(node : DialogueNode);
+
+signal text_changed(node : DialogueNode, text : String, variables : Dictionary);
+
 
 enum Type {
 	Dialogue,
 	Offering,
 	Response
 }
+
+
+const VARIABLE_PATTERN := "\\${[a-zA-Z_]+[\\w]*}";
 
 
 @export var TypeOptions : OptionButton;
@@ -29,21 +36,23 @@ enum Type {
 @export var ResponsesConfig : PackedScene;
 @export var ResponseElement : PackedScene;
 
-@export var type := Type.Dialogue;
-#@export var dialogue : DialogueBase;
+var type := Type.Dialogue;
 
 var offerings_config : OfferingsConfig;
 var item_offerings : VBoxContainer;
 var offering_fail : HBoxContainer;
 var responses_config : ResponsesConfig;
 
-
-
-
 var curr_resp_slots := 1;
 var curr_item_count := 1;
 
 var response_elements : Array[ResponseElement] = [];
+
+# TODO: highlighted variables in TextEdit must be mapped properly in order to show correctly in dialogue boxes
+var variable_match := RegEx.create_from_string(VARIABLE_PATTERN);
+# TODO: use set of variables when populating dialogue boxes
+var dialogue_variables := {};
+
 
 
 func _init():
@@ -85,6 +94,22 @@ func set_speaker(speaker : String):
 
 func set_dialogue(text : String):
 	Text.text = text;
+
+
+func text() -> String:
+	return Text.text;
+
+
+func find_dialogue_variables():
+	var found := variable_match.search_all(Text.text);
+	
+	dialogue_variables.clear();
+	for v in found:
+		var name := v.get_string();
+		if(!dialogue_variables.has(name)):
+			dialogue_variables[name] = true;
+#	if(dialogue_variables.size())
+	print_debug("dialogue - %s, vars=%s" % [Text.text, dialogue_variables]);
 
 
 func clean() -> DialogueNode:
@@ -171,21 +196,40 @@ static func new_from_dict(scn : PackedScene, dict : Dictionary, graph : GraphEdi
 
 
 func from_dict(dict : Dictionary):
-	type = dict.type;
+	name = dict.name.replace("@", "_");
+	set_type(DialogueNode.Type[dict.type]);
 	Speaker.text = dict.speaker;
 	Text.text = dict.text;
+	size = Vector2(dict.metadata.size.x, dict.metadata.size.y);
+	var pos := Vector2(dict.metadata.position.x, dict.metadata.position.y);
+	position_offset = pos;
+	print_debug("new from dict - %s" % [dict]);
 	match(type):
 		Type.Dialogue:
 			pass;
 		Type.Offering:
+			# Update node's properties to saved properties
+			var index := 0;
 			for offering in dict.properties.offerings:
-				pass;
-			pass;
+				if(index >= offerings_config.offering_count()):
+					add_item_offering();
+				var off : OfferingElement = offerings_config.get_offering(index);
+				off.ItemName.text = offering.item_name;
+				off.ItemType.text = offering.item_type;
+				off.Quantity.value = offering.quantity;
+				index += 1;
 		Type.Response:
-			pass;
+			# Update node's properties to saved properties
+			var index := responses_config.get_index() + 1;
+			for response in dict.properties.responses:
+				if(index >= get_child_count()):
+					add_response();
+				var resp : ResponseElement = get_child(index);
+				resp.Text.text = response.text;
+				index += 1;
 		_:
 			push_error("Invalid type found in dictionary - %s" % [JSON.stringify(dict, "", false)]);
-	pass;
+	find_dialogue_variables();
 
 
 func to_dict() -> Dictionary:
@@ -374,11 +418,11 @@ func _on_close_request():
 
 func _on_speaker_text_submitted(new_text):
 	print_debug("speaker - %s" % [Speaker.text]);
-	
 
 
 func _on_dialogue_text_changed():
-	print_debug("dialogue - %s" % [Text.text]);
+	find_dialogue_variables();
+	text_changed.emit(self, Text.text, dialogue_variables);
 
 
 func _on_test_print_pressed():
@@ -424,3 +468,8 @@ func _on_delete_response(response : ResponseElement):
 	print_debug("on delete response - %s" % [response]);
 	delete_response(response);
 	reset_size();
+
+
+func _on_preview_pressed():
+	print_debug("on '%s' preview" % [name]);
+	preview_pressed.emit(self);
