@@ -1,14 +1,25 @@
-[gd_scene load_steps=2 format=3 uid="uid://cpmp4yh04cg38"]
+[gd_scene load_steps=3 format=3 uid="uid://cpmp4yh04cg38"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/ConditionElement.gd" id="1_a3vs8"]
+[ext_resource type="Texture2D" uid="uid://d28uo12v6av0s" path="res://addons/chicken_scratch/icons/trash.svg" id="2_6tp3i"]
 
-[node name="ConditionElement" type="VBoxContainer" node_paths=PackedStringArray("condition")]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="ConditionElement" type="HBoxContainer" node_paths=PackedStringArray("delete_button", "condition")]
+offset_right = 68.0
+offset_bottom = 31.0
 script = ExtResource("1_a3vs8")
+delete_button = NodePath("Delete")
 condition = NodePath("condition")
+
+[node name="Delete" type="Button" parent="."]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+icon = ExtResource("2_6tp3i")
+icon_alignment = 1
 
 [node name="condition" type="LineEdit" parent="."]
 layout_mode = 2
+size_flags_horizontal = 3
 placeholder_text = "<condition>"
 alignment = 1
+
+[connection signal="pressed" from="Delete" to="." method="_on_delete_pressed"]

@@ -38,6 +38,8 @@ static var SaveFileDialog : EditorFileDialog;
 
 # TODO: open DialogueFile from disk and populate graph (adding nodes, adding connections, etc)
 static var current_dialogue_file : DialogueFile;
+
+static var save_pretty := false;
  
 
 func _ready():
@@ -74,6 +76,7 @@ func on_plugin_start():
 	OpenFileDialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS;
 #	OpenFileDialog.transient = true;
 	OpenFileDialog.add_filter("*.dngraph", "DialogueNode Graph");
+	OpenFileDialog.add_filter("*.json", "JSON file");
 	OpenFileDialog.file_selected.connect(_on_open_file);
 	add_child(OpenFileDialog);
 	
@@ -83,6 +86,7 @@ func on_plugin_start():
 	SaveFileDialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS;
 #	SaveFileDialog.transient = true;
 	SaveFileDialog.add_filter("*.dngraph", "DialogueNode Graph");
+	SaveFileDialog.add_filter("*.json", "JSON file");
 	SaveFileDialog.file_selected.connect(_on_save_file);
 	add_child(SaveFileDialog);
 
@@ -167,8 +171,10 @@ func new_dialogue_graph():
 	
 	for child in Graph.get_children():
 		child.free();
-	root_node = root_node_scn.instantiate();
-	Graph.add_child(root_node);
+		
+	if(root_node):
+		root_node.queue_free();
+	add_root_node();
 
 
 func init_nodes_from_json(dict : Dictionary):
@@ -192,9 +198,14 @@ func init_nodes_from_json(dict : Dictionary):
 		Graph.connect_node(connection.from, connection.from_port, connection.to, connection.to_port);
 
 
-func root_from_dict(dict : Dictionary):
+func add_root_node():
 	root_node = root_node_scn.instantiate();
+	root_node.slots_removed.connect(_on_graph_node_slots_removed);
 	Graph.add_child(root_node);
+
+
+func root_from_dict(dict : Dictionary):
+	add_root_node();
 	root_node.set_from_dict(dict);
 
 
@@ -261,6 +272,13 @@ func close_preview():
 	dialogue_preview.hide();
 
 
+func disconnect_node(node : DialogueNode, from_port : int):
+	for connections in Graph.get_connection_list():
+#		print_debug("connections - %s, %s" % [connections, typeof(connections)]);
+		if(connections.from == node.name && connections.from_port == from_port):
+			Graph.disconnect_node(connections.from, connections.from_port, connections.to, connections.to_port);
+
+
 func close_node(node : DialogueNode):
 	for connections in Graph.get_connection_list():
 #		print_debug("connections - %s, %s" % [connections, typeof(connections)]);
@@ -316,9 +334,11 @@ func _on_file_menu_opened(id : int):
 		1: # Open
 			OpenFileDialog.show();
 		2: # Save
+			save_pretty = false;
 			SaveFileDialog.show();
-		3: # Save as...
-			pass;
+		3: # Save Pretty
+			save_pretty = true;
+			SaveFileDialog.show();
 
 
 func _on_open_file(path : String):
@@ -326,6 +346,10 @@ func _on_open_file(path : String):
 	var file := FileAccess.open(path, FileAccess.READ);
 	var dict = from_json(file.get_as_text());
 	print_debug("dialogue(%s)" % JSON.stringify(dict, "\t", false));
+	
+	if(!dict.has("connections") || !dict.has("root_node") || !dict.has("root_node") || !dict.has("nodes") || !(dict.connections is Array) || !(dict.nodes is Array)): 
+		push_error("Unable to load file. Invalid formatting.");
+		return;
 	
 	if(dict.has("variables") && dict.variables.size() > 0):
 		test_variables_container.show();
@@ -351,7 +375,8 @@ func _on_open_file(path : String):
 func _on_save_file(path : String):
 	print_debug("saving file '%s'" % [path]);
 	var file := FileAccess.open(path, FileAccess.WRITE);
-	file.store_string(graph_to_json());
+	file.store_string(graph_to_json("\t" if save_pretty else ""));
+	save_pretty = false;
 
 
 func _on_graph_connection_request(from_node, from_port, to_node, to_port):
@@ -381,12 +406,17 @@ func _on_graph_node_close_request(node : DialogueNode):
 
 
 ## When DailogueNode slots change
-func _on_graph_node_slots_removed(node : DialogueNode, from_port : int):
+func _on_graph_node_slots_removed(node : GraphNode, from_port : int):
 #	print_debug("node slot[%s] removed - %s, %s" % [from_port, node, Graph.get_connection_list()]);
+	
 	for connections in Graph.get_connection_list():
-#		print_debug("connections - %s, %s" % [connections, typeof(connections)]);
 		if(connections.from == node.name && connections.from_port == from_port):
 			Graph.disconnect_node(connections.from, connections.from_port, connections.to, connections.to_port);
+			
+	for connections in Graph.get_connection_list():
+		if(connections.from == node.name && connections.from_port > from_port):
+			Graph.disconnect_node(connections.from, connections.from_port, connections.to, connections.to_port);
+			Graph.connect_node(connections.from, connections.from_port - 1, connections.to, connections.to_port);
 
 
 ## Shows a dialogue preview node when the preview button is pressed on a DialogueNode

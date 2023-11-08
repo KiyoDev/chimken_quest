@@ -355,7 +355,7 @@ func add_response():
 
 func delete_response(response : ResponseElement):
 	slots_removed.emit(self, response.get_index() - 2);
-	remove_child(response);
+	response.queue_free();
 	response_elements.erase(response);
 	curr_resp_slots -= 1;
 

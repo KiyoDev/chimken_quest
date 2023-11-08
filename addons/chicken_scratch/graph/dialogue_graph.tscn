@@ -47,7 +47,7 @@ popup/item_1/text = "Open..."
 popup/item_1/id = 1
 popup/item_2/text = "Save"
 popup/item_2/id = 2
-popup/item_3/text = "Save as..."
+popup/item_3/text = "Save Pretty"
 popup/item_3/id = 3
 
 [node name="VSeparator" type="VSeparator" parent="GraphContainer/HBoxContainer"]

@@ -2,11 +2,12 @@
 class_name RootNode extends GraphNode
 
 
+signal slots_removed(node : DialogueNode, from_port : int);
+
 signal node_close_request(node : DialogueNode);
 
 
 @export var ConditionConfig : HBoxContainer;
-@export var ConditionCount : SpinBox;
 
 @export var condition_element : PackedScene;
 
@@ -28,19 +29,17 @@ func _exit_tree():
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print_debug("ready");
-	add_child(condition_element.instantiate());
-	set_slot_enabled_right(ConditionConfig.get_index() + 1, true);
+#	add_child(condition_element.instantiate());
+#	set_slot_enabled_right(ConditionConfig.get_index() + 1, true);
 
 
 func set_from_dict(dict : Dictionary):
-	var condition_count : int = dict.conditions.size();
-	ConditionCount.value = condition_count;
-	
-	var index := 1;
+	for c in condition_elements:
+		c.queue_free();
+
 	for condition in dict.conditions:
-		var con : ConditionElement = get_child(index + ConditionConfig.get_index());
+		var con := add_condition();
 		con.condition.text = condition.condition;
-		index += 1;
 	
 	position_offset = Vector2(dict.metadata.position.x, dict.metadata.position.y);
 	custom_minimum_size = Vector2(dict.metadata.custom_minimum_size.x, dict.metadata.custom_minimum_size.y);
@@ -70,6 +69,24 @@ func to_dict() -> Dictionary:
 	return dict;
 
 
+func add_condition() -> ConditionElement:
+	var new_condition := condition_element.instantiate();
+	add_child(new_condition);
+	condition_elements.append(new_condition);
+	new_condition.delete_requested.connect(_on_delete_condition_pressed);
+	set_slot_enabled_right(get_child_count() - 1, true);
+	reset_size();
+	
+	return new_condition;
+
+
+func delete_condition(condition : ConditionElement):
+	slots_removed.emit(self, condition.get_index() - 2);
+	condition_elements.erase(condition);
+	condition.queue_free();
+	reset_size();
+
+
 func _clone(flags := 0b0111):
 	var node := super.duplicate(flags);
 	return node;
@@ -90,26 +107,9 @@ func _on_dragged(from, to):
 	print_debug("dragging '%s' [%s->%s] %s" % [name, from, to, position]);
 
 
-func _on_count_value_changed(value):
-	print_debug("change condition count");
-	print_debug("v=%s, c=%s, %s" % [value, curr_condition_count, ConditionConfig.get_index()]);
-	if(value > curr_condition_count):
-		# ignore base ele and slot config ele
-		var curr_last_index := curr_condition_count + ConditionConfig.get_index() + 1;
-#		for i in value - curr_resp_slots:
-		for i in range(curr_last_index, value + ConditionConfig.get_index() + 1):
-			print_debug("5 - %s=%s" % [curr_last_index + i, is_slot_enabled_right(curr_last_index + i)]);
-#			print_debug("value > curr [count=%s, i=%s, last=%s, slot_config=%s, rsp=%s]" % [get_child_count(), i, curr_last_index, response_config.get_index(), response_elements]);
-			var new_condition = condition_element.instantiate();
-			condition_elements.append(new_condition);
-			add_child(new_condition);
-			set_slot_enabled_right(i, true);
-#			set_slot_enabled_right(curr_last_index + i, true);
-	elif(value < curr_condition_count):
-		for i in range(get_child_count() - 1, ConditionConfig.get_index() + value, -1):
-			print_debug("value < curr [%s, %s]" % [get_child_count(), i]);
-			remove_child(get_child(i));
-			condition_elements.pop_back(); # -(text.index + config.index)
-#			condition_elements.remove_at(i - (ConditionConfig.get_index() + 2)); # -(text.index + config.index)
-	curr_condition_count = value;
-	reset_size();
+func _on_add_condition_pressed():
+	add_condition();
+
+
+func _on_delete_condition_pressed(condition : ConditionElement):
+	delete_condition(condition);
