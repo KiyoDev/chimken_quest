@@ -13,14 +13,18 @@ var enabled : bool;
 
 
 func _enter_tree():
+	print_debug(get_editor_interface().get_editor_main_screen().get_children());
+	
 	graph_instance = graph.instantiate();
 	# Initialization of the plugin goes here.
-	print_debug(get_editor_interface().get_editor_main_screen().get_children());
-#	print_debug(graph_instance);
 
 	get_editor_interface().get_editor_main_screen().add_child(graph_instance);
 	_make_visible(false);
+
+
+func _ready():
 	graph_instance.on_plugin_start();
+	print_debug(graph_instance);
 
 
 func _exit_tree():

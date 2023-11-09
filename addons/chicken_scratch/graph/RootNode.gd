@@ -1,10 +1,5 @@
 @tool
-class_name RootNode extends GraphNode
-
-
-signal slots_removed(node : DialogueNode, from_port : int);
-
-signal node_close_request(node : DialogueNode);
+class_name RootNode extends BaseNode
 
 
 @export var ConditionConfig : HBoxContainer;
@@ -92,19 +87,8 @@ func _clone(flags := 0b0111):
 	return node;
 
 
-func _on_resize_request(new_minsize):
-#	print_debug("new_minsize - %s" % [new_minsize]);
-	custom_minimum_size = new_minsize;
-	reset_size(); # ensures window size updates to correct minimum, even if it gets resized from adding/removing children
-
-
 func _on_close_request():
-	# FIXME: add confirmation menu before actually deleting
-	print_debug("Cannot close root node.");
-
-
-func _on_dragged(from, to):
-	print_debug("dragging '%s' [%s->%s] %s" % [name, from, to, position]);
+	print_debug("Cannot close root node?");
 
 
 func _on_add_condition_pressed():

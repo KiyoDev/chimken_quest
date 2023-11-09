@@ -1,12 +1,6 @@
 @tool
-class_name DialogueNode extends GraphNode
+class_name DialogueNode extends BaseNode
 
-
-signal node_closed(node : DialogueNode);
-
-signal node_close_request(node : DialogueNode);
-
-signal slots_removed(node : DialogueNode, from_port : int);
 
 signal type_changed(type : Type);
 
@@ -403,19 +397,6 @@ func _to_string():
 	return JSON.stringify(to_dict(), "", false);
 
 
-func _on_resize_request(new_minsize):
-#	print_debug("new_minsize - %s" % [new_minsize]);
-	custom_minimum_size = new_minsize;
-	reset_size(); # ensures window size updates to correct minimum, even if it gets resized from adding/removing children
-
-
-func _on_close_request():
-	# FIXME: add confirmation menu before actually deleting
-	print_debug("_on_close_request - %s" % [name]);
-	node_close_request.emit(self);
-#	queue_free();
-
-
 func _on_speaker_text_submitted(new_text):
 	print_debug("speaker - %s" % [Speaker.text]);
 
@@ -427,10 +408,6 @@ func _on_dialogue_text_changed():
 
 func _on_test_print_pressed():
 	print_debug("%s={type: %s,%s: '%s'}" % [name, type, Speaker.text, Text.text]);
-
-
-func _on_dragged(from, to):
-	print_debug("dragging '%s' [%s->%s] %s" % [name, from, to, position]);
 
 
 func _on_type_options_item_selected(index):

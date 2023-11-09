@@ -2,8 +2,6 @@
 class_name DialogueGraphEditor extends VBoxContainer
 
 
-
-#@export var dialogue_node_template : PackedScene;
 @export var Graph : DialogueGraph;
 @export var FileMenu : MenuButton;
 @export var Filename : Label;
@@ -35,6 +33,7 @@ var new_node_position := Vector2();
 
 static var OpenFileDialog : EditorFileDialog;
 static var SaveFileDialog : EditorFileDialog;
+static var ChangeThemeDialog : EditorFileDialog;
 
 # TODO: open DialogueFile from disk and populate graph (adding nodes, adding connections, etc)
 static var current_dialogue_file : DialogueFile;
@@ -66,9 +65,17 @@ func _notification(what):
 
 
 func on_plugin_start():
+	# init EditorFileDialogs
+	var popup := FileMenu.get_popup();
+	if(!popup.id_pressed.is_connected(_on_file_menu_opened)):
+		popup.id_pressed.connect(_on_file_menu_opened);
+		
+	for i in popup.item_count:
+		file_menu_items[i] = popup.get_item_text(i);
+	print_debug("file_menu_items=%s" % [file_menu_items]);
+	
 	new_dialogue_graph();
 	
-	# init EditorFileDialogs
 	OpenFileDialog = EditorFileDialog.new();
 	OpenFileDialog.title = "Open a DialogueNode graph";
 	OpenFileDialog.size = Vector2i(800, 400);
@@ -89,7 +96,22 @@ func on_plugin_start():
 	SaveFileDialog.add_filter("*.json", "JSON file");
 	SaveFileDialog.file_selected.connect(_on_save_file);
 	add_child(SaveFileDialog);
+	
+	ChangeThemeDialog = EditorFileDialog.new();
+	ChangeThemeDialog.size = Vector2i(800, 400);
+	ChangeThemeDialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE;
+	ChangeThemeDialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS;
+#	SaveFileDialog.transient = true;
+	ChangeThemeDialog.add_filter("*.theme", "UI Theme");
+	ChangeThemeDialog.file_selected.connect(_on_change_theme);
+	add_child(ChangeThemeDialog);
+	
+	dialogue_preview.files_dropped.connect(_on_theme_dropped);
 
+
+func _on_theme_dropped(files: PackedStringArray):
+	print(files);
+	
 
 func _set_root_node(node):
 	if(root_node != null) :
@@ -123,7 +145,7 @@ func get_graph_node_dicts() ->  Array[Dictionary]:
 func get_variables() -> Dictionary:
 	var dict := {};
 	for variable in test_variables.get_children():
-		print_debug("v = %s" % [variable.as_dict()]);
+#		print_debug("v = %s" % [variable.as_dict()]);
 		dict[variable.var_name()] = variable.as_dict();
 	
 	return dict;
@@ -133,6 +155,11 @@ func get_variables() -> Dictionary:
 func graph_to_json(indent := ""):
 	# TODO: have a DialogueGraphFile extends RefCounted that keeps track of currently loaded file?
 #	print_debug("Graph %s, %s" % [Graph, JSON.stringify(connection_dict(), "\t", false)]);
+	
+	if(!root_node):
+		print_debug("no root node detected");
+		return "";
+	
 	var graph := {
 		"connections": Graph.get_connection_list(),
 		"variables": get_variables(),
@@ -145,15 +172,16 @@ func graph_to_json(indent := ""):
 
 
 func new_dialogue_graph():
-	right_click_menu.hide();
-	var popup := FileMenu.get_popup();
-	if(!popup.id_pressed.is_connected(_on_file_menu_opened)):
-		popup.id_pressed.connect(_on_file_menu_opened);
-	for i in popup.item_count:
-		file_menu_items[i] = popup.get_item_text(i);
-	print_debug("file_menu_items=%s" % [file_menu_items]);
+	Graph.clear_connections();
 	
-	dialogue_preview.get_node("%Text").text = "";
+	for child in test_variables.get_children():
+		remove_dialogue_variable(child);
+	
+	for child in Graph.get_children():
+		child.free(); # free all graph nodes
+		
+	right_click_menu.hide();
+	dialogue_preview.get_node("%PreviewText").text = "";
 	dialogue_preview.hide();
 	previewed_node = null;
 	node_dict.clear();
@@ -161,19 +189,8 @@ func new_dialogue_graph():
 	selected_nodes.clear();
 	current_file_path = "";
 	Filename.text = "[empty]";
-	
 	test_variables_container.hide();
-	for child in test_variables.get_children():
-		remove_dialogue_variable(child);
-
-	for connections in Graph.get_connection_list():
-		Graph.disconnect_node(connections.from, connections.from_port, connections.to, connections.to_port);
-	
-	for child in Graph.get_children():
-		child.free();
 		
-	if(root_node):
-		root_node.queue_free();
 	add_root_node();
 
 
@@ -235,19 +252,16 @@ func from_json(text : String):
 func add_new_node(position := Vector2(0, 0)) -> DialogueNode:
 	var new_node : DialogueNode = dialogue_node.instantiate();
 #	print_debug("asf %s" % [str(new_node.name).replace("@", "_")]);
-	new_node.node_close_request.connect(_on_graph_node_close_request);
+	new_node.node_close_requested.connect(_on_graph_node_close_requested);
 	new_node.slots_removed.connect(_on_graph_node_slots_removed);
 	new_node.preview_pressed.connect(_on_dialogue_node_preview);
 	Graph.add_child(new_node);
 	new_node.name = new_node.name.replace("@", "_");
 #	print_debug("add new node=%s, %s" % [position, new_node]);
-#	new_node.global_position = position;
 	new_node.position_offset = position;
 	node_dict[new_node.name] = new_node; # cache node names
 	
 	return new_node;
-#	print_debug("add - node_dict=%s" % [node_dict]);
-#	print_debug("new_node - %s, %s, %s, %s" % [position, new_node.position, new_node.global_position, new_node.position_offset]);
 
 
 func add_dialogue_variable() -> VariableValue:
@@ -291,11 +305,10 @@ func close_node(node : DialogueNode):
 	Graph.node_deselected.emit(node); # closed node needs to be deselected
 	node_dict.erase(node.name);
 	node.close_node();
-#	print_debug("del - node_dict=%s" % [node_dict]);
 
 
 func update_preview_text(text : String):
-	dialogue_preview.get_node("%Text").text = text;
+	dialogue_preview.get_node("%PreviewText").text = text;
 
 
 func update_dialogue_preview():
@@ -363,13 +376,6 @@ func _on_open_file(path : String):
 	init_nodes_from_json(dict);
 	current_file_path = path;
 	Filename.text = path.get_file();
-	
-#	print_debug("root[%s] - %s" % [dict.root_node.name, dict.root_node.metadata.position]);
-#	for node in dict.nodes:
-#		print_debug("node[%s] - %s" % [node.name, node.metadata.position]);
-	# new_graph
-#	var content = file.get_as_text();
-#	return content;
 
 
 func _on_save_file(path : String):
@@ -390,7 +396,7 @@ func _on_graph_disconnection_request(from_node, from_port, to_node, to_port):
 
 # TODO: figure out if theres a better way than looping through every node connection... maybe connect nodes to eachother to close those connections if the neighbor closes.
 # Removes all connections related to the closed node
-func _on_graph_node_close_request(node : DialogueNode):
+func _on_graph_node_close_requested(node : DialogueNode):
 	print_debug("node close request - %s, %s" % [node, Graph.get_connection_list()]);
 	nodes_to_delete.clear();
 	nodes_to_delete.append(node.name);
@@ -412,7 +418,7 @@ func _on_graph_node_slots_removed(node : GraphNode, from_port : int):
 	for connections in Graph.get_connection_list():
 		if(connections.from == node.name && connections.from_port == from_port):
 			Graph.disconnect_node(connections.from, connections.from_port, connections.to, connections.to_port);
-			
+	
 	for connections in Graph.get_connection_list():
 		if(connections.from == node.name && connections.from_port > from_port):
 			Graph.disconnect_node(connections.from, connections.from_port, connections.to, connections.to_port);
@@ -508,7 +514,7 @@ func _on_graph_node_selected(node):
 	selected_nodes[node] = true;
 	if(dialogue_preview.visible):
 		swap_dialogue_preview(node);
-	print_debug("Selected '%s' - %s" % [node.name, selected_nodes]);
+#	print_debug("Selected '%s' - %s" % [node.name, selected_nodes]);
 
 
 func _on_graph_node_deselected(node):
@@ -567,3 +573,18 @@ func _on_add_variable_pressed():
 
 func _on_variable_delete_requested(node : Node):
 	remove_dialogue_variable(node);
+
+
+func _on_change_theme_pressed():
+	ChangeThemeDialog.show();
+	
+
+func _on_change_theme(path : String):
+	var theme : Theme = load(path);
+	dialogue_preview.get_node("Container").set_theme(theme);
+	dialogue_preview.get_node("Container/VBoxContainer/ThemeLabel").text = path.get_file();
+
+
+func _on_remove_theme_pressed():
+	dialogue_preview.get_node("Container").theme = null;
+	dialogue_preview.get_node("Container/VBoxContainer/ThemeLabel").text = "[default_theme]";

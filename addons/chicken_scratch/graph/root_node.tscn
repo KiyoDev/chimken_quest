@@ -6,7 +6,7 @@
 
 [node name="RootNode" type="GraphNode" node_paths=PackedStringArray("ConditionConfig")]
 offset_right = 171.0
-offset_bottom = 193.0
+offset_bottom = 157.0
 resizable = true
 slot/0/left_enabled = false
 slot/0/left_type = 0
@@ -35,15 +35,6 @@ slot/2/right_type = 0
 slot/2/right_color = Color(1, 1, 1, 1)
 slot/2/right_icon = null
 slot/2/draw_stylebox = true
-slot/3/left_enabled = false
-slot/3/left_type = 0
-slot/3/left_color = Color(1, 1, 1, 1)
-slot/3/left_icon = null
-slot/3/right_enabled = true
-slot/3/right_type = 0
-slot/3/right_color = Color(1, 1, 1, 1)
-slot/3/right_icon = null
-slot/3/draw_stylebox = true
 script = ExtResource("1_ucoe3")
 ConditionConfig = NodePath("ConditionsConfig")
 condition_element = ExtResource("2_qvq84")

@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://ble2jtawtk3mo" path="res://addons/chicken_scratch/icons/dialogue_preview.svg" id="7_5lumq"]
 [ext_resource type="Script" path="res://addons/chicken_scratch/DialogueEditHighlighter.gd" id="9_wtywx"]
 
-[sub_resource type="SyntaxHighlighter" id="SyntaxHighlighter_5wy7b"]
+[sub_resource type="SyntaxHighlighter" id="SyntaxHighlighter_mrgny"]
 script = ExtResource("9_wtywx")
 variable_color = Color(0.933333, 0.509804, 0.933333, 1)
 binary_color = Color(0.172549, 0.356863, 0.960784, 1)
@@ -146,7 +146,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "Dialogue goes here... "
 wrap_mode = 1
-syntax_highlighter = SubResource("SyntaxHighlighter_5wy7b")
+syntax_highlighter = SubResource("SyntaxHighlighter_mrgny")
 
 [node name="Test Print" type="Button" parent="BaseElements"]
 visible = false
