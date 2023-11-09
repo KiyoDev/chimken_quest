@@ -149,6 +149,8 @@ size = Vector2i(300, 220)
 visible = false
 wrap_controls = true
 always_on_top = true
+content_scale_mode = 1
+content_scale_aspect = 1
 
 [node name="Container" type="MarginContainer" parent="Window"]
 anchors_preset = 15
@@ -175,12 +177,13 @@ horizontal_alignment = 1
 layout_mode = 2
 
 [node name="ChangeTheme" type="Button" parent="Window/Container/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(34, 34)
+custom_minimum_size = Vector2(34, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Change Theme"
 
 [node name="RemoveTheme" type="Button" parent="Window/Container/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Remove Theme"
@@ -189,6 +192,7 @@ text = "Remove Theme"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 100)
 layout_mode = 2
+focus_mode = 1
 bbcode_enabled = true
 scroll_active = false
 context_menu_enabled = true

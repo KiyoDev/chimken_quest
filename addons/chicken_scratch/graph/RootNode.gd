@@ -17,8 +17,8 @@ func _init():
 
 
 
-func _exit_tree():
-	print_debug("'%s' exiting tree..." % [name]);
+#func _exit_tree():
+#	print_debug("'%s' exiting tree..." % [name]);
 
 
 # Called when the node enters the scene tree for the first time.
@@ -76,7 +76,7 @@ func add_condition() -> ConditionElement:
 
 
 func delete_condition(condition : ConditionElement):
-	slots_removed.emit(self, condition.get_index() - 2);
+	slots_removed.emit(self, condition.get_index() - 1);
 	condition_elements.erase(condition);
 	condition.queue_free();
 	reset_size();

@@ -14,7 +14,7 @@ signal dialogue_finished;
 @export var indicator : Sprite2D;
 @export var indicator_animator : AnimationPlayer;
 
-@export var text_speed := 0.05;
+@export var text_speed := 0.04;
 
 
 var tween : Tween;
@@ -25,27 +25,33 @@ var tween_finished := false;
 func _ready():
 	tween_finished = false;
 	indicator.hide();
-	
-	var end := get_rect().end;
-	indicator.position = Vector2i(end.x - 24, end.y - 6);
-	indicator_animator.play(&"idle");
 
 
 func _input(event):
 	if(tween_finished && (event.is_action_pressed(&"ui_accept") || event.is_action_pressed(&"ui_cancel"))):
 		print_debug("DialogueBox input - %s" % [event]);
 		tween_finished = false;
+		indicator_animator.stop();
 		indicator.hide();
 		next_pressed.emit();
 	elif(tween.is_running() && event.is_action_pressed(&"ui_cancel")):
-		indicator.show();
+		show_indicator();
 		tween_finished = true;
 		TextBox.visible_ratio = 1;
 		tween.stop();
 
 
+func show_indicator():
+	indicator_animator.play(&"idle");
+	indicator.show();
+
+
 # \n terminates line, stops and shows indicator
 func load_dialogue(text : String):
+	await get_tree().create_timer(0.001).timeout;
+	print_debug("box rect - %s" % [size]);
+	indicator.position = Vector2i(size.x - 16, size.y - 10);
+	
 	var line_num = 1;
 	for line in text.split("\n"):
 		tween = create_tween();
@@ -56,7 +62,7 @@ func load_dialogue(text : String):
 		TextBox.visible_characters = 0;
 		var len := TextBox.get_parsed_text().length();
 		
-		tween.tween_property(TextBox, "visible_characters", len, 0.05 * len);
+		tween.tween_property(TextBox, "visible_characters", len, text_speed * len);
 
 		tween.play();
 		
@@ -68,5 +74,10 @@ func load_dialogue(text : String):
 
 func _on_tween_finished():
 	print_debug("tween finished");
-	indicator.show();
+	show_indicator();
 	tween_finished = true;
+
+
+func _on_text_resized():
+	print_debug("box rect - %s" % [size]);
+	indicator.position = Vector2i(size.x - 16, size.y - 10);

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://542bcl844gbm"]
+[gd_scene load_steps=12 format=3 uid="uid://542bcl844gbm"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueNode.gd" id="1_dm8qm"]
 [ext_resource type="PackedScene" uid="uid://j4i1b4cdlcrs" path="res://addons/chicken_scratch/graph/offerings_config.tscn" id="2_gb7sj"]
@@ -8,9 +8,10 @@
 [ext_resource type="PackedScene" uid="uid://r7ibrepvtebn" path="res://addons/chicken_scratch/graph/responses_config.tscn" id="5_aiqi7"]
 [ext_resource type="PackedScene" uid="uid://dv8pk15nx1s0w" path="res://addons/chicken_scratch/graph/response_element.tscn" id="5_dsjvb"]
 [ext_resource type="Texture2D" uid="uid://ble2jtawtk3mo" path="res://addons/chicken_scratch/icons/dialogue_preview.svg" id="7_5lumq"]
+[ext_resource type="Texture2D" uid="uid://cnbk0jnfotvev" path="res://addons/chicken_scratch/icons/play_button.svg" id="8_da1ju"]
 [ext_resource type="Script" path="res://addons/chicken_scratch/DialogueEditHighlighter.gd" id="9_wtywx"]
 
-[sub_resource type="SyntaxHighlighter" id="SyntaxHighlighter_00k0l"]
+[sub_resource type="SyntaxHighlighter" id="SyntaxHighlighter_q67ms"]
 script = ExtResource("9_wtywx")
 variable_color = Color(0.933333, 0.509804, 0.933333, 1)
 binary_color = Color(0.172549, 0.356863, 0.960784, 1)
@@ -24,7 +25,7 @@ custom_minimum_size = Vector2(240, 0)
 offset_left = 39.0
 offset_top = 60.0
 offset_right = 279.0
-offset_bottom = 358.0
+offset_bottom = 362.0
 title = "Dialogue Node"
 show_close = true
 resizable = true
@@ -113,8 +114,16 @@ popup/item_2/text = "Response"
 popup/item_2/id = 2
 
 [node name="Preview" type="Button" parent="BaseElements/HBoxContainer"]
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 icon = ExtResource("7_5lumq")
+icon_alignment = 1
+
+[node name="Play" type="Button" parent="BaseElements/HBoxContainer"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+icon = ExtResource("8_da1ju")
+icon_alignment = 1
 
 [node name="SpeakerLabel" type="Label" parent="BaseElements"]
 layout_mode = 2
@@ -146,7 +155,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "Dialogue goes here... "
 wrap_mode = 1
-syntax_highlighter = SubResource("SyntaxHighlighter_00k0l")
+syntax_highlighter = SubResource("SyntaxHighlighter_q67ms")
 
 [node name="Test Print" type="Button" parent="BaseElements"]
 visible = false
@@ -167,6 +176,7 @@ layout_mode = 2
 [connection signal="resize_request" from="." to="." method="_on_resize_request"]
 [connection signal="item_selected" from="BaseElements/HBoxContainer/TypeOptions" to="." method="_on_type_options_item_selected"]
 [connection signal="pressed" from="BaseElements/HBoxContainer/Preview" to="." method="_on_preview_pressed"]
+[connection signal="pressed" from="BaseElements/HBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="text_submitted" from="BaseElements/Speaker" to="." method="_on_speaker_text_submitted"]
 [connection signal="text_changed" from="BaseElements/ScrollContainer/Dialogue" to="." method="_on_dialogue_text_changed"]
 [connection signal="delete_requested" from="Response" to="." method="_on_delete_response"]

@@ -72,13 +72,14 @@ func on_plugin_start():
 	var popup := FileMenu.get_popup();
 	if(!popup.id_pressed.is_connected(_on_file_menu_opened)):
 		popup.id_pressed.connect(_on_file_menu_opened);
-		
+
 	for i in popup.item_count:
 		file_menu_items[i] = popup.get_item_text(i);
-	print_debug("file_menu_items=%s" % [file_menu_items]);
+#	print_debug("file_menu_items=%s" % [file_menu_items]);
+#	print_debug("Graph.get_rect().end=%s" % [Graph.get_parent().get_rect().end]);
 	
-	new_dialogue_graph();
-	
+	new_dialogue_graph(Vector2(380, 380));
+
 	OpenFileDialog = EditorFileDialog.new();
 	OpenFileDialog.title = "Open a DialogueNode graph";
 	OpenFileDialog.size = Vector2i(800, 400);
@@ -89,7 +90,7 @@ func on_plugin_start():
 	OpenFileDialog.add_filter("*.json", "JSON file");
 	OpenFileDialog.file_selected.connect(_on_open_file);
 	add_child(OpenFileDialog);
-	
+
 	SaveFileDialog = EditorFileDialog.new();
 	SaveFileDialog.size = Vector2i(800, 400);
 	SaveFileDialog.file_mode = EditorFileDialog.FILE_MODE_SAVE_FILE;
@@ -99,7 +100,7 @@ func on_plugin_start():
 	SaveFileDialog.add_filter("*.json", "JSON file");
 	SaveFileDialog.file_selected.connect(_on_save_file);
 	add_child(SaveFileDialog);
-	
+
 	ChangeThemeDialog = EditorFileDialog.new();
 	ChangeThemeDialog.size = Vector2i(800, 400);
 	ChangeThemeDialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE;
@@ -108,8 +109,8 @@ func on_plugin_start():
 	ChangeThemeDialog.add_filter("*.theme", "UI Theme");
 	ChangeThemeDialog.file_selected.connect(_on_change_theme);
 	add_child(ChangeThemeDialog);
-	
-	dialogue_preview.files_dropped.connect(_on_theme_dropped);
+
+#	dialogue_preview.files_dropped.connect(_on_theme_dropped);
 
 
 func _on_theme_dropped(files: PackedStringArray):
@@ -174,15 +175,15 @@ func graph_to_json(indent := ""):
 	return json;
 
 
-func new_dialogue_graph():
+func new_dialogue_graph(root_position := Vector2()):
 	Graph.clear_connections();
-	
+
 	for child in test_variables.get_children():
 		remove_dialogue_variable(child);
-	
+
 	for child in Graph.get_children():
-		child.free(); # free all graph nodes
-		
+		child.queue_free(); # free all graph nodes
+
 	right_click_menu.hide();
 	dialogue_preview.get_node("%PreviewText").text = "";
 	dialogue_preview.hide();
@@ -193,8 +194,8 @@ func new_dialogue_graph():
 	current_file_path = "";
 	Filename.text = "[empty]";
 	test_variables_container.hide();
-		
-	add_root_node();
+	
+	add_root_node(root_position);
 
 
 func init_nodes_from_json(dict : Dictionary):
@@ -218,24 +219,6 @@ func init_nodes_from_json(dict : Dictionary):
 		Graph.connect_node(connection.from, connection.from_port, connection.to, connection.to_port);
 
 
-func add_root_node():
-	root_node = root_node_scn.instantiate();
-	root_node.slots_removed.connect(_on_graph_node_slots_removed);
-	Graph.add_child(root_node);
-
-
-func root_from_dict(dict : Dictionary):
-	add_root_node();
-	root_node.set_from_dict(dict);
-
-
-func node_from_dict(dict: Dictionary) -> DialogueNode:
-	var new_node = add_new_node();
-	new_node.from_dict(dict);
-	
-	return new_node;
-
-
 func from_json(text : String):
 	var json = JSON.new();
 	var error = json.parse(text);
@@ -252,17 +235,41 @@ func from_json(text : String):
 	return data as Dictionary;
 
 
+func add_root_node(position := Vector2(0, 0)) -> RootNode:
+	root_node = root_node_scn.instantiate();
+	root_node.slots_removed.connect(_on_graph_node_slots_removed);
+	Graph.add_child(root_node);
+	print("ro %s" % [root_node.custom_minimum_size]);
+	root_node.position_offset = position - Vector2(75, 55);
+	
+	return root_node;
+
+
+func root_from_dict(dict : Dictionary) -> RootNode:
+	add_root_node();
+	root_node.set_from_dict(dict);
+	
+	return root_node;
+
+
 func add_new_node(position := Vector2(0, 0)) -> DialogueNode:
 	var new_node : DialogueNode = dialogue_node.instantiate();
 #	print_debug("asf %s" % [str(new_node.name).replace("@", "_")]);
 	new_node.node_close_requested.connect(_on_graph_node_close_requested);
 	new_node.slots_removed.connect(_on_graph_node_slots_removed);
 	new_node.preview_pressed.connect(_on_dialogue_node_preview);
+	
 	Graph.add_child(new_node);
 	new_node.name = new_node.name.replace("@", "_");
-#	print_debug("add new node=%s, %s" % [position, new_node]);
 	new_node.position_offset = position;
 	node_dict[new_node.name] = new_node; # cache node names
+	
+	return new_node;
+
+
+func node_from_dict(dict: Dictionary) -> DialogueNode:
+	var new_node = add_new_node();
+	new_node.from_dict(dict);
 	
 	return new_node;
 
@@ -346,7 +353,8 @@ func _on_file_menu_opened(id : int):
 	print_debug("opening file menu - %s" % [id]);
 	match id:
 		0: # New Graph
-			new_dialogue_graph();
+			print("rect %s, %s" %[Graph.global_position, Graph.get_rect().end/2]);
+			new_dialogue_graph(Graph.get_rect().end/2);
 		1: # Open
 			OpenFileDialog.show();
 		2: # Save
@@ -450,6 +458,8 @@ func _on_dialogue_node_preview(node : DialogueNode):
 func _on_dialogue_box_finished(box : DialogueBox):
 	print_debug("dialogue box finished");
 	dialogue_box.queue_free();
+#	await get_tree().create_timer(0.001).timeout;
+#	dialogue_preview.reset_size();
 
 
 func _on_window_close_requested():

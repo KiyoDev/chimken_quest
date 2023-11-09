@@ -1,8 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://3543xgdit3ts"]
+[gd_scene load_steps=8 format=3 uid="uid://3543xgdit3ts"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/DialogueBox.gd" id="1_xk7m3"]
 [ext_resource type="Texture2D" uid="uid://dhn5w56l72mo8" path="res://addons/chicken_scratch/sprites/dialogue_box.png" id="1_yg5qv"]
-[ext_resource type="Theme" uid="uid://bi4ct4ejmsk48" path="res://assets/fonts/battle_ui_big.theme" id="2_3tw7a"]
 [ext_resource type="Texture2D" uid="uid://8f31gva4o6mr" path="res://addons/chicken_scratch/sprites/next_indicator_small.png" id="4_aqtne"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0cvq0"]
@@ -32,6 +31,7 @@ _data = {
 }
 
 [node name="DialogueBox" type="MarginContainer" node_paths=PackedStringArray("Background", "TextBox", "indicator", "indicator_animator")]
+texture_filter = 1
 custom_minimum_size = Vector2(0, 96)
 offset_right = 280.0
 offset_bottom = 96.0
@@ -42,7 +42,6 @@ Background = NodePath("Background")
 TextBox = NodePath("MarginContainer/VBoxContainer/Text")
 indicator = NodePath("Sprite2D")
 indicator_animator = NodePath("Sprite2D/AnimationPlayer")
-text_speed = 0.1
 
 [node name="Background" type="NinePatchRect" parent="."]
 texture_filter = 1
@@ -68,7 +67,6 @@ texture_filter = 1
 clip_contents = false
 layout_mode = 2
 size_flags_vertical = 3
-theme = ExtResource("2_3tw7a")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_0cvq0")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_b3kqx")
 bbcode_enabled = true
@@ -80,9 +78,10 @@ visible = false
 texture_filter = 1
 position = Vector2(256, 90)
 texture = ExtResource("4_aqtne")
-offset = Vector2(0, 1)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite2D"]
 libraries = {
 "": SubResource("AnimationLibrary_w4wnf")
 }
+
+[connection signal="resized" from="MarginContainer/VBoxContainer/Text" to="." method="_on_text_resized"]

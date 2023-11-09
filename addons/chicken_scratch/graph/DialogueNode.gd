@@ -450,3 +450,7 @@ func _on_delete_response(response : ResponseElement):
 func _on_preview_pressed():
 	print_debug("on '%s' preview" % [name]);
 	preview_pressed.emit(self);
+
+
+func _on_play_pressed():
+	print_debug("Play dialogue");
