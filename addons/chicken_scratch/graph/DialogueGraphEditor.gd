@@ -41,6 +41,9 @@ static var current_dialogue_file : DialogueFile;
 static var save_pretty := false;
  
 
+@export var dialogue_box_scn : PackedScene;
+
+
 func _ready():
 	print_debug("ready");
 
@@ -425,6 +428,9 @@ func _on_graph_node_slots_removed(node : GraphNode, from_port : int):
 			Graph.connect_node(connections.from, connections.from_port - 1, connections.to, connections.to_port);
 
 
+var dialogue_box : DialogueBox;
+
+
 ## Shows a dialogue preview node when the preview button is pressed on a DialogueNode
 func _on_dialogue_node_preview(node : DialogueNode):
 	print_debug("Preview: %s, %s" % [node.text, node.dialogue_variables]);
@@ -433,11 +439,24 @@ func _on_dialogue_node_preview(node : DialogueNode):
 	selected_nodes[node] = true;
 	swap_dialogue_preview(node);
 	dialogue_preview.show();
+	
+	if(dialogue_box == null):
+		dialogue_box = dialogue_box_scn.instantiate();
+		dialogue_box.dialogue_finished.connect(_on_dialogue_box_finished);
+		dialogue_preview.get_node("Container/VBoxContainer").add_child(dialogue_box);
+		dialogue_box.load_dialogue(dialogue_preview.get_node("%PreviewText").text);
+
+
+func _on_dialogue_box_finished(box : DialogueBox):
+	print_debug("dialogue box finished");
+	dialogue_box.queue_free();
 
 
 func _on_window_close_requested():
 	print_debug("close preview window");
 	close_preview();
+	if(dialogue_box != null):
+		dialogue_box.queue_free();
 
 
 func _on_dialogue_node_text_changed(node : DialogueNode, text : String, variables : Dictionary):

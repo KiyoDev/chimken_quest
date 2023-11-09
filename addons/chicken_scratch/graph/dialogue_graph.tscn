@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://duio0ke3bpeoi"]
+[gd_scene load_steps=8 format=3 uid="uid://duio0ke3bpeoi"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueGraphEditor.gd" id="1_x85w6"]
 [ext_resource type="PackedScene" uid="uid://542bcl844gbm" path="res://addons/chicken_scratch/graph/dialogue_node.tscn" id="2_1eaom"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/dialogue/graph/DialogueGraph.gd" id="3_1gqce"]
 [ext_resource type="Texture2D" uid="uid://bo6mykqvqv2y" path="res://addons/chicken_scratch/icons/cross.svg" id="4_7gnp3"]
 [ext_resource type="PackedScene" uid="uid://dttyij5w5h0nc" path="res://addons/chicken_scratch/graph/variable_value.tscn" id="4_wsan6"]
+[ext_resource type="PackedScene" uid="uid://3543xgdit3ts" path="res://addons/chicken_scratch/dialogue_box.tscn" id="5_w0qgi"]
 
 [node name="ChickenScratch" type="VBoxContainer" node_paths=PackedStringArray("Graph", "FileMenu", "Filename", "right_click_menu", "delete_confirmation", "dialogue_preview", "test_variables_container", "test_variables")]
 offset_right = 1584.0
@@ -24,6 +25,7 @@ delete_confirmation = NodePath("DeleteConfirmationDialog")
 dialogue_preview = NodePath("Window")
 test_variables_container = NodePath("GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/Container")
 test_variables = NodePath("GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/Container/TestVariables")
+dialogue_box_scn = ExtResource("5_w0qgi")
 
 [node name="GraphContainer" type="VBoxContainer" parent="."]
 texture_filter = 1

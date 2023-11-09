@@ -1,4 +1,4 @@
-class_name DialogueBox extends MarginContainer
+extends MarginContainer
 
 @onready var Background : NinePatchRect = $Background;
 @onready var TextBox : RichTextLabel = $TextBox;
