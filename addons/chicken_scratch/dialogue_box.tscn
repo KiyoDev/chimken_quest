@@ -84,4 +84,4 @@ libraries = {
 "": SubResource("AnimationLibrary_w4wnf")
 }
 
-[connection signal="resized" from="MarginContainer/VBoxContainer/Text" to="." method="_on_text_resized"]
+[connection signal="resized" from="." to="." method="_on_resized"]

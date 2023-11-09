@@ -180,12 +180,14 @@ layout_mode = 2
 custom_minimum_size = Vector2(34, 30)
 layout_mode = 2
 size_flags_horizontal = 3
+focus_mode = 0
 text = "Change Theme"
 
 [node name="RemoveTheme" type="Button" parent="Window/Container/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
+focus_mode = 0
 text = "Remove Theme"
 
 [node name="PreviewText" type="RichTextLabel" parent="Window/Container/VBoxContainer"]

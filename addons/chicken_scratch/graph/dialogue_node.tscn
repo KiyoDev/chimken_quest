@@ -116,12 +116,14 @@ popup/item_2/id = 2
 [node name="Preview" type="Button" parent="BaseElements/HBoxContainer"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
+focus_mode = 0
 icon = ExtResource("7_5lumq")
 icon_alignment = 1
 
 [node name="Play" type="Button" parent="BaseElements/HBoxContainer"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
+focus_mode = 0
 icon = ExtResource("8_da1ju")
 icon_alignment = 1
 

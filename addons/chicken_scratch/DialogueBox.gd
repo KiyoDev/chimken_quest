@@ -14,7 +14,7 @@ signal dialogue_finished;
 @export var indicator : Sprite2D;
 @export var indicator_animator : AnimationPlayer;
 
-@export var text_speed := 0.04;
+var text_speed := 0.04;
 
 
 var tween : Tween;
@@ -25,6 +25,11 @@ var tween_finished := false;
 func _ready():
 	tween_finished = false;
 	indicator.hide();
+
+
+func _exit_tree():
+	if(tween != null):
+		tween.stop();
 
 
 func _input(event):
@@ -49,7 +54,7 @@ func show_indicator():
 # \n terminates line, stops and shows indicator
 func load_dialogue(text : String):
 	await get_tree().create_timer(0.001).timeout;
-	print_debug("box rect - %s" % [size]);
+#	print_debug("box rect - %s" % [size]);
 	indicator.position = Vector2i(size.x - 16, size.y - 10);
 	
 	var line_num = 1;
@@ -78,6 +83,6 @@ func _on_tween_finished():
 	tween_finished = true;
 
 
-func _on_text_resized():
-	print_debug("box rect - %s" % [size]);
+func _on_resized():
+#	print_debug("box rect - %s" % [size]);
 	indicator.position = Vector2i(size.x - 16, size.y - 10);
