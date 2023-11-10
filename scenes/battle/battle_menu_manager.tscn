@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dnu1rndfemfkh"]
+
+[ext_resource type="Script" path="res://scripts/ui/menus/battle_menu_manager.gd" id="1_5afbi"]
+
+[node name="BattleMenuManager" type="CanvasLayer"]
+scale = Vector2(4, 4)
+transform = Transform2D(4, 0, 0, 4, 0, 0)
+script = ExtResource("1_5afbi")

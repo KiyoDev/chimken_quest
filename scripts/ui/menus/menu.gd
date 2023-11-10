@@ -4,10 +4,14 @@ class_name Menu extends MarginContainer
 signal menu_closed;
 
 
-@onready var Background := $Background;
-@onready var MenuLayout := $MenuLayout;
-@onready var Title := $MenuLayout/Title;
-@onready var Options := $MenuLayout/Options/Container;
+@export var Background : NinePatchRect;
+@export var MenuLayout : VBoxContainer;
+@export var Title : Label;
+@export var Options : Container;
+#@onready var Background := $Background;
+#@onready var MenuLayout := $MenuLayout;
+#@onready var Title := $MenuLayout/Title;
+#@onready var Options := $MenuLayout/Options/Container;
 
 @export var select_wrap := false;
 @export var escapeable := true;
@@ -74,8 +78,8 @@ func navigate_wrap(direction_value) -> OptionBase:
 
 
 func try_get_option(index) -> OptionBase:
-	print_debug("try get - %s, ch-'%s'" % [index, option_count()]);
-	print(Options.get_children());
+	print_debug("try get - %s, option count-'%s'" % [index, option_count()]);
+#	print(Options.get_children());
 	if(index < 0 || index >= option_count()): 
 		return null;
 	

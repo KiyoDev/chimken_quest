@@ -202,7 +202,7 @@ func on_option_selected(option : OptionBase, menu : Menu):
 			battle_escaped.emit();
 		else:
 			print_debug("cancelled escape");
-			Cursor.cancel_option();
+			cancel_option();
 
 
 func on_action_selected(action_option : ActionOption):

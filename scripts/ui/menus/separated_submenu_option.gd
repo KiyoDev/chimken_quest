@@ -2,9 +2,7 @@ class_name SeparatedSubmenuOption extends OptionBase
 # MenuController element that contains a label, sprite, and a submenu
 
 
-@onready var NameLabel := $Layout/Container/Name;
-
-
+@export var NameLabel : Label;
 @export var Menu : Menu;
 
 

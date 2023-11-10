@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://ckofsuxdlbuqf"]
+[gd_scene load_steps=7 format=3 uid="uid://ckofsuxdlbuqf"]
 
 [ext_resource type="Script" path="res://scripts/autoload/battle_manager.gd" id="1_3ul8d"]
+[ext_resource type="PackedScene" uid="uid://dnu1rndfemfkh" path="res://scenes/battle/battle_menu_manager.tscn" id="2_1qonw"]
 [ext_resource type="Script" path="res://scripts/battle/nodes/battle_ui.gd" id="2_7g0n2"]
 [ext_resource type="Theme" uid="uid://1qeq3n04pcoe" path="res://assets/fonts/battle_ui.theme" id="2_i8bjo"]
 [ext_resource type="Script" path="res://scripts/chimken/character.gd" id="2_jgbtj"]
@@ -8,6 +9,7 @@
 
 [node name="BattleSystem" type="Node"]
 script = ExtResource("1_3ul8d")
+battle_menu_manager_scn = ExtResource("2_1qonw")
 metadata/_edit_vertical_guides_ = []
 
 [node name="dummy" type="CharacterBody2D" parent="."]
@@ -20,6 +22,7 @@ script = ExtResource("2_jgbtj")
 
 [node name="BattleUI" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
+visible = false
 follow_viewport_enabled = true
 script = ExtResource("2_7g0n2")
 

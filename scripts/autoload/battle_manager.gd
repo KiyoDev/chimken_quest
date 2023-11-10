@@ -10,7 +10,9 @@ signal battle_ended;
 #@onready var SubMenuContainer = %BattleUI/Container/SubMenu;
 @onready var AllyContainer := $AllyContainer;
 @onready var EnemyContainer := $EnemyContainer;
-@onready var BattleMenuTest = preload("res://scenes/ui/battle_menu.tscn").instantiate();
+
+@export var battle_menu_manager_scn : PackedScene;
+#@onready var BattleMenuTest = preload("res://scenes/ui/battle_menu.tscn").instantiate();
 
 
 @export var turn_queue : Array[Turn] = [];
@@ -33,7 +35,7 @@ var in_battle := false;
 
 func _ready():
 	get_viewport();
-	battle_menu_manager = BattleMenuManager.new();
+	battle_menu_manager = battle_menu_manager_scn.instantiate();
 	battle_menu_manager.show();
 	add_child(battle_menu_manager);
 	
