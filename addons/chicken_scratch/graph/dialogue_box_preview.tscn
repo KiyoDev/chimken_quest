@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=3 uid="uid://cwt4loou338go"]
+
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueBoxPreview.gd" id="1_1lin0"]
+[ext_resource type="PackedScene" uid="uid://3543xgdit3ts" path="res://addons/chicken_scratch/dialogue_box.tscn" id="2_8p3e4"]
+
+[node name="DialogueBoxPreview" type="Window" node_paths=PackedStringArray("dialogue_box")]
+title = "Dialogue Player"
+initial_position = 4
+size = Vector2i(300, 200)
+script = ExtResource("1_1lin0")
+dialogue_box = NodePath("VBoxContainer/DialogueBox")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.5
+offset_top = -65.5
+offset_right = 125.5
+offset_bottom = 65.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="ChangeTheme" type="Button" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(34, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Change Theme"
+
+[node name="RemoveTheme" type="Button" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Remove Theme"
+
+[node name="DialogueBox" parent="VBoxContainer" instance=ExtResource("2_8p3e4")]
+layout_mode = 2
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/ChangeTheme" to="." method="_on_change_theme_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/RemoveTheme" to="." method="_on_remove_theme_pressed"]

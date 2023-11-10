@@ -13,7 +13,10 @@ class_name DialogueGraphEditor extends VBoxContainer
 @export var right_click_menu : PopupMenu;
 @export var delete_confirmation : ConfirmationDialog;
 @export var dialogue_preview : Window;
+@export var dialogue_box_preview : Window;
 
+@export var dialogue_player : DialoguePlayer;
+@export var graph_variable_seeker : GraphVariableSeeker;
 @export var test_variables_container : Control;
 @export var test_variables : Control;
 
@@ -75,8 +78,12 @@ func on_plugin_start():
 
 	for i in popup.item_count:
 		file_menu_items[i] = popup.get_item_text(i);
+	dialogue_player.dialogue_finished.connect(_on_dialogue_player_finished);
 #	print_debug("file_menu_items=%s" % [file_menu_items]);
 #	print_debug("Graph.get_rect().end=%s" % [Graph.get_parent().get_rect().end]);
+	
+	dialogue_box_preview.hide();
+	graph_variable_seeker.variables_requested.connect(_on_variables_requested);
 	
 	new_dialogue_graph(Vector2(380, 380));
 
@@ -137,22 +144,63 @@ func connection_dict() -> Dictionary:
 	return connections;
 
 
-func get_graph_node_dicts() ->  Array[Dictionary]:
-	var nodes : Array[Dictionary] = [];
+func get_graph_node_dicts() ->  Dictionary:
+	var nodes := {};
 	# ignore root node
 	for i in range(0, Graph.get_child_count()):
 		if(Graph.get_child(i) is RootNode): continue;
-		nodes.append(Graph.get_child(i).to_dict());
+		var dict : Dictionary = Graph.get_child(i).to_dict();
+		nodes[dict.name] = dict;
 	return nodes;
 
 
-func get_variables() -> Dictionary:
+# Variables from all nodes
+func get_variable_list() -> Array:
+	var vars := {};
+	for i in range(0, Graph.get_child_count()):
+		if(Graph.get_child(i) is RootNode): continue;
+		var node : DialogueNode = Graph.get_child(i);
+		
+		for variable in node.get_variables():
+			vars[variable] = true;
+	
+	return vars.keys();
+
+
+# Variables specific to this GraphEdit
+func get_graph_variables() -> Dictionary:
 	var dict := {};
 	for variable in test_variables.get_children():
 #		print_debug("v = %s" % [variable.as_dict()]);
 		dict[variable.var_name()] = variable.as_dict();
 	
 	return dict;
+
+
+func get_variables_parsed() -> Dictionary:
+	var dict := {};
+	for variable in test_variables.get_children():
+		dict[variable.var_name()] = variable.value();
+	
+	return dict;
+
+
+func get_variable_values(vars : Array) -> Dictionary:
+	var dict := {};
+	var v := get_graph_variables();
+	for variable in vars:
+		dict[variable] = v[variable].value();
+	
+	return dict;
+
+
+func graph_to_dict() -> Dictionary:
+	return {
+		"connections": Graph.get_connection_list(),
+		"variables": get_graph_variables(),
+		"root_node": root_node.to_dict(),
+		"nodes": get_graph_node_dicts()
+	};
 
 
 # from graph to json
@@ -164,14 +212,7 @@ func graph_to_json(indent := ""):
 		print_debug("no root node detected");
 		return "";
 	
-	var graph := {
-		"connections": Graph.get_connection_list(),
-		"variables": get_variables(),
-		"root_node": root_node.to_dict(),
-		"nodes": get_graph_node_dicts()
-	};
-	
-	var json := JSON.stringify(graph, indent, false);
+	var json := JSON.stringify(graph_to_dict(), indent, false);
 	return json;
 
 
@@ -210,8 +251,11 @@ func init_nodes_from_json(dict : Dictionary):
 
 	root_from_dict(dict.root_node);
 
-	for node in dict.nodes:
-		node_from_dict(node);
+#	for node in dict.nodes:
+#		node_from_dict(node);
+
+	for key in dict.nodes:
+		node_from_dict(dict.nodes[key]);
 	
 	for connection in dict.connections:
 #		print_debug("reconnect - [%s, %s] -> [%s, %s]" % [connection.from, connection.from_port, connection.to, connection.to_port]);
@@ -258,6 +302,7 @@ func add_new_node(position := Vector2(0, 0)) -> DialogueNode:
 	new_node.node_close_requested.connect(_on_graph_node_close_requested);
 	new_node.slots_removed.connect(_on_graph_node_slots_removed);
 	new_node.preview_pressed.connect(_on_dialogue_node_preview);
+	new_node.play_pressed.connect(_on_dialogue_node_play);
 	
 	Graph.add_child(new_node);
 	new_node.name = new_node.name.replace("@", "_");
@@ -324,7 +369,7 @@ func update_preview_text(text : String):
 func update_dialogue_preview():
 	var text := previewed_node.text();
 	var variables := previewed_node.dialogue_variables;
-	var vars := get_variables();
+	var vars := get_graph_variables();
 	for variable_name in vars:
 		text = text.replace("${%s}" % variable_name, str(vars[variable_name].value));
 	
@@ -336,7 +381,7 @@ func swap_dialogue_preview(node : DialogueNode):
 	
 	var text := node.text();
 	var variables := node.dialogue_variables;
-	var vars := get_variables();
+	var vars := get_graph_variables();
 	for variable_name in vars:
 		text = text.replace("${%s}" % variable_name, str(vars[variable_name].value));
 	
@@ -371,7 +416,7 @@ func _on_open_file(path : String):
 	var dict = from_json(file.get_as_text());
 	print_debug("dialogue(%s)" % JSON.stringify(dict, "\t", false));
 	
-	if(!dict.has("connections") || !dict.has("root_node") || !dict.has("root_node") || !dict.has("nodes") || !(dict.connections is Array) || !(dict.nodes is Array)): 
+	if(!dict.has("connections") || !dict.has("root_node") || !dict.has("root_node") || !dict.has("nodes") || !(dict.connections is Array) || !(dict.nodes is Dictionary)): 
 		push_error("Unable to load file. Invalid formatting.");
 		return;
 	
@@ -455,11 +500,58 @@ func _on_dialogue_node_preview(node : DialogueNode):
 		dialogue_box.load_dialogue(dialogue_preview.get_node("%PreviewText").text);
 
 
+func _on_variables_requested(vars : Array):
+	print_debug("variable requested = %s" % [vars]);
+	graph_variable_seeker.call_deferred("set_variables", get_variables_parsed());
+#	graph_variable_seeker.set_variables(get_variables_parsed());
+
+
+func _on_dialogue_node_play(node : DialogueNode):
+	print_debug("Play: %s, %s" % [node.text(), node.dialogue_variables]);
+	Graph.set_selected(node);
+	selected_nodes.clear();
+	selected_nodes[node] = true;
+#	graph_variable_seeker.set_variables(get_variables_parsed());
+	dialogue_player.dialogue_box = dialogue_box_preview.dialogue_box;
+	
+	await dialogue_player.load_dialogue_tree(graph_to_dict());
+	
+	dialogue_box_preview.show();
+	dialogue_player.load_dialogue(node.to_dict());
+	
+#	swap_dialogue_preview(node);
+#	dialogue_preview.show();
+#
+#	if(dialogue_box == null):
+#		dialogue_box = dialogue_box_scn.instantiate();
+#		dialogue_box.dialogue_finished.connect(_on_dialogue_box_finished);
+#		dialogue_preview.get_node("Container/VBoxContainer").add_child(dialogue_box);
+#		dialogue_box.load_dialogue(dialogue_preview.get_node("%PreviewText").text);
+
+
+func _on_dialogue_box_preview_close_requested():
+	dialogue_box_preview.hide();
+
+
 func _on_dialogue_box_finished(box : DialogueBox):
 	print_debug("dialogue box finished");
 	dialogue_box.queue_free();
 #	await get_tree().create_timer(0.001).timeout;
 #	dialogue_preview.reset_size();
+
+
+func _on_play_pressed():
+	print_debug("playing whole dialogue.");
+	dialogue_player.dialogue_box = dialogue_box_preview.dialogue_box;
+	
+	dialogue_box_preview.show();
+	dialogue_player.load_dialogue_tree(graph_to_dict());
+	dialogue_player.play();
+
+
+func _on_dialogue_player_finished():
+	print_debug("dialogue player finished branch");
+	dialogue_box_preview.hide();
 
 
 func _on_window_close_requested():
@@ -470,7 +562,7 @@ func _on_window_close_requested():
 
 
 func _on_dialogue_node_text_changed(node : DialogueNode, text : String, variables : Dictionary):
-	var vars := get_variables();
+	var vars := get_graph_variables();
 	for variable_name in vars:
 		text = text.replace("${%s}" % variable_name, str(vars[variable_name].value));
 	

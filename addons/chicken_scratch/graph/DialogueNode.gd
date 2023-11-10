@@ -4,6 +4,8 @@ class_name DialogueNode extends BaseNode
 
 signal type_changed(type : Type);
 
+signal play_pressed(node : DialogueNode);
+
 signal preview_pressed(node : DialogueNode);
 
 signal text_changed(node : DialogueNode, text : String, variables : Dictionary);
@@ -62,7 +64,7 @@ func _ready():
 func _exit_tree():
 	print_debug("'%s' exiting tree..." % [name]);
 	for child in Hidden.get_children():
-		child.reparent(self);
+		child.queue_free();
 
 
 func set_type(value):
@@ -94,6 +96,11 @@ func text() -> String:
 	return Text.text;
 
 
+func get_variables() -> Array:
+	find_dialogue_variables();
+	return dialogue_variables.keys();
+
+
 func find_dialogue_variables():
 	var found := variable_match.search_all(Text.text);
 	
@@ -103,7 +110,7 @@ func find_dialogue_variables():
 		if(!dialogue_variables.has(name)):
 			dialogue_variables[name] = true;
 #	if(dialogue_variables.size())
-	print_debug("dialogue - %s, vars=%s" % [Text.text, dialogue_variables]);
+#	print_debug("dialogue - %s, vars=%s" % [Text.text, dialogue_variables]);
 
 
 func clean() -> DialogueNode:
@@ -198,6 +205,7 @@ func from_dict(dict : Dictionary):
 	var pos := Vector2(dict.metadata.position.x, dict.metadata.position.y);
 	position_offset = pos;
 	print_debug("new from dict - %s" % [dict]);
+#	dialogue_variables = dict.variables;
 	match(type):
 		Type.Dialogue:
 			pass;
@@ -235,6 +243,7 @@ func to_dict() -> Dictionary:
 	dict["type"] = Type.keys()[type];
 	dict["speaker"] = Speaker.text;
 	dict["text"] = Text.text;
+	dict["variables"] = get_variables();
 	dict["properties"] = {};
 	match(type):
 		Type.Dialogue:
@@ -454,3 +463,4 @@ func _on_preview_pressed():
 
 func _on_play_pressed():
 	print_debug("Play dialogue");
+	play_pressed.emit(self);

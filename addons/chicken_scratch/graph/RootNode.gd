@@ -49,7 +49,7 @@ func to_dict() -> Dictionary:
 	# response index = node port for the editor connections
 	dict["conditions"] = [];
 #	print_debug("hhh '%s'" % [get_children()]);
-	for index in range(ConditionConfig.get_index() + 1, get_child_count()):
+	for index in range(ConditionConfig.get_parent().get_index() + 1, get_child_count()):
 		var child : ConditionElement = get_child(index);
 #		print_debug("lakdhgjklad '%s', '%s'" % [child.condition.name, child.condition.text]);
 		dict["conditions"].append({

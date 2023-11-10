@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://duio0ke3bpeoi"]
+[gd_scene load_steps=12 format=3 uid="uid://duio0ke3bpeoi"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueGraphEditor.gd" id="1_x85w6"]
 [ext_resource type="PackedScene" uid="uid://542bcl844gbm" path="res://addons/chicken_scratch/graph/dialogue_node.tscn" id="2_1eaom"]
@@ -7,8 +7,12 @@
 [ext_resource type="Texture2D" uid="uid://bo6mykqvqv2y" path="res://addons/chicken_scratch/icons/cross.svg" id="4_7gnp3"]
 [ext_resource type="PackedScene" uid="uid://dttyij5w5h0nc" path="res://addons/chicken_scratch/graph/variable_value.tscn" id="4_wsan6"]
 [ext_resource type="PackedScene" uid="uid://3543xgdit3ts" path="res://addons/chicken_scratch/dialogue_box.tscn" id="5_w0qgi"]
+[ext_resource type="Texture2D" uid="uid://cnbk0jnfotvev" path="res://addons/chicken_scratch/icons/play_button.svg" id="6_av8pf"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/GraphVariableSeeker.gd" id="8_daxiu"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/DialoguePlayer.gd" id="9_kau8p"]
+[ext_resource type="PackedScene" uid="uid://cwt4loou338go" path="res://addons/chicken_scratch/graph/dialogue_box_preview.tscn" id="10_c6bl4"]
 
-[node name="ChickenScratch" type="VBoxContainer" node_paths=PackedStringArray("Graph", "FileMenu", "Filename", "right_click_menu", "delete_confirmation", "dialogue_preview", "test_variables_container", "test_variables")]
+[node name="ChickenScratch" type="VBoxContainer" node_paths=PackedStringArray("Graph", "FileMenu", "Filename", "right_click_menu", "delete_confirmation", "dialogue_preview", "dialogue_box_preview", "dialogue_player", "graph_variable_seeker", "test_variables_container", "test_variables")]
 offset_right = 1584.0
 offset_bottom = 942.0
 size_flags_horizontal = 3
@@ -23,6 +27,9 @@ variable_value = ExtResource("4_wsan6")
 right_click_menu = NodePath("RightClickMenu")
 delete_confirmation = NodePath("DeleteConfirmationDialog")
 dialogue_preview = NodePath("Window")
+dialogue_box_preview = NodePath("DialogueBoxPreview")
+dialogue_player = NodePath("DialoguePlayer")
+graph_variable_seeker = NodePath("GraphVariableSeeker")
 test_variables_container = NodePath("GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/Container")
 test_variables = NodePath("GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/Container/TestVariables")
 dialogue_box_scn = ExtResource("5_w0qgi")
@@ -59,6 +66,12 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Print"
+
+[node name="Play" type="Button" parent="GraphContainer/HBoxContainer"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+icon = ExtResource("6_av8pf")
+icon_alignment = 1
 
 [node name="VSeparator2" type="VSeparator" parent="GraphContainer/HBoxContainer"]
 layout_mode = 2
@@ -199,7 +212,18 @@ bbcode_enabled = true
 scroll_active = false
 context_menu_enabled = true
 
+[node name="GraphVariableSeeker" type="Node" parent="."]
+script = ExtResource("8_daxiu")
+
+[node name="DialoguePlayer" type="Node" parent="." node_paths=PackedStringArray("variable_seeker")]
+script = ExtResource("9_kau8p")
+variable_seeker = NodePath("../GraphVariableSeeker")
+
+[node name="DialogueBoxPreview" parent="." instance=ExtResource("10_c6bl4")]
+visible = false
+
 [connection signal="pressed" from="GraphContainer/HBoxContainer/Print" to="." method="_on_print_pressed"]
+[connection signal="pressed" from="GraphContainer/HBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/ToggleShowVariables" to="." method="_on_toggle_show_variables_pressed"]
 [connection signal="pressed" from="GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/Container/AddVariable" to="." method="_on_add_variable_pressed"]
 [connection signal="connection_request" from="GraphContainer/HSplitContainer/Graph" to="." method="_on_graph_connection_request"]
@@ -220,3 +244,4 @@ context_menu_enabled = true
 [connection signal="close_requested" from="Window" to="." method="_on_window_close_requested"]
 [connection signal="pressed" from="Window/Container/VBoxContainer/HBoxContainer/ChangeTheme" to="." method="_on_change_theme_pressed"]
 [connection signal="pressed" from="Window/Container/VBoxContainer/HBoxContainer/RemoveTheme" to="." method="_on_remove_theme_pressed"]
+[connection signal="close_requested" from="DialogueBoxPreview" to="." method="_on_dialogue_box_preview_close_requested"]

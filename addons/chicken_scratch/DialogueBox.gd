@@ -33,6 +33,8 @@ func _exit_tree():
 
 
 func _input(event):
+	if(tween == null): return;
+	
 	if(tween_finished && (event.is_action_pressed(&"ui_accept") || event.is_action_pressed(&"ui_cancel"))):
 		print_debug("DialogueBox input - %s" % [event]);
 		tween_finished = false;
@@ -52,7 +54,7 @@ func show_indicator():
 
 
 # \n terminates line, stops and shows indicator
-func load_dialogue(text : String):
+func load_dialogue(text : String, dialogue := {}):
 	await get_tree().create_timer(0.001).timeout;
 #	print_debug("box rect - %s" % [size]);
 	indicator.position = Vector2i(size.x - 16, size.y - 10);
@@ -74,7 +76,7 @@ func load_dialogue(text : String):
 		await next_pressed;
 		line_num += 1;
 	
-	dialogue_finished.emit(self);
+	dialogue_finished.emit(dialogue);
 
 
 func _on_tween_finished():
