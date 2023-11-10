@@ -533,7 +533,7 @@ func _on_dialogue_box_preview_close_requested():
 	dialogue_box_preview.hide();
 
 
-func _on_dialogue_box_finished(box : DialogueBox):
+func _on_dialogue_box_finished(dialogue : Dictionary):
 	print_debug("dialogue box finished");
 	dialogue_box.queue_free();
 #	await get_tree().create_timer(0.001).timeout;

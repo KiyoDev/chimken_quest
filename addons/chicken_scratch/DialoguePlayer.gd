@@ -52,7 +52,7 @@ func load_dialogue_tree(dialogue_tree : Dictionary):
 func play():
 	var root = dialogue_tree.root_node;
 	# TODO
-	load_next_dialogue(root.name, 1);
+	load_next_dialogue(root.name, 0);
 
 
 func load_next_dialogue(name : String, slot : int):
