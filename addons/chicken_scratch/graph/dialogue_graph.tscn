@@ -65,11 +65,13 @@ layout_mode = 2
 [node name="Print" type="Button" parent="GraphContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+focus_mode = 0
 text = "Print"
 
 [node name="Play" type="Button" parent="GraphContainer/HBoxContainer"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
+focus_mode = 0
 icon = ExtResource("6_av8pf")
 icon_alignment = 1
 
@@ -117,6 +119,7 @@ size_flags_horizontal = 3
 [node name="ToggleShowVariables" type="Button" parent="GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer"]
 custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
+focus_mode = 0
 text = "𝑥"
 
 [node name="Container" type="VBoxContainer" parent="GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer"]

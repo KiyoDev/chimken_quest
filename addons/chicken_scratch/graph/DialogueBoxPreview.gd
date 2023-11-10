@@ -2,6 +2,8 @@
 class_name DialogueBoxPreview extends Window
 
 
+signal branch_changed(branch : int);
+
 
 @export var dialogue_box : DialogueBox;
 
@@ -18,6 +20,7 @@ func _ready():
 	ChangeThemeDialog.add_filter("*.theme", "UI Theme");
 	ChangeThemeDialog.file_selected.connect(_on_change_theme);
 	add_child(ChangeThemeDialog);
+	ChangeThemeDialog.hide();
 
 
 func load_dialogue(text : String):
@@ -37,4 +40,3 @@ func _on_change_theme(path : String):
 	var theme : Theme = load(path);
 	dialogue_box.set_theme(theme);
 #	dialogue_preview.get_node("Container/VBoxContainer/ThemeLabel").text = path.get_file();
-

@@ -41,29 +41,35 @@ func connection_dict() -> Dictionary:
 func load_dialogue_tree(dialogue_tree : Dictionary):
 	if(!dialogue_box.dialogue_finished.is_connected(_on_dialogue_finished)):
 		dialogue_box.dialogue_finished.connect(_on_dialogue_finished);
+		dialogue_box.restart();
 	self.dialogue_tree = dialogue_tree;
 	connections = connection_dict();
 #	await seek_variables(dialogue_tree.variables.keys());
 	variables = await variable_seeker.seek(dialogue_tree.variables.keys());
 	print_debug("loading tree - %s" % [variables]);
-	print_debug("connections - %s" % [connections]);
+#	print_debug("connections - %s" % [connections]);
+
+
+func play_branch(slot : int):
+	var root = dialogue_tree.root_node;
+	load_next_dialogue(root.name, slot);
 
 
 func play():
 	var root = dialogue_tree.root_node;
 	# TODO
-	load_next_dialogue(root.name, 0);
+	load_next_dialogue(root.name, 1);
 
 
 func load_next_dialogue(name : String, slot : int):
-	if(connections.has(name)):
+	print("next - %s, %s" % [name, slot]);
+	if(connections.has(name) && connections[name].has(slot)):
 		var next = connections[name][slot];
 		print("connections[root.name] %s" % [next]);
 		load_dialogue(dialogue_tree.nodes[next.to]);
 	else:
 		print_debug("No connections left");
 		dialogue_finished.emit();
-	
 
 
 func load_dialogue(dialogue : Dictionary):

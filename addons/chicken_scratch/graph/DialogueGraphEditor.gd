@@ -22,6 +22,7 @@ class_name DialogueGraphEditor extends VBoxContainer
 
 var root_node : RootNode;
 var previewed_node : DialogueNode;
+var dialogue_box : DialogueBox;
 
 var node_dict : Dictionary = {};
 var file_menu_items : Dictionary = {};
@@ -79,6 +80,7 @@ func on_plugin_start():
 	for i in popup.item_count:
 		file_menu_items[i] = popup.get_item_text(i);
 	dialogue_player.dialogue_finished.connect(_on_dialogue_player_finished);
+	dialogue_box_preview.branch_changed.connect(_on_branch_changed);
 #	print_debug("file_menu_items=%s" % [file_menu_items]);
 #	print_debug("Graph.get_rect().end=%s" % [Graph.get_parent().get_rect().end]);
 	
@@ -282,6 +284,7 @@ func from_json(text : String):
 func add_root_node(position := Vector2(0, 0)) -> RootNode:
 	root_node = root_node_scn.instantiate();
 	root_node.slots_removed.connect(_on_graph_node_slots_removed);
+	root_node.branch_play_requested.connect(_on_branch_play_requested);
 	Graph.add_child(root_node);
 	print("ro %s" % [root_node.custom_minimum_size]);
 	root_node.position_offset = position - Vector2(75, 55);
@@ -457,14 +460,6 @@ func _on_graph_node_close_requested(node : DialogueNode):
 	nodes_to_delete.clear();
 	nodes_to_delete.append(node.name);
 	delete_confirmation.show();
-	
-#	for connections in Graph.get_connection_list():
-##		print_debug("connections - %s, %s" % [connections, typeof(connections)]);
-#		if(connections.from == node.name || connections.to == node.name):
-#			Graph.disconnect_node(connections.from, connections.from_port, connections.to, connections.to_port);
-#
-#	node_dict.erase(node.name);
-#	print_debug("del - node_dict=%s" % [node_dict]);
 
 
 ## When DailogueNode slots change
@@ -481,7 +476,13 @@ func _on_graph_node_slots_removed(node : GraphNode, from_port : int):
 			Graph.connect_node(connections.from, connections.from_port - 1, connections.to, connections.to_port);
 
 
-var dialogue_box : DialogueBox;
+func _on_branch_play_requested(slot : int):
+	print_debug("playing branch %s" % [slot]);
+	dialogue_player.dialogue_box = dialogue_box_preview.dialogue_box;
+	
+	dialogue_box_preview.show();
+	dialogue_player.load_dialogue_tree(graph_to_dict());
+	dialogue_player.play_branch(slot);
 
 
 ## Shows a dialogue preview node when the preview button is pressed on a DialogueNode
@@ -505,7 +506,7 @@ func _on_variables_requested(vars : Array):
 	graph_variable_seeker.call_deferred("set_variables", get_variables_parsed());
 #	graph_variable_seeker.set_variables(get_variables_parsed());
 
-
+# PLAY
 func _on_dialogue_node_play(node : DialogueNode):
 	print_debug("Play: %s, %s" % [node.text(), node.dialogue_variables]);
 	Graph.set_selected(node);
@@ -518,15 +519,6 @@ func _on_dialogue_node_play(node : DialogueNode):
 	
 	dialogue_box_preview.show();
 	dialogue_player.load_dialogue(node.to_dict());
-	
-#	swap_dialogue_preview(node);
-#	dialogue_preview.show();
-#
-#	if(dialogue_box == null):
-#		dialogue_box = dialogue_box_scn.instantiate();
-#		dialogue_box.dialogue_finished.connect(_on_dialogue_box_finished);
-#		dialogue_preview.get_node("Container/VBoxContainer").add_child(dialogue_box);
-#		dialogue_box.load_dialogue(dialogue_preview.get_node("%PreviewText").text);
 
 
 func _on_dialogue_box_preview_close_requested():
@@ -546,7 +538,13 @@ func _on_play_pressed():
 	
 	dialogue_box_preview.show();
 	dialogue_player.load_dialogue_tree(graph_to_dict());
-	dialogue_player.play();
+#	dialogue_player.play_branch(1);
+	dialogue_player.play_branch(dialogue_box_preview.get_branch());
+
+
+func _on_branch_changed(branch : int):
+	dialogue_player.dialogue_box.restart();
+	dialogue_player.play_branch(branch);
 
 
 func _on_dialogue_player_finished():
@@ -560,7 +558,7 @@ func _on_window_close_requested():
 	if(dialogue_box != null):
 		dialogue_box.queue_free();
 
-
+# DIALOGUE NODE
 func _on_dialogue_node_text_changed(node : DialogueNode, text : String, variables : Dictionary):
 	var vars := get_graph_variables();
 	for variable_name in vars:
@@ -577,10 +575,10 @@ func _on_variable_value_changed(name : String, value):
 ## Right click menu
 func _on_graph_popup_request(position):
 	print_debug("_on_graph_popup_request - %s" % [position]);
-#	if(!right_click_menu_open):
-#	right_click_menu.set_position(position);
 	new_node_position = Vector2i(position);
-	right_click_menu.set_position(Vector2(position.x + 302, position.y + 142));
+	right_click_menu.set_position(get_global_mouse_position() + Vector2(0, 30));
+#	right_click_menu.set_position((Vector2(position.x, position.y) + Graph.scroll_offset) / Graph.zoom);
+#	right_click_menu.set_position(Vector2(position.x + 302, position.y + 142) + (Graph.scroll_offset / Graph.zoom));
 	right_click_menu.show();
 
 

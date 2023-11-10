@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://3543xgdit3ts" path="res://addons/chicken_scratch/dialogue_box.tscn" id="2_8p3e4"]
 
 [node name="DialogueBoxPreview" type="Window" node_paths=PackedStringArray("dialogue_box")]
-title = "Dialogue Player"
+title = "Dialogue Box Previewer"
 initial_position = 4
 size = Vector2i(300, 200)
 script = ExtResource("1_1lin0")
@@ -25,17 +25,20 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="SizeContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="ChangeTheme" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="ThemeContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="ChangeTheme" type="Button" parent="VBoxContainer/ThemeContainer"]
 custom_minimum_size = Vector2(34, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 text = "Change Theme"
 
-[node name="RemoveTheme" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="RemoveTheme" type="Button" parent="VBoxContainer/ThemeContainer"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -45,5 +48,5 @@ text = "Remove Theme"
 [node name="DialogueBox" parent="VBoxContainer" instance=ExtResource("2_8p3e4")]
 layout_mode = 2
 
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/ChangeTheme" to="." method="_on_change_theme_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/RemoveTheme" to="." method="_on_remove_theme_pressed"]
+[connection signal="pressed" from="VBoxContainer/ThemeContainer/ChangeTheme" to="." method="_on_change_theme_pressed"]
+[connection signal="pressed" from="VBoxContainer/ThemeContainer/RemoveTheme" to="." method="_on_remove_theme_pressed"]

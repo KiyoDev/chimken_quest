@@ -2,6 +2,9 @@
 class_name RootNode extends BaseNode
 
 
+signal branch_play_requested(slot : int);
+
+
 @export var ConditionConfig : HBoxContainer;
 
 @export var condition_element : PackedScene;
@@ -69,6 +72,7 @@ func add_condition() -> ConditionElement:
 	add_child(new_condition);
 	condition_elements.append(new_condition);
 	new_condition.delete_requested.connect(_on_delete_condition_pressed);
+	new_condition.branch_play_requested.connect(_on_branch_play_requested);
 	set_slot_enabled_right(get_child_count() - 1, true);
 	reset_size();
 	
@@ -97,3 +101,11 @@ func _on_add_condition_pressed():
 
 func _on_delete_condition_pressed(condition : ConditionElement):
 	delete_condition(condition);
+
+
+func _on_branch_play_requested(condition : ConditionElement):
+	branch_play_requested.emit(condition.get_index() - 1);
+
+
+func _on_play_pressed():
+	branch_play_requested.emit(0);
