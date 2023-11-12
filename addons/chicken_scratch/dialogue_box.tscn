@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://3543xgdit3ts"]
 
-[ext_resource type="Script" path="res://addons/chicken_scratch/DialogueBox.gd" id="1_xk7m3"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/core/DialogueBox.gd" id="1_k36l7"]
 [ext_resource type="Texture2D" uid="uid://dhn5w56l72mo8" path="res://addons/chicken_scratch/sprites/dialogue_box.png" id="1_yg5qv"]
 [ext_resource type="Texture2D" uid="uid://8f31gva4o6mr" path="res://addons/chicken_scratch/sprites/next_indicator_small.png" id="4_aqtne"]
 
@@ -37,7 +37,7 @@ offset_right = 280.0
 offset_bottom = 96.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_xk7m3")
+script = ExtResource("1_k36l7")
 Background = NodePath("Background")
 TextBox = NodePath("MarginContainer/VBoxContainer/Text")
 indicator = NodePath("Sprite2D")

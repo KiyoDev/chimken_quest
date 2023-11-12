@@ -65,6 +65,7 @@ layout_mode = 2
 
 [connection signal="pressed" from="Delete" to="." method="_on_delete_pressed"]
 [connection signal="item_selected" from="MenuButton" to="." method="_on_menu_button_item_selected"]
+[connection signal="text_changed" from="Variable" to="." method="_on_variable_name_changed"]
 [connection signal="text_changed" from="ValueContainer/StringValue" to="." method="_on_string_value_text_changed"]
 [connection signal="value_changed" from="ValueContainer/IntValue" to="." method="_on_int_value_value_changed"]
 [connection signal="value_changed" from="ValueContainer/FloatValue" to="." method="_on_float_value_value_changed"]

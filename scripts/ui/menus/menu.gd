@@ -8,10 +8,6 @@ signal menu_closed;
 @export var MenuLayout : VBoxContainer;
 @export var Title : Label;
 @export var Options : Container;
-#@onready var Background := $Background;
-#@onready var MenuLayout := $MenuLayout;
-#@onready var Title := $MenuLayout/Title;
-#@onready var Options := $MenuLayout/Options/Container;
 
 @export var select_wrap := false;
 @export var escapeable := true;
@@ -23,6 +19,7 @@ var focused_index := 0;
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	for opt in Options.get_children():
+		if(!(opt is OptionBase)): continue;
 		menu_closed.connect(opt._on_menu_closed);
 	hide();
 

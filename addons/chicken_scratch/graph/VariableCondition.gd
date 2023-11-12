@@ -2,7 +2,7 @@
 class_name VariableCondition extends HBoxContainer
 
 #	var variable_match = RegEx.new()
-#	variable_match.compile("\\${\\w+}");
+#	variable_match.compile("\\${\\w+}")
 
 enum Type {
 	STRING,
@@ -21,55 +21,55 @@ enum Op {
 }
 
 
-@export var type_menu : OptionButton;
-@export var op_menu : OptionButton;
+@export var type_menu : OptionButton
+@export var op_menu : OptionButton
 
-@export var value_container : MarginContainer;
-@export var string_value : LineEdit;
-@export var int_value : SpinBox;
-@export var float_value : SpinBox;
-@export var bool_value : CheckBox;
+@export var value_container : MarginContainer
+@export var string_value : LineEdit
+@export var int_value : SpinBox
+@export var float_value : SpinBox
+@export var bool_value : CheckBox
 
-@export var type := Type.STRING;
+@export var type := Type.STRING
 
 
 func _read():
 	for child in value_container.get_children():
-		child.hide();
+		child.hide()
 	match(type):
 		Type.STRING:
-			string_value.show();
+			string_value.show()
 		Type.INT:
-			int_value.show();
+			int_value.show()
 		Type.FLOAT:
-			float_value.show();
+			float_value.show()
 		Type.BOOL:
-			bool_value.show();
+			bool_value.show()
 
 
 func value():
 	match(type_menu.selected):
 		Type.STRING:
-			return string_value.text;
+			return string_value.text
 		Type.INT:
-			return int_value.value;
+			return int_value.value
 		Type.FLOAT:
-			return float_value.value;
+			return float_value.value
 		Type.BOOL:
-			return bool_value.button_pressed;
+			return bool_value.button_pressed
 
 
 func _on_menu_button_item_selected(index):
-	print_debug("index[%s]=%s" % [index, Type.keys()[index]]);
-	type = index;
+	print_debug("index[%s]=%s" % [index, Type.keys()[index]])
+	type = index
 	for child in value_container.get_children():
-		child.hide();
+		child.hide()
 	match(index):
 		Type.STRING:
-			string_value.show();
+			string_value.show()
 		Type.INT:
-			int_value.show();
+			int_value.show()
 		Type.FLOAT:
-			float_value.show();
+			float_value.show()
 		Type.BOOL:
-			bool_value.show();
+			bool_value.show()

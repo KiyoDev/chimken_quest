@@ -1,0 +1,81 @@
+[gd_scene load_steps=5 format=3 uid="uid://kbbgyyk8fyxy"]
+
+[ext_resource type="Script" path="res://addons/chicken_scratch/menu/menu_base.gd" id="1_mxupr"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/menu/menu_option_base.gd" id="2_d4tks"]
+[ext_resource type="Texture2D" uid="uid://dhn5w56l72mo8" path="res://addons/chicken_scratch/sprites/dialogue_box.png" id="2_qaxmo"]
+[ext_resource type="Theme" uid="uid://bi4ct4ejmsk48" path="res://assets/fonts/battle_ui_big.theme" id="4_3o86c"]
+
+[node name="MarginContainer" type="MarginContainer"]
+texture_filter = 1
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Menu" type="MarginContainer" parent="."]
+layout_mode = 2
+script = ExtResource("1_mxupr")
+
+[node name="Background" type="NinePatchRect" parent="Menu"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("2_qaxmo")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="MenuLayout" type="VBoxContainer" parent="Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="Options" type="MarginContainer" parent="Menu/MenuLayout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="OptionsContainer" type="VBoxContainer" parent="Menu/MenuLayout/Options"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="MenuOptionBase" type="MarginContainer" parent="Menu/MenuLayout/Options/OptionsContainer"]
+layout_mode = 2
+script = ExtResource("2_d4tks")
+
+[node name="Label" type="Label" parent="Menu/MenuLayout/Options/OptionsContainer/MenuOptionBase"]
+layout_mode = 2
+theme = ExtResource("4_3o86c")
+text = "Text"
+
+[node name="MenuOptionBase2" type="MarginContainer" parent="Menu/MenuLayout/Options/OptionsContainer"]
+layout_mode = 2
+script = ExtResource("2_d4tks")
+
+[node name="Label" type="Label" parent="Menu/MenuLayout/Options/OptionsContainer/MenuOptionBase2"]
+layout_mode = 2
+theme = ExtResource("4_3o86c")
+text = "Tjexf"
+
+[node name="MenuOptionBase3" type="MarginContainer" parent="Menu/MenuLayout/Options/OptionsContainer"]
+layout_mode = 2
+script = ExtResource("2_d4tks")
+
+[node name="Label" type="Label" parent="Menu/MenuLayout/Options/OptionsContainer/MenuOptionBase3"]
+layout_mode = 2
+theme = ExtResource("4_3o86c")
+text = "Text"
+
+[node name="MenuOptionBase4" type="MarginContainer" parent="Menu/MenuLayout/Options/OptionsContainer"]
+layout_mode = 2
+script = ExtResource("2_d4tks")
+
+[node name="Label" type="Label" parent="Menu/MenuLayout/Options/OptionsContainer/MenuOptionBase4"]
+layout_mode = 2
+theme = ExtResource("4_3o86c")
+text = "Poggies "

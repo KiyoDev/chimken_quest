@@ -9,10 +9,10 @@
 [ext_resource type="PackedScene" uid="uid://3543xgdit3ts" path="res://addons/chicken_scratch/dialogue_box.tscn" id="5_w0qgi"]
 [ext_resource type="Texture2D" uid="uid://cnbk0jnfotvev" path="res://addons/chicken_scratch/icons/play_button.svg" id="6_av8pf"]
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/GraphVariableSeeker.gd" id="8_daxiu"]
-[ext_resource type="Script" path="res://addons/chicken_scratch/DialoguePlayer.gd" id="9_kau8p"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/core/DialogueManager.gd" id="10_8et40"]
 [ext_resource type="PackedScene" uid="uid://cwt4loou338go" path="res://addons/chicken_scratch/graph/dialogue_box_preview.tscn" id="10_c6bl4"]
 
-[node name="ChickenScratch" type="VBoxContainer" node_paths=PackedStringArray("Graph", "FileMenu", "Filename", "right_click_menu", "delete_confirmation", "dialogue_preview", "dialogue_box_preview", "dialogue_player", "graph_variable_seeker", "test_variables_container", "test_variables")]
+[node name="ChickenScratch" type="VBoxContainer" node_paths=PackedStringArray("Graph", "FileMenu", "Filename", "right_click_menu", "delete_confirmation", "dialogue_preview", "dialogue_box_preview", "test_variables_container", "test_variables")]
 offset_right = 1584.0
 offset_bottom = 942.0
 size_flags_horizontal = 3
@@ -28,8 +28,6 @@ right_click_menu = NodePath("RightClickMenu")
 delete_confirmation = NodePath("DeleteConfirmationDialog")
 dialogue_preview = NodePath("Window")
 dialogue_box_preview = NodePath("DialogueBoxPreview")
-dialogue_player = NodePath("DialoguePlayer")
-graph_variable_seeker = NodePath("GraphVariableSeeker")
 test_variables_container = NodePath("GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/Container")
 test_variables = NodePath("GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/Container/TestVariables")
 dialogue_box_scn = ExtResource("5_w0qgi")
@@ -120,7 +118,7 @@ size_flags_horizontal = 3
 custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
 focus_mode = 0
-text = "𝑥"
+text = "𝑥 Variables"
 
 [node name="Container" type="VBoxContainer" parent="GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer"]
 visible = false
@@ -218,9 +216,8 @@ context_menu_enabled = true
 [node name="GraphVariableSeeker" type="Node" parent="."]
 script = ExtResource("8_daxiu")
 
-[node name="DialoguePlayer" type="Node" parent="." node_paths=PackedStringArray("variable_seeker")]
-script = ExtResource("9_kau8p")
-variable_seeker = NodePath("../GraphVariableSeeker")
+[node name="DialoguePlayer" type="Node" parent="."]
+script = ExtResource("10_8et40")
 
 [node name="DialogueBoxPreview" parent="." instance=ExtResource("10_c6bl4")]
 visible = false

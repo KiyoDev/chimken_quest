@@ -1,6 +1,6 @@
 [gd_scene load_steps=15 format=3 uid="uid://ca8xdo7didik8"]
 
-[ext_resource type="Script" path="res://scripts/ui/menus/menu.gd" id="1_2mc5k"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/menu/menu_base.gd" id="2_exgwt"]
 [ext_resource type="Script" path="res://scripts/ui/menus/action_option.gd" id="3_af8un"]
 [ext_resource type="Theme" uid="uid://1qeq3n04pcoe" path="res://assets/fonts/battle_ui.theme" id="3_ui3bp"]
 [ext_resource type="Texture2D" uid="uid://b17a46f72xa3s" path="res://assets/battle/ui/chimken_battle_actions_title.png" id="3_x4ljg"]
@@ -24,7 +24,7 @@ texture_filter = 1
 offset_right = 65.0
 offset_bottom = 101.0
 theme = ExtResource("3_ui3bp")
-script = ExtResource("1_2mc5k")
+script = ExtResource("2_exgwt")
 Background = NodePath("Background")
 MenuLayout = NodePath("MenuLayout")
 Title = NodePath("MenuLayout/Title")
@@ -209,7 +209,7 @@ offset_left = -30.0
 offset_right = 44.0
 offset_bottom = 40.0
 theme_override_constants/margin_bottom = 0
-script = ExtResource("1_2mc5k")
+script = ExtResource("2_exgwt")
 Background = NodePath("Background")
 MenuLayout = NodePath("MenuLayout")
 Title = NodePath("MenuLayout/Title")
@@ -230,7 +230,7 @@ theme_override_constants/margin_top = 15
 [node name="Title" type="Label" parent="SubMenus/AttacksMenu/MenuLayout"]
 layout_mode = 2
 size_flags_vertical = 1
-theme = ExtResource("9_u78pn")
+theme = ExtResource("4_knfgv")
 text = "  ATTACKS "
 horizontal_alignment = 1
 uppercase = true
@@ -374,7 +374,7 @@ layout_mode = 2
 offset_left = -30.0
 offset_right = 104.0
 offset_bottom = 40.0
-script = ExtResource("1_2mc5k")
+script = ExtResource("2_exgwt")
 Background = NodePath("Background")
 MenuLayout = NodePath("MenuLayout")
 Title = NodePath("MenuLayout/Title")
@@ -668,7 +668,7 @@ layout_mode = 2
 offset_left = -30.0
 offset_right = 109.0
 offset_bottom = 40.0
-script = ExtResource("1_2mc5k")
+script = ExtResource("2_exgwt")
 Background = NodePath("Background")
 MenuLayout = NodePath("MenuLayout")
 Title = NodePath("MenuLayout/Title")
@@ -761,7 +761,7 @@ offset_left = -30.0
 offset_right = 64.0
 offset_bottom = 40.0
 size_flags_horizontal = 3
-script = ExtResource("1_2mc5k")
+script = ExtResource("2_exgwt")
 Background = NodePath("Background")
 MenuLayout = NodePath("MenuLayout")
 Title = NodePath("MenuLayout/Title")
