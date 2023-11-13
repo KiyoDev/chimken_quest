@@ -1,6 +1,7 @@
 @tool
 class_name DialogueNode extends BaseNode
 
+signal node_updated(node : DialogueNode)
 
 signal type_changed(type : Type)
 
@@ -235,22 +236,21 @@ func from_dict(dict : Dictionary):
 
 
 func to_dict() -> Dictionary:
-	var dict := {}
+	var dict := {
+		"name": name,
+		"type": Type.keys()[type],
+		"speaker": Speaker.text,
+		"text": Text.text,
+		"variables": get_variables(),
+		"properties": {}
+	}
 	
-#	print_debug("a - %s" % [Speaker.text])
-	
-	dict["name"] = name
-	dict["type"] = Type.keys()[type]
-	dict["speaker"] = Speaker.text
-	dict["text"] = Text.text
-	dict["variables"] = get_variables()
-	dict["properties"] = {}
 	match(type):
 		Type.Dialogue:
 			# TODO: add connections?
 			pass
 		Type.Offering:
-			dict["properties"]["offerings"] = []
+			dict.properties["offerings"] = []
 			for offer in offerings_config.get_offers():
 				var item := {}
 
@@ -258,16 +258,16 @@ func to_dict() -> Dictionary:
 				item["item_type"] = offer.ItemType.text
 				item["quantity"] = offer.Quantity.value
 
-				dict["properties"]["offerings"].append(item)
+				dict.properties["offerings"].append(item)
 			# TODO: add connections
 		Type.Response:
 			# TODO: add connections but maybe is just managed by the graph editor itself
 			# response index = node port for the editor connections
-			dict["properties"]["responses"] = []
+			dict.properties["responses"] = []
 			for index in range(responses_config.get_index() + 1, get_child_count()):
 				var child : ResponseElement = get_child(index)
 				var response := {"text": child.text()}
-				dict["properties"]["responses"].append(response)
+				dict.properties["responses"].append(response)
 #			print_debug("responses - %s" % [get_responses()])
 			pass
 
@@ -378,7 +378,6 @@ func delete_item_offering(offering : OfferingElement):
 func empty() -> DialogueNode:
 	var node := super.duplicate(0b0111)
 	node.type = Type.Dialogue
-	node.dialogue = Dialogue.new()
 	print_debug("empty - %s" % [node.dialogue])
 	return node
 
@@ -406,13 +405,17 @@ func _to_string():
 	return JSON.stringify(to_dict(), "", false)
 
 
-func _on_speaker_text_submitted(new_text):
+#region Signal Callbacks
+
+func _on_speaker_text_changed(new_text):
 	print_debug("speaker - %s" % [Speaker.text])
+	node_updated.emit(self)
 
 
 func _on_dialogue_text_changed():
 	find_dialogue_variables()
 	text_changed.emit(self, Text.text, dialogue_variables)
+	node_updated.emit(self)
 
 
 func _on_test_print_pressed():
@@ -430,30 +433,35 @@ func _on_type_options_item_selected(index):
 	TypeOptions.select(index)
 	update_node_options()
 	reset_size()
+	node_updated.emit(self)
 
 
 func _on_add_offering_pressed():
 	print_debug("on add offering")
 	add_item_offering()
 	reset_size()
+	node_updated.emit(self)
 
 
 func _on_delete_offering(offering : OfferingElement):
 	print_debug("on delete offering")
 	delete_item_offering(offering)
 	reset_size()
+	node_updated.emit(self)
 
 
 func _on_add_response_pressed():
 	print_debug("on add response")
 	add_response()
 	reset_size()
+	node_updated.emit(self)
 	
 	
 func _on_delete_response(response : ResponseElement):
 	print_debug("on delete response - %s" % [response])
 	delete_response(response)
 	reset_size()
+	node_updated.emit(self)
 
 
 func _on_preview_pressed():

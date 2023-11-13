@@ -37,9 +37,6 @@ static var OpenFileDialog : EditorFileDialog
 static var SaveFileDialog : EditorFileDialog
 static var ChangeThemeDialog : EditorFileDialog
 
-# TODO: open DialogueFile from disk and populate graph (adding nodes, adding connections, etc)
-static var current_dialogue_file : DialogueFile
-
 static var save_pretty := false
  
 
@@ -77,7 +74,9 @@ func on_plugin_start():
 
 	for i in popup.item_count:
 		file_menu_items[i] = popup.get_item_text(i)
-	ChickenScratch.dialogue_finished.connect(_on_dialogue_player_finished)
+		
+#	ChickenScratch.dialogue_finished.connect(_on_dialogue_player_finished)
+
 #	print_debug("file_menu_items=%s" % [file_menu_items])
 #	print_debug("Graph.get_rect().end=%s" % [Graph.get_parent().get_rect().end])
 	
@@ -169,7 +168,6 @@ func get_variable_list() -> Array:
 func get_graph_variables() -> Dictionary:
 	var dict := {}
 	for variable in test_variables.get_children():
-#		print_debug("v = %s" % [variable.as_dict()])
 		dict[variable.var_name()] = variable.value()
 	
 	return dict
@@ -194,7 +192,8 @@ func get_variables_parsed() -> Dictionary:
 
 func graph_to_dict() -> Dictionary:
 	return {
-		"connections": Graph.get_connection_list(),
+#		"connections": Graph.get_connection_list(),
+		"connections": ChickenScratch.dialogue_tree.connections,
 		"variables": ChickenScratch.variables,
 		"root_node": root_node.to_dict(),
 		"nodes": get_graph_node_dicts()
@@ -203,7 +202,6 @@ func graph_to_dict() -> Dictionary:
 
 # from graph to json
 func graph_to_json(indent := ""):
-	# TODO: have a DialogueGraphFile extends RefCounted that keeps track of currently loaded file?
 #	print_debug("Graph %s, %s" % [Graph, JSON.stringify(connection_dict(), "\t", false)])
 	
 	if(!root_node):
@@ -215,6 +213,8 @@ func graph_to_json(indent := ""):
 
 
 func new_dialogue_graph(root_position := Vector2()):
+	if(!ChickenScratch.dialogue_finished.is_connected(_on_dialogue_player_finished)):
+		ChickenScratch.dialogue_finished.connect(_on_dialogue_player_finished)
 	Graph.clear_connections()
 
 	for child in test_variables.get_children():
@@ -237,12 +237,41 @@ func new_dialogue_graph(root_position := Vector2()):
 	add_root_node(root_position)
 
 
-func init_nodes_from_json(dict : Dictionary):
+func init_nodes_from_tree():
+	print_debug("From tree - %s" % [ChickenScratch.dialogue_tree.nodes])
+	node_dict.clear()
+	file_menu_items.clear()
+	nodes_to_delete.clear()
+	Graph.clear_connections()
+	
+	for child in Graph.get_children():
+		child.free()
+
+	root_from_dict(ChickenScratch.dialogue_tree.root_node)
+
+#	for node in dict.nodes:
+#		node_from_dict(node)
+
+	for key in ChickenScratch.dialogue_tree.nodes:
+		print_debug("nodddd - %s" % [key])
+		node_from_dict(ChickenScratch.dialogue_tree.nodes[key])
+	
+	# {"name": { <from_port>: { "to": <name>, "to_port": <to_port> } }}
+	for from in ChickenScratch.dialogue_tree.connections:
+#		print_debug("reconnect - [%s, %s] -> [%s, %s]" % [connection.from, connection.from_port, connection.to, connection.to_port])
+		await get_tree().create_timer(0.001).timeout
+		for from_port in ChickenScratch.dialogue_tree.connections[from]:
+			var to_info = ChickenScratch.dialogue_tree.connections[from][from_port]
+			Graph.connect_node(from, int(from_port), to_info.to, to_info.to_port)
+
+
+func init_nodes_from_dict(dict : Dictionary):
 	print_debug("json %s" % [dict])
 	node_dict.clear()
 	file_menu_items.clear()
 	nodes_to_delete.clear()
 	Graph.clear_connections()
+	ChickenScratch.dialogue_tree.connections.clear()
 	
 	for child in Graph.get_children():
 		child.free()
@@ -255,10 +284,14 @@ func init_nodes_from_json(dict : Dictionary):
 	for key in dict.nodes:
 		node_from_dict(dict.nodes[key])
 	
-	for connection in dict.connections:
+	# {"name": { <from_port>: { "to": <name>, "to_port": <to_port> } }}
+	for from in dict.connections:
 #		print_debug("reconnect - [%s, %s] -> [%s, %s]" % [connection.from, connection.from_port, connection.to, connection.to_port])
 		await get_tree().create_timer(0.001).timeout
-		Graph.connect_node(connection.from, connection.from_port, connection.to, connection.to_port)
+		for from_port in ChickenScratch.dialogue_tree.connections[from]:
+			var to_info = ChickenScratch.dialogue_tree.connections[from][from_port]
+			Graph.connect_node(from, from_port, to_info.to, to_info.to_port)
+#		Graph.connect_node(connection.from, connection.from_port, connection.to, connection.to_port)
 
 
 func from_json(text : String):
@@ -297,16 +330,20 @@ func root_from_dict(dict : Dictionary) -> RootNode:
 
 func add_new_node(position := Vector2(0, 0)) -> DialogueNode:
 	var new_node : DialogueNode = dialogue_node.instantiate()
-#	print_debug("asf %s" % [str(new_node.name).replace("@", "_")])
+	new_node.show()
 	new_node.node_close_requested.connect(_on_graph_node_close_requested)
 	new_node.slots_removed.connect(_on_graph_node_slots_removed)
 	new_node.preview_pressed.connect(_on_dialogue_node_preview)
 	new_node.play_pressed.connect(_on_dialogue_node_play)
+	new_node.node_updated.connect(_on_dialogue_node_updated)
 	
 	Graph.add_child(new_node)
 	new_node.name = new_node.name.replace("@", "_")
 	new_node.position_offset = position
 	node_dict[new_node.name] = new_node # cache node names
+	
+	print_debug("new node - %s" % [new_node])
+	print_debug("Graph - %s" % [Graph.get_children()])
 	
 	return new_node
 
@@ -327,8 +364,17 @@ func add_dialogue_variable() -> VariableValue:
 	return v
 
 
+func update_variable_name(old : String, new : Variant):
+	ChickenScratch.update_variable_name(old, new)
+
+func update_variable_value(name : String, value : Variant):
+	ChickenScratch.update_variable_value(name, value)
+	
+
+
 func remove_dialogue_variable(variable : VariableValue):
 	variable.queue_free()
+	ChickenScratch.delete_variable(variable.var_name())
 
 
 func close_preview():
@@ -342,17 +388,21 @@ func close_preview():
 
 
 func disconnect_node(node : DialogueNode, from_port : int):
+	ChickenScratch.dialogue_tree.disconnect_node(node.name, from_port)
 	for connections in Graph.get_connection_list():
 #		print_debug("connections - %s, %s" % [connections, typeof(connections)])
 		if(connections.from == node.name && connections.from_port == from_port):
 			Graph.disconnect_node(connections.from, connections.from_port, connections.to, connections.to_port)
+	
 
 
 func close_node(node : DialogueNode):
+	ChickenScratch.dialogue_tree.remove_node_connections(node.name, Graph.get_connection_list())
 	for connections in Graph.get_connection_list():
 #		print_debug("connections - %s, %s" % [connections, typeof(connections)])
 		if(connections.from == node.name || connections.to == node.name):
 			Graph.disconnect_node(connections.from, connections.from_port, connections.to, connections.to_port)
+	
 	
 	if(node == previewed_node):
 		close_preview()
@@ -360,6 +410,13 @@ func close_node(node : DialogueNode):
 	Graph.node_deselected.emit(node) # closed node needs to be deselected
 	node_dict.erase(node.name)
 	node.close_node()
+	ChickenScratch.dialogue_tree.nodes.erase(node.name)
+
+
+# TODO: support changing node names?
+func update_dialogue_tree(node : DialogueNode):
+	ChickenScratch.dialogue_tree.nodes[node.name] = node.to_dict()
+	ChickenScratch.dialogue_tree.connections = connection_dict()
 
 
 func update_preview_text(text : String):
@@ -412,26 +469,29 @@ func _on_file_menu_opened(id : int):
 
 func _on_open_file(path : String):
 	print_debug("opening file '%s'" % [path])
-	var file := FileAccess.open(path, FileAccess.READ)
-	var dict = from_json(file.get_as_text())
-	print_debug("dialogue(%s)" % JSON.stringify(dict, "\t", false))
+#	var file := FileAccess.open(path, FileAccess.READ)
+#	var dict = from_json(file.get_as_text())
+#	print_debug("dialogue(%s)" % JSON.stringify(dict, "\t", false))
+#
+#	if(!dict.has("connections") || !dict.has("root_node") || !dict.has("root_node") || !dict.has("nodes") || !(dict.connections is Array) || !(dict.nodes is Dictionary)): 
+#		push_error("Unable to load file. Invalid formatting.")
+#		return
 	
-	if(!dict.has("connections") || !dict.has("root_node") || !dict.has("root_node") || !dict.has("nodes") || !(dict.connections is Array) || !(dict.nodes is Dictionary)): 
-		push_error("Unable to load file. Invalid formatting.")
-		return
+#	if(dict.has("variables") && dict.variables.size() > 0):
+
+	ChickenScratch.preload_tree(path)
 	
-	if(dict.has("variables") && dict.variables.size() > 0):
-		test_variables_container.show()
-		for child in test_variables.get_children():
-			test_variables.remove_child(child)
-		
-		for variable in dict.variables:
-			ChickenScratch.variables[variable] = dict.variables[variable]
-			var v := add_dialogue_variable()
-			v.set_variable(variable, dict.variables[variable])
+	test_variables_container.show()
+	for child in test_variables.get_children():
+		test_variables.remove_child(child)
+	
+	for variable in ChickenScratch.variables:
+#		ChickenScratch.variables[variable] = dict.variables[variable]
+		var v := add_dialogue_variable()
+		v.set_variable(variable, ChickenScratch.variables[variable])
 #			v.from_dict(dict.variables[variable])
-	
-	init_nodes_from_json(dict)
+
+	init_nodes_from_tree()
 	current_file_path = path
 	Filename.text = path.get_file()
 
@@ -445,11 +505,24 @@ func _on_save_file(path : String):
 
 func _on_graph_connection_request(from_node, from_port, to_node, to_port):
 	print_debug("connection request - [%s, %s, %s ,%s]" % [from_node, from_port, to_node, to_port])
-	Graph.connect_node(from_node, from_port, to_node, to_port)
+	# TODO: check if from_port connection already exists, else don't connect
+	if(!ChickenScratch.dialogue_tree.node_is_connected(from_node, from_port)):
+		ChickenScratch.dialogue_tree.connect_node(from_node, from_port, to_node, to_port)
+		Graph.connect_node(from_node, from_port, to_node, to_port)
+	
 
 
 func _on_graph_disconnection_request(from_node, from_port, to_node, to_port):
+	ChickenScratch.dialogue_tree.disconnect_node(from_node, from_port)
 	Graph.disconnect_node(from_node, from_port, to_node, to_port)
+
+# FIXME: update DialogueTree on:
+#		add/delete node, update text/speaker, add/remove connection
+
+#region Dialogue Node Callbacks
+func _on_dialogue_node_updated(node : DialogueNode):
+	print_debug("updating node %s" % node)
+	update_dialogue_tree(node)
 
 
 # TODO: figure out if theres a better way than looping through every node connection... maybe connect nodes to eachother to close those connections if the neighbor closes.
@@ -480,7 +553,9 @@ func _on_branch_play_requested(slot : int):
 	ChickenScratch.dialogue_box = dialogue_box_preview.dialogue_box
 	
 	dialogue_box_preview.show()
-	ChickenScratch.load_dialogue_tree(graph_to_dict())
+	
+#	ChickenScratch.load_dialogue_tree(graph_to_dict())
+	
 	ChickenScratch.play_branch(slot)
 
 
@@ -508,7 +583,7 @@ func _on_dialogue_node_play(node : DialogueNode):
 	selected_nodes[node] = true
 	ChickenScratch.dialogue_box = dialogue_box_preview.dialogue_box
 	
-	await ChickenScratch.load_dialogue_tree(graph_to_dict())
+#	await ChickenScratch.load_dialogue_tree(graph_to_dict())
 	
 	dialogue_box_preview.show()
 	ChickenScratch.load_dialogue(node.to_dict())
@@ -530,7 +605,7 @@ func _on_play_pressed():
 	ChickenScratch.dialogue_box = dialogue_box_preview.dialogue_box
 	
 	dialogue_box_preview.show()
-	ChickenScratch.load_dialogue_tree(graph_to_dict())
+#	ChickenScratch.load_dialogue_tree(graph_to_dict())
 	ChickenScratch.play_branch(0)
 
 
@@ -584,20 +659,9 @@ func _on_graph_delete_nodes_request(nodes):
 # TODO: undoredo
 
 
-func _on_graph_tree_entered():
-	print_debug("entering graph")
-
-
-func _on_graph_tree_exited():
-	print_debug("exiting graph")
-
-
-func _on_root_node_scn_pressed():
-	print_debug("Add root node")
-
-
 func _on_print_pressed():
 	print_debug(graph_to_json("\t"))
+	print_debug(connection_dict())
 
 
 func _on_delete_confirmation_dialog_confirmed():
@@ -673,23 +737,18 @@ func _on_add_variable_pressed():
 
 
 func _on_variable_delete_requested(variable : VariableValue):
-	ChickenScratch.variables.erase(variable.var_name())
 	remove_dialogue_variable(variable)
 
 
 func _on_variable_value_changed(name : String, value):
-	ChickenScratch.variables[name] = value
+	update_variable_value(name, value)
 	if(previewed_node != null):
 		update_dialogue_preview()
 
 
 func _on_variable_name_changed(old : String, new : String):
-	print_debug("'%s'->: %s" % [old, ChickenScratch.variables.get(old)])
 	# get original variable value, remove old mapping, and remap to new name
-	var value = ChickenScratch.variables.get(old)
-	ChickenScratch.variables.erase(old)
-	ChickenScratch.variables[new] = value
-	print_debug("  ->'%s': %s" % [new, ChickenScratch.variables.get(new)])
+	update_variable_name(old, new)
 
 
 func _on_change_theme_pressed():

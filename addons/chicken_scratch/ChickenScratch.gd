@@ -44,13 +44,14 @@ func _exit_tree():
 
 
 func _enable_plugin():
-	enabled = true
+	print("enable")
 	add_autoload_singleton("ChickenScratch", "res://addons/chicken_scratch/core/DialogueManager.gd")
 	default_settings()
+	enabled = true
 	
 
 func _disable_plugin():
-	_make_visible(false)
+	remove_autoload_singleton("ChickenScratch")
 	enabled = false
 #	if(graph_instance):
 ##		print_debug("disable plugin, %s" % [_get_plugin_name()])

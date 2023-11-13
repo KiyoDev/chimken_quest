@@ -40,12 +40,12 @@ func var_name() -> String:
 	return variable_name.text
 
 
-func as_dict() -> Dictionary:
-	return {
-		"name": variable_name.text,
-		"type": Type.keys()[type],
-		"value": value()
-	}
+#func as_dict() -> Dictionary:
+#	return {
+#		"name": variable_name.text,
+#		"type": Type.keys()[type],
+#		"value": value()
+#	}
 
 ## Sets the name and value input fields to the given values. Hides
 func set_variable(name : String, value : Variant):

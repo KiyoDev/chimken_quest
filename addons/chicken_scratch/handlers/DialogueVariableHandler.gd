@@ -21,7 +21,7 @@ func parse_text(text : String) -> String:
 	return parsed
 
 
-func get_autoloads() -> Array[Node]:
+func get_autoloads() -> Array:
 	var autoloads := []
 	for child in get_tree().root.get_children():
 		autoloads.append(child)
@@ -37,13 +37,23 @@ func get_variable(name : String):
 		var len := split.size()
 		var key := split[0]
 		
-		# check autoloads first
+		# check autoloads first; can call autoload method or get property
+		var current_obj = null
 		for autoload in get_autoloads():
+#			print_debug("autoload[%s] %s" % [autoload.name, key])
 			if key == autoload.name:
-				print_debug("autoload variable")
-				key = split[1]
-				return autoload.call(key) if autoload.has_method(key) else autoload.get(key)
-		
+				current_obj = autoload
+				# check for nested properties/methods
+				for i in range(1, len):
+					key = split[i]
+#					print_debug("ket[%s] %s-%s" % [key, current_obj, current_obj.get(key)])
+					if(key.is_empty() || !current_obj): return null
+					
+					if i == len - 1:
+						return current_obj.get(key) if current_obj is Dictionary || !current_obj.has_method(key) else current_obj.call(key)
+					current_obj = current_obj.get(key)
+					
+		key = split[0]
 		var dict := ChickenScratch.variables;
 		for i in range(1, len):
 			if key.is_empty() || !dict.has(key): return null

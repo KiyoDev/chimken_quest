@@ -22,6 +22,7 @@ Rng="*res://scripts/autoload/rng.gd"
 BattleSystem="*res://scenes/battle/battle_system.tscn"
 Game="*res://scripts/autoload/game.gd"
 ChickenScratch="*res://addons/chicken_scratch/core/DialogueManager.gd"
+InventoryManager="*res://scripts/inventory/InventoryManager.gd"
 
 [debug]
 
