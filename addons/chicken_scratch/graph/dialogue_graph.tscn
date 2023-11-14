@@ -10,7 +10,7 @@
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueGraph.gd" id="8_do64j"]
 [ext_resource type="PackedScene" uid="uid://cwt4loou338go" path="res://addons/chicken_scratch/graph/dialogue_box_preview.tscn" id="10_c6bl4"]
 
-[node name="ChickenScratchEditor" type="VBoxContainer" node_paths=PackedStringArray("Graph", "FileMenu", "Filename", "right_click_menu", "delete_confirmation", "dialogue_preview", "dialogue_box_preview", "test_variables_container", "test_variables")]
+[node name="ChickenScratchEditor" type="VBoxContainer" node_paths=PackedStringArray("Graph", "FileMenu", "Filename", "right_click_menu", "delete_confirmation", "dialogue_preview", "test_variables_container", "test_variables")]
 offset_right = 1584.0
 offset_bottom = 942.0
 size_flags_horizontal = 3
@@ -25,7 +25,6 @@ variable_value = ExtResource("4_wsan6")
 right_click_menu = NodePath("RightClickMenu")
 delete_confirmation = NodePath("DeleteConfirmationDialog")
 dialogue_preview = NodePath("Window")
-dialogue_box_preview = NodePath("DialogueBoxPreview")
 test_variables_container = NodePath("GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/Container")
 test_variables = NodePath("GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/Container/TestVariables")
 dialogue_box_scn = ExtResource("5_w0qgi")
@@ -212,10 +211,6 @@ focus_mode = 1
 bbcode_enabled = true
 scroll_active = false
 context_menu_enabled = true
-
-[node name="DialogueBoxPreview" parent="." instance=ExtResource("10_c6bl4")]
-visible = false
-layout_mode = 2
 
 [connection signal="pressed" from="GraphContainer/HBoxContainer/Print" to="." method="_on_print_pressed"]
 [connection signal="pressed" from="GraphContainer/HBoxContainer/Play" to="." method="_on_play_pressed"]

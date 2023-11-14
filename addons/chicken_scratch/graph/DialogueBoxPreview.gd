@@ -26,6 +26,7 @@ func load_dialogue(text : String):
 	
 
 func _on_change_theme_pressed():
+	dialogue_box.kill()
 	ChangeThemeDialog.show()
 
 
@@ -43,3 +44,8 @@ func _on_change_theme(path : String):
 func _on_finished_revealing(dialogue):
 #	dialogue_box.queue_free()
 	hide()
+
+
+func _on_close_request():
+	ChickenScratch.started = false
+	queue_free()

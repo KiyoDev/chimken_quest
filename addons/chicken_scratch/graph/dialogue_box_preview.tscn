@@ -4,8 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://3543xgdit3ts" path="res://addons/chicken_scratch/dialogue_box.tscn" id="2_8p3e4"]
 
 [node name="DialogueBoxPreview" type="GraphNode" node_paths=PackedStringArray("dialogue_box")]
-offset_right = 300.0
-offset_bottom = 200.0
+offset_right = 259.0
+offset_bottom = 143.0
 title = "Dialogue Box Previewer"
 show_close = true
 resizable = true
@@ -49,5 +49,6 @@ text = "Remove Theme"
 [node name="DialogueBox" parent="VBoxContainer" instance=ExtResource("2_8p3e4")]
 layout_mode = 2
 
+[connection signal="close_request" from="." to="." method="_on_close_request"]
 [connection signal="pressed" from="VBoxContainer/ThemeContainer/ChangeTheme" to="." method="_on_change_theme_pressed"]
 [connection signal="pressed" from="VBoxContainer/ThemeContainer/RemoveTheme" to="." method="_on_remove_theme_pressed"]

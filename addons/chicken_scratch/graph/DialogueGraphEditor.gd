@@ -13,7 +13,6 @@ class_name DialogueGraphEditor extends VBoxContainer
 @export var right_click_menu : PopupMenu
 @export var delete_confirmation : ConfirmationDialog
 @export var dialogue_preview : Window
-@export var dialogue_box_preview : DialogueBoxPreview
 
 @export var test_variables_container : Control
 @export var test_variables : Control
@@ -24,6 +23,8 @@ class_name DialogueGraphEditor extends VBoxContainer
 var root_node : RootNode
 var previewed_node : DialogueNode
 var dialogue_box : DialogueBox
+
+var dialogue_box_preview : DialogueBoxPreview
 
 var node_dict : Dictionary = {}
 var file_menu_items : Dictionary = {}
@@ -577,17 +578,16 @@ func _on_dialogue_node_play(node : DialogueNode):
 	selected_nodes[node] = true
 	
 	dialogue_box_preview = dialogue_box_preview_scn.instantiate()
+#	add_child(dialogue_box_preview)
+	dialogue_box_preview.show()
 	Graph.add_child(dialogue_box_preview)
+	dialogue_box_preview.position_offset = ((get_viewport_rect().size / 4) + Graph.scroll_offset) / Graph.zoom
 	
 	if(dialogue_box == null):
 		dialogue_box = dialogue_box_scn.instantiate()
 		dialogue_box.finished_revealing.connect(_on_dialogue_box_finished)
 		
 	ChickenScratch.dialogue_box = dialogue_box_preview.dialogue_box
-	
-	
-	
-	dialogue_box_preview.show()
 	ChickenScratch.play_at(node.name)
 
 
@@ -596,10 +596,12 @@ func _on_branch_play_requested(slot : int):
 	
 	print_debug("playing branch %s" % [slot])
 	dialogue_box_preview = dialogue_box_preview_scn.instantiate()
-	Graph.add_child(dialogue_box_preview)
-	ChickenScratch.dialogue_box = dialogue_box_preview.dialogue_box
-	
+#	add_child(dialogue_box_preview)
 	dialogue_box_preview.show()
+	Graph.add_child(dialogue_box_preview)
+	dialogue_box_preview.position_offset = ((get_viewport_rect().size / 4) + Graph.scroll_offset) / Graph.zoom
+	
+	ChickenScratch.dialogue_box = dialogue_box_preview.dialogue_box
 	ChickenScratch.play_branch(slot)
 
 

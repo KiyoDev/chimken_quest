@@ -17,8 +17,9 @@ signal finished_revealing
 var delay := 0.05
 
 var revealing_text := false
-
+var reveal_all := false
 var killed := false
+
 
 func _ready():
 	hide_indicator()
@@ -44,6 +45,7 @@ func clear():
 	hide_indicator()
 	TextBox.text = ""
 	TextBox.visible_characters = 0
+	ChickenScratch.Inputs.cancel_input.connect(_on_cancel_input)
 
 
 func hide_indicator():
@@ -57,70 +59,54 @@ func show_indicator():
 
 # \n terminates line, stops and shows indicator
 func load_dialogue(text : String, dialogue := {}):
-#	await get_tree().create_timer(0.001).timeout
 #	print_debug("box rect - %s" % [size])
 	killed = false
+	reveal_all = false
 	clear()
 	indicator.position = Vector2i(size.x - 16, size.y - 10)
 	
 	var timer := Timer.new()
-	timer.wait_time = delay
 	add_child(timer)
-	timer.start()
 	
 	var line_num = 1
 	for line in text.split("\n\n"):
+		timer.wait_time = delay
+		timer.start()
 		print("%s: '%s'" % [line_num, line])
 		TextBox.text = line
 		TextBox.visible_characters = 0
 		var len := TextBox.get_parsed_text().length()
 		
-#		tween.tween_property(TextBox, "visible_characters", len, delay * len)
-#		tween.play()
-		
 		for sec in range(0, len):
-			print("killed=%s" % [killed])
-			if(killed): break
+			print("killed=%s, %s" % [killed, reveal_all])
+			if(killed || reveal_all): break
 			# TODO: if forward dialogue, reveal rest of text and break loop
 			# if(forward): visible_characters = len; break
 			
 			TextBox.visible_characters += 1
-			print("t: '%s'" % [TextBox.get_parsed_text().substr(0, TextBox.visible_characters)])
+			print("t: %s, '%s'" % [len, TextBox.get_parsed_text().substr(0, TextBox.visible_characters)])
 			await timer.timeout
 		
 			timer.wait_time = delay
 		
 		timer.stop()
 		show_indicator()
-#		print("aa - %s" % [ChickenScratch.Inputs.has_signal("input_action")])
 		await ChickenScratch.Inputs.input_action
-		# TODO: show indicator, wait for input 
+		hide_indicator()
 		
-#		var continue_dialogue = await go_next
 		print("\tdebug - %s" % [line])
-#		if(!continue_dialogue): 
-#			print_debug("do not continue - %s" % [line])
-##			restart()
-#			return
+		
 		if(killed): break
+		reveal_all = false
 		line_num += 1
-#	for line in text.split("\n"):
-#		tween = create_tween()
-#		tween.stop()
-#		tween.finished.connect(_on_tween_finished.bind(line))
-#		print("%s: '%s'" % [line_num, line])
-#		TextBox.text = line
-#		TextBox.visible_characters = 0
-#		var len := TextBox.get_parsed_text().length()
-#
-#		tween.tween_property(TextBox, "visible_characters", len, delay * len)
-#		tween.play()
+	
 	print("finished")
 	TextBox.visible_characters = 0
 	timer.queue_free()
 	finished_revealing.emit(dialogue)
 	hide_indicator()
 	killed = false
+	reveal_all = false
 
 
 #func _on_tween_finished(line : String):
@@ -134,6 +120,13 @@ func load_dialogue(text : String, dialogue := {}):
 
 func kill():
 	killed = true
+	TextBox.visible_characters = TextBox.get_parsed_text().length()
+	hide_indicator()
+
+
+func _on_cancel_input():
+	print("cancel input")
+	reveal_all = true
 	TextBox.visible_characters = TextBox.get_parsed_text().length()
 	hide_indicator()
 
