@@ -3,8 +3,6 @@ class_name ChickenScratchPlugin extends EditorPlugin
 
 const DIALOGUE_ACCEPT := "input/dialogue_accept"
 const DIALOGUE_CANCEL := "input/dialogue_cancel"
-const ACCEPT_SETTING_OVERRIDE := "dialogue/settings/accept"
-const CANCEL_SETTING_OVERRIDE := "dialogue/settings/cancel"
 const GRAPH = preload("res://addons/chicken_scratch/graph/dialogue_graph.tscn")
 
 var graph_instance : DialogueGraphEditor
@@ -16,38 +14,31 @@ var enabled : bool
 
 
 func _enter_tree():
-	print_debug(get_editor_interface().get_editor_main_screen().get_children())
+	print_debug("_enter_tree")
 	
 	graph_instance = GRAPH.instantiate()
-	# Initialization of the plugin goes here.
-
+	graph_instance.hide()
 	get_editor_interface().get_editor_main_screen().add_child(graph_instance)
 	_make_visible(false)
-
-
-func _ready():
-	print_debug("graph - %s, %s" % [graph_instance, graph_instance.has_method("on_plugin_start")])
-	graph_instance.on_plugin_start()
 
 
 func _exit_tree():
 	_make_visible(false)
 	if(enabled && graph_instance):
-#		print_debug("exit tree")
-		graph_instance.release_focus()
-		get_editor_interface().get_editor_main_screen().remove_child(graph_instance)
+		remove_control_from_bottom_panel(graph_instance)
 		graph_instance.queue_free()
-#		get_editor_interface().get_editor_main_screen().get_
-#		get_editor_interface().get_editor_main_screen().get_child(0).grab_focus()
-#		get_editor_interface().get_editor_main_screen().get_child(0).visible = true
-#		update_overlays()
+
+
+func _ready():
+	print_debug("_ready")
 
 
 func _enable_plugin():
-	print("enable")
-	add_autoload_singleton("ChickenScratch", "res://addons/chicken_scratch/core/DialogueManager.gd")
+	print("_enable_plugin")
 	default_settings()
+	add_autoload_singleton("ChickenScratch", "res://addons/chicken_scratch/core/DialogueManager.gd")
 	enabled = true
+	graph_instance.on_plugin_start()
 	
 
 func _disable_plugin():
@@ -86,43 +77,61 @@ func _get_plugin_icon():
 
 
 func default_settings():
+	print("has=%s, %s" % [ProjectSettings.has_setting(DIALOGUE_ACCEPT), InputMap.has_action("dialogue_accept")])
+	var enter := InputEventKey.new()
+	enter.keycode = KEY_ENTER
+	var space := InputEventKey.new()
+	space.keycode = KEY_SPACE
+	var x := InputEventKey.new()
+	x.keycode = KEY_X
+	var controller_accept := InputEventJoypadButton.new()
+	controller_accept.button_index = JOY_BUTTON_A
+	
 	if(!ProjectSettings.has_setting(DIALOGUE_ACCEPT)):
-		var enter := InputEventKey.new()
-		enter.keycode = KEY_ENTER
-		var space := InputEventKey.new()
-		space.keycode = KEY_SPACE
-		var x := InputEventKey.new()
-		x.keycode = KEY_X
-		var controller_input := InputEventJoypadButton.new()
-		controller_input.button_index = JOY_BUTTON_A
-		
+
 		ProjectSettings.set_setting(DIALOGUE_ACCEPT, {
-			'events': [
+			"deadzone": 0.5,
+			"events": [
 				enter,
 				space,
 				x,
-				controller_input
+				controller_accept
 			]
 		});
-		ProjectSettings.save()
-		
+
+	if(!InputMap.has_action("dialogue_accept")):
+		InputMap.add_action("dialogue_accept")
+		InputMap.action_add_event("dialogue_accept", enter)
+		InputMap.action_add_event("dialogue_accept", space)
+		InputMap.action_add_event("dialogue_accept", x)
+		InputMap.action_add_event("dialogue_accept", controller_accept)
+
+	var escape := InputEventKey.new()
+	escape.keycode = KEY_ESCAPE
+	var backspace := InputEventKey.new()
+	backspace.keycode = KEY_BACKSPACE
+	var z := InputEventKey.new()
+	z.keycode = KEY_Z
+	var controller_cancel := InputEventJoypadButton.new()
+	controller_cancel.button_index = JOY_BUTTON_B
+	
 	if(!ProjectSettings.has_setting(DIALOGUE_CANCEL)):
-		var escape := InputEventKey.new()
-		escape.keycode = KEY_ESCAPE
-		var backspace := InputEventKey.new()
-		backspace.keycode = KEY_BACKSPACE
-		var z := InputEventKey.new()
-		z.keycode = KEY_Z
-		var controller_input := InputEventJoypadButton.new()
-		controller_input.button_index = JOY_BUTTON_B
-		
+
 		ProjectSettings.set_setting(DIALOGUE_CANCEL, {
-			'events': [
+			"deadzone": 0.5,
+			"events": [
 				escape,
 				backspace,
 				z,
-				controller_input
+				controller_cancel
 			]
 		});
-		ProjectSettings.save()
+
+	if(!InputMap.has_action("dialogue_cancel")):
+		InputMap.add_action("dialogue_cancel")
+		InputMap.action_add_event("dialogue_cancel", escape)
+		InputMap.action_add_event("dialogue_cancel", backspace)
+		InputMap.action_add_event("dialogue_cancel", z)
+		InputMap.action_add_event("dialogue_cancel", controller_cancel)
+	ProjectSettings.save()
 

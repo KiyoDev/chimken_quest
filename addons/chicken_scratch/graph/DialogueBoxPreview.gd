@@ -1,5 +1,5 @@
 @tool
-class_name DialogueBoxPreview extends Window
+class_name DialogueBoxPreview extends GraphNode
 
 
 @export var dialogue_box : DialogueBox
@@ -18,6 +18,7 @@ func _ready():
 	ChangeThemeDialog.file_selected.connect(_on_change_theme)
 	add_child(ChangeThemeDialog)
 	ChangeThemeDialog.hide()
+	dialogue_box.finished_revealing.connect(_on_finished_revealing)
 
 
 func load_dialogue(text : String):
@@ -37,3 +38,8 @@ func _on_change_theme(path : String):
 	var theme : Theme = load(path)
 	dialogue_box.set_theme(theme)
 #	dialogue_preview.get_node("Container/VBoxContainer/ThemeLabel").text = path.get_file()
+
+
+func _on_finished_revealing(dialogue):
+#	dialogue_box.queue_free()
+	hide()

@@ -10,6 +10,8 @@ signal dialogue_paused
 
 signal dialogue_resumed
 
+signal dialogue_started
+
 signal dialogue_finished
 
 signal variables_updated
@@ -25,18 +27,27 @@ enum Type {
 @export var dialogue_box : DialogueBox
 
 var VariableHandler : DialogueVariableHandler
+var Inputs : DialogueInputHandler
 
 var variables := {} # { "name": <value> }
 
-#var dialogue_tree := {}
 var dialogue_tree : DialogueTree
+
+var started := false 
 
 
 func _ready():
 	# module stuff
 	VariableHandler = DialogueVariableHandler.new()
 	add_child(VariableHandler)
-	print("VariableHandler %s" % [VariableHandler])
+	
+	Inputs = DialogueInputHandler.new()
+	Inputs.name = "Input"
+	add_child(Inputs)
+	
+	print("VariableHandler %s" % [Inputs])
+#	print("InputHandler %s" % [ChickenScratch.Input])
+	print("Inputs %s" % [ChickenScratch.Inputs])
 
 
 func update_variable_name(old : String, new : Variant):
@@ -72,10 +83,13 @@ func start_from_path(path : String):
 			variables = dialogue_tree.variables
 		elif path.to_lower().ends_with(".tres") || path.to_lower().ends_with(".res"):
 			dialogue_tree = load(path)
+	
+	started = true
+	dialogue_started.emit()
 	# else: search through a directory of dialogue trees?
 
 
-func preload_tree(path : String):
+func preload_tree(path : String, dialogue_box : DialogueBox):
 	print("preload tree - %s" % [path])
 	if path.begins_with("res://"):
 		print_debug("??? - %s, %s" % [path.to_lower().ends_with(".dngraph"), path.to_lower().ends_with(".json")])
@@ -88,36 +102,27 @@ func preload_tree(path : String):
 		elif(path.to_lower().ends_with(".tres") || path.to_lower().ends_with(".res")):
 			dialogue_tree = load(path)
 		
+		self.dialogue_box = dialogue_box
+		
 
-#func connection_dict() -> Dictionary:
-#    var connections := {}
-#    for connection in dialogue_tree.connections:
-#        if(!connections.has(connection.from)):
-##			print_debug("add new connection to dict")
-#            connections[connection.from] = {}
-#        # support multiple connections at same "from_port"?
-#        connections[connection.from][connection.from_port] = {"to": connection.to, "to_port": connection.to_port}
-#
-#    return connections
+func reset():
+	started = false
 
 
-#func load_dialogue_tree(dialogue_tree : DialogueTree):
-#    if(!dialogue_box.dialogue_finished.is_connected(_on_dialogue_finished)):
-#        dialogue_box.dialogue_finished.connect(_on_dialogue_finished)
-#        dialogue_box.restart()
-#    self.dialogue_tree = dialogue_tree
-#    connections = connection_dict()
-#    print_debug("loading tree - %s" % [variables])
+func stop():
+	started = false
+	dialogue_finished.emit()
 
 
-#func load_dialogue_tree(dialogue_tree : Dictionary):
-#    if(!dialogue_box.dialogue_finished.is_connected(_on_dialogue_finished)):
-#        dialogue_box.dialogue_finished.connect(_on_dialogue_finished)
-#        dialogue_box.restart()
-#    self.dialogue_tree = dialogue_tree
-#    connections = connection_dict()
-#    print_debug("loading tree - %s" % [variables])
-#	print_debug("connections - %s" % [connections])
+func kill():
+	started = false
+	dialogue_box.kill()
+	dialogue_finished.emit()
+
+
+func play():
+	var root = dialogue_tree.root_node
+	load_next_dialogue(root.name, 0)
 
 
 func play_branch(slot : int):
@@ -125,13 +130,7 @@ func play_branch(slot : int):
 	load_next_dialogue(root.name, slot)
 
 
-func play():
-	var root = dialogue_tree.root_node
-	# TODO
-	load_next_dialogue(root.name, 0)
-
-
-func load_at(name : String):
+func play_at(name : String):
 	load_dialogue(dialogue_tree.nodes[name])
 
 
@@ -150,6 +149,10 @@ func load_next_dialogue(name : String, slot):
 
 
 func load_dialogue(dialogue : Dictionary):
+	if(started): 
+		push_warning("Dialogue already started...")
+		return
+	started = true
 	print("dialogue - %s" % [dialogue])
 	var type : Type = Type[dialogue.type] # type name -> enum
 	var speaker : String = dialogue.speaker
@@ -167,7 +170,10 @@ func load_dialogue(dialogue : Dictionary):
 	var parsed := VariableHandler.parse_text(text)
 	
 #	DialogueInputHandler.accept_input.connect()
-	dialogue_box.load_dialogue(parsed, dialogue)
+	await dialogue_box.load_dialogue(parsed, dialogue)
+	
+	dialogue_finished.emit()
+	started = false
 
 
 func _on_dialogue_finished(dialogue : Dictionary):

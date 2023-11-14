@@ -6,7 +6,7 @@ signal go_next
 
 signal text_stopped
 
-signal dialogue_finished
+signal finished_revealing
 
 
 @export var Background : NinePatchRect
@@ -14,39 +14,19 @@ signal dialogue_finished
 @export var indicator : Sprite2D
 @export var indicator_animator : AnimationPlayer
 
-var text_speed := 0.04
+var delay := 0.05
 
 var revealing_text := false
 
-var tween : Tween
-
-var tween_finished := false
-
+var killed := false
 
 func _ready():
-	tween_finished = false
-	indicator.hide()
+	hide_indicator()
+#	ChickenScratch.dialogue_finished.connect(_on_dialogue_finished)
 
 
 func _exit_tree():
-	if(tween != null):
-		tween.stop()
-
-
-#func _input(event):
-#	if(tween == null): return
-#
-#	if(tween_finished && (event.is_action_pressed(&"ui_accept") || event.is_action_pressed(&"ui_cancel"))):
-#		print_debug("DialogueBox input - %s" % [event])
-#		tween_finished = false
-#		indicator_animator.stop()
-#		indicator.hide()
-#		go_next.emit(true)
-#	elif(tween.is_running() && event.is_action_pressed(&"ui_cancel")):
-#		show_indicator()
-#		tween.stop()
-#		tween_finished = true
-#		TextBox.visible_ratio = 1
+	pass
 
 
 #func restart():
@@ -60,6 +40,14 @@ func _exit_tree():
 #	indicator.hide()
 
 
+func clear():
+	hide_indicator()
+	TextBox.text = ""
+	TextBox.visible_characters = 0
+
+
+func hide_indicator():
+	indicator.hide()
 
 
 func show_indicator():
@@ -69,43 +57,85 @@ func show_indicator():
 
 # \n terminates line, stops and shows indicator
 func load_dialogue(text : String, dialogue := {}):
-	tween_finished = false
-	await get_tree().create_timer(0.001).timeout
+#	await get_tree().create_timer(0.001).timeout
 #	print_debug("box rect - %s" % [size])
+	killed = false
+	clear()
 	indicator.position = Vector2i(size.x - 16, size.y - 10)
 	
+	var timer := Timer.new()
+	timer.wait_time = delay
+	add_child(timer)
+	timer.start()
+	
 	var line_num = 1
-	for line in text.split("\n"):
-		tween = create_tween()
-		tween.stop()
-		tween.finished.connect(_on_tween_finished.bind(line))
+	for line in text.split("\n\n"):
 		print("%s: '%s'" % [line_num, line])
 		TextBox.text = line
 		TextBox.visible_characters = 0
 		var len := TextBox.get_parsed_text().length()
 		
-		tween.tween_property(TextBox, "visible_characters", len, text_speed * len)
-		tween.play()
+#		tween.tween_property(TextBox, "visible_characters", len, delay * len)
+#		tween.play()
 		
-		var continue_dialogue = await go_next
+		for sec in range(0, len):
+			print("killed=%s" % [killed])
+			if(killed): break
+			# TODO: if forward dialogue, reveal rest of text and break loop
+			# if(forward): visible_characters = len; break
+			
+			TextBox.visible_characters += 1
+			print("t: '%s'" % [TextBox.get_parsed_text().substr(0, TextBox.visible_characters)])
+			await timer.timeout
+		
+			timer.wait_time = delay
+		
+		timer.stop()
+		show_indicator()
+#		print("aa - %s" % [ChickenScratch.Inputs.has_signal("input_action")])
+		await ChickenScratch.Inputs.input_action
+		# TODO: show indicator, wait for input 
+		
+#		var continue_dialogue = await go_next
 		print("\tdebug - %s" % [line])
-		if(!continue_dialogue): 
-			print_debug("do not continue - %s" % [line])
-#			restart()
-			return
+#		if(!continue_dialogue): 
+#			print_debug("do not continue - %s" % [line])
+##			restart()
+#			return
+		if(killed): break
 		line_num += 1
-	
-	dialogue_finished.emit(dialogue)
+#	for line in text.split("\n"):
+#		tween = create_tween()
+#		tween.stop()
+#		tween.finished.connect(_on_tween_finished.bind(line))
+#		print("%s: '%s'" % [line_num, line])
+#		TextBox.text = line
+#		TextBox.visible_characters = 0
+#		var len := TextBox.get_parsed_text().length()
+#
+#		tween.tween_property(TextBox, "visible_characters", len, delay * len)
+#		tween.play()
+	print("finished")
+	TextBox.visible_characters = 0
+	timer.queue_free()
+	finished_revealing.emit(dialogue)
+	hide_indicator()
+	killed = false
 
 
-func _on_tween_finished(line : String):
-	if(tween_finished):
-		print_debug("tween finished but already finished - %s" % [line])
-#		restart()
-		return
-	print_debug("tween finished - %s, %s" % [tween_finished, line])
-	show_indicator()
-	tween_finished = true
+#func _on_tween_finished(line : String):
+#	if(tween_finished):
+#		print_debug("tween finished but already finished - %s" % [line])
+##		restart()
+#		return
+#	print_debug("tween finished - %s, %s" % [tween_finished, line])
+#	show_indicator()
+#	tween_finished = true
+
+func kill():
+	killed = true
+	TextBox.visible_characters = TextBox.get_parsed_text().length()
+	hide_indicator()
 
 
 func _on_resized():

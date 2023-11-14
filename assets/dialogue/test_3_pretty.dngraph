@@ -14,12 +14,6 @@
 				"to_port": 0
 			}
 		},
-		"GraphNode": {
-			"0": {
-				"to": "_GraphNode_40334",
-				"to_port": 0
-			}
-		},
 		"_GraphNode_40286": {
 			"0": {
 				"to": "_GraphNode_40359",
@@ -37,6 +31,12 @@
 			},
 			"1": {
 				"to": "_GraphNode_50748",
+				"to_port": 0
+			}
+		},
+		"GraphNode": {
+			"0": {
+				"to": "_GraphNode_40334",
 				"to_port": 0
 			}
 		}
@@ -83,8 +83,8 @@
 					"y": 200
 				},
 				"size": {
-					"x": 240.000030517578,
-					"y": 286.999877929688
+					"x": 240,
+					"y": 287
 				},
 				"custom_minimum_size": {
 					"x": 240,
@@ -107,8 +107,8 @@
 					"y": 520
 				},
 				"size": {
-					"x": 575.532775878906,
-					"y": 287.000030517578
+					"x": 575.532348632813,
+					"y": 287
 				},
 				"custom_minimum_size": {
 					"x": 240,
@@ -131,8 +131,8 @@
 					"y": 840
 				},
 				"size": {
-					"x": 240.000366210938,
-					"y": 287.000122070313
+					"x": 240.000061035156,
+					"y": 287.000366210938
 				},
 				"custom_minimum_size": {
 					"x": 240,
@@ -155,8 +155,8 @@
 					"y": 1160
 				},
 				"size": {
-					"x": 240.000183105469,
-					"y": 287
+					"x": 240.000122070313,
+					"y": 287.000122070313
 				},
 				"custom_minimum_size": {
 					"x": 240,
@@ -179,7 +179,7 @@
 					"y": 800
 				},
 				"size": {
-					"x": 240.000015258789,
+					"x": 240,
 					"y": 287.000366210938
 				},
 				"custom_minimum_size": {
@@ -210,8 +210,8 @@
 					"y": 600
 				},
 				"size": {
-					"x": 240.000030517578,
-					"y": 461.999908447266
+					"x": 240,
+					"y": 462.000122070313
 				},
 				"custom_minimum_size": {
 					"x": 240,
@@ -223,7 +223,7 @@
 			"name": "_GraphNode_40359",
 			"type": "Offering",
 			"speaker": "Bungus",
-			"text": "[rainbow][wave]${burgers} ${item_name}[/wave][/rainbow]  pls.\n [shake rate=20.0 level=4]I am so hungry! I could probably eat 1000 horses if I really wanted to...[/shake]",
+			"text": "[rainbow][wave]${burgers} ${item_name}[/wave][/rainbow]  pls.\n\n [shake rate=20.0 level=4]I am so hungry! I could probably eat 1000 horses if I really wanted to...[/shake]",
 			"variables": [
 				"${burgers}",
 				"${item_name}"
@@ -248,8 +248,8 @@
 					"y": 500
 				},
 				"size": {
-					"x": 240.000183105469,
-					"y": 604.000122070313
+					"x": 240.000061035156,
+					"y": 604.000366210938
 				},
 				"custom_minimum_size": {
 					"x": 240,
@@ -261,9 +261,10 @@
 			"name": "_GraphNode_40334",
 			"type": "Dialogue",
 			"speaker": "Bungus",
-			"text": "That is [shake rate=22.0 level=4]${active}![/shake]",
+			"text": "That is [shake rate=22.0 level=4]${active}![/shake] Please give me ${InventoryManager.nested.nested.value} gold!",
 			"variables": [
-				"${active}"
+				"${active}",
+				"${InventoryManager.nested.nested.value}"
 			],
 			"properties": {
 
@@ -274,8 +275,8 @@
 					"y": 200
 				},
 				"size": {
-					"x": 240.000183105469,
-					"y": 286.999877929688
+					"x": 240.000061035156,
+					"y": 287
 				},
 				"custom_minimum_size": {
 					"x": 240,

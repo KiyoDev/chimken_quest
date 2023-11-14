@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://duio0ke3bpeoi"]
+[gd_scene load_steps=10 format=3 uid="uid://duio0ke3bpeoi"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueGraphEditor.gd" id="1_x85w6"]
 [ext_resource type="PackedScene" uid="uid://542bcl844gbm" path="res://addons/chicken_scratch/graph/dialogue_node.tscn" id="2_1eaom"]
@@ -7,11 +7,10 @@
 [ext_resource type="PackedScene" uid="uid://dttyij5w5h0nc" path="res://addons/chicken_scratch/graph/variable_value.tscn" id="4_wsan6"]
 [ext_resource type="PackedScene" uid="uid://3543xgdit3ts" path="res://addons/chicken_scratch/dialogue_box.tscn" id="5_w0qgi"]
 [ext_resource type="Texture2D" uid="uid://cnbk0jnfotvev" path="res://addons/chicken_scratch/icons/play_button.svg" id="6_av8pf"]
-[ext_resource type="Script" path="res://addons/chicken_scratch/graph/GraphVariableSeeker.gd" id="8_daxiu"]
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueGraph.gd" id="8_do64j"]
 [ext_resource type="PackedScene" uid="uid://cwt4loou338go" path="res://addons/chicken_scratch/graph/dialogue_box_preview.tscn" id="10_c6bl4"]
 
-[node name="ChickenScratch" type="VBoxContainer" node_paths=PackedStringArray("Graph", "FileMenu", "Filename", "right_click_menu", "delete_confirmation", "dialogue_preview", "dialogue_box_preview", "test_variables_container", "test_variables")]
+[node name="ChickenScratchEditor" type="VBoxContainer" node_paths=PackedStringArray("Graph", "FileMenu", "Filename", "right_click_menu", "delete_confirmation", "dialogue_preview", "dialogue_box_preview", "test_variables_container", "test_variables")]
 offset_right = 1584.0
 offset_bottom = 942.0
 size_flags_horizontal = 3
@@ -30,6 +29,7 @@ dialogue_box_preview = NodePath("DialogueBoxPreview")
 test_variables_container = NodePath("GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/Container")
 test_variables = NodePath("GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/Container/TestVariables")
 dialogue_box_scn = ExtResource("5_w0qgi")
+dialogue_box_preview_scn = ExtResource("10_c6bl4")
 
 [node name="GraphContainer" type="VBoxContainer" parent="."]
 texture_filter = 1
@@ -156,6 +156,7 @@ item_0/text = "Add Dialogue Node"
 item_0/id = 0
 
 [node name="Window" type="Window" parent="."]
+handle_input_locally = false
 title = "Preview"
 initial_position = 4
 size = Vector2i(300, 220)
@@ -212,11 +213,9 @@ bbcode_enabled = true
 scroll_active = false
 context_menu_enabled = true
 
-[node name="GraphVariableSeeker" type="Node" parent="."]
-script = ExtResource("8_daxiu")
-
 [node name="DialogueBoxPreview" parent="." instance=ExtResource("10_c6bl4")]
 visible = false
+layout_mode = 2
 
 [connection signal="pressed" from="GraphContainer/HBoxContainer/Print" to="." method="_on_print_pressed"]
 [connection signal="pressed" from="GraphContainer/HBoxContainer/Play" to="." method="_on_play_pressed"]
@@ -240,4 +239,3 @@ visible = false
 [connection signal="close_requested" from="Window" to="." method="_on_window_close_requested"]
 [connection signal="pressed" from="Window/Container/VBoxContainer/HBoxContainer/ChangeTheme" to="." method="_on_change_theme_pressed"]
 [connection signal="pressed" from="Window/Container/VBoxContainer/HBoxContainer/RemoveTheme" to="." method="_on_remove_theme_pressed"]
-[connection signal="close_requested" from="DialogueBoxPreview" to="." method="_on_dialogue_box_preview_close_requested"]

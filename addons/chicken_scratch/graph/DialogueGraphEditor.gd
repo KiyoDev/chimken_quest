@@ -18,6 +18,9 @@ class_name DialogueGraphEditor extends VBoxContainer
 @export var test_variables_container : Control
 @export var test_variables : Control
 
+@export var dialogue_box_scn : PackedScene
+@export var dialogue_box_preview_scn : PackedScene
+
 var root_node : RootNode
 var previewed_node : DialogueNode
 var dialogue_box : DialogueBox
@@ -38,9 +41,6 @@ static var SaveFileDialog : EditorFileDialog
 static var ChangeThemeDialog : EditorFileDialog
 
 static var save_pretty := false
- 
-
-@export var dialogue_box_scn : PackedScene
 
 
 func _ready():
@@ -80,7 +80,7 @@ func on_plugin_start():
 #	print_debug("file_menu_items=%s" % [file_menu_items])
 #	print_debug("Graph.get_rect().end=%s" % [Graph.get_parent().get_rect().end])
 	
-	dialogue_box_preview.hide()
+#	dialogue_box_preview.hide()
 	
 	new_dialogue_graph(Vector2(380, 380))
 
@@ -479,7 +479,11 @@ func _on_open_file(path : String):
 	
 #	if(dict.has("variables") && dict.variables.size() > 0):
 
-	ChickenScratch.preload_tree(path)
+	if(dialogue_box == null):
+		dialogue_box = dialogue_box_scn.instantiate()
+		dialogue_box.finished_revealing.connect(_on_dialogue_box_finished)
+		
+	ChickenScratch.preload_tree(path, dialogue_box)
 	
 	test_variables_container.show()
 	for child in test_variables.get_children():
@@ -548,17 +552,6 @@ func _on_graph_node_slots_removed(node : GraphNode, from_port : int):
 			Graph.connect_node(connections.from, connections.from_port - 1, connections.to, connections.to_port)
 
 
-func _on_branch_play_requested(slot : int):
-	print_debug("playing branch %s" % [slot])
-	ChickenScratch.dialogue_box = dialogue_box_preview.dialogue_box
-	
-	dialogue_box_preview.show()
-	
-#	ChickenScratch.load_dialogue_tree(graph_to_dict())
-	
-	ChickenScratch.play_branch(slot)
-
-
 ## Shows a dialogue preview node when the preview button is pressed on a DialogueNode
 func _on_dialogue_node_preview(node : DialogueNode):
 	print_debug("Preview: %s, %s" % [node.text, node.dialogue_variables])
@@ -570,27 +563,49 @@ func _on_dialogue_node_preview(node : DialogueNode):
 	
 	if(dialogue_box == null):
 		dialogue_box = dialogue_box_scn.instantiate()
-		dialogue_box.dialogue_finished.connect(_on_dialogue_box_finished)
+		dialogue_box.finished_revealing.connect(_on_dialogue_box_finished)
 		dialogue_preview.get_node("Container/VBoxContainer").add_child(dialogue_box)
 		dialogue_box.load_dialogue(dialogue_preview.get_node("%PreviewText").text)
 
 
 # PLAY
 func _on_dialogue_node_play(node : DialogueNode):
+	if(ChickenScratch.started): return
 	print_debug("Play: %s, %s" % [node.text(), node.dialogue_variables])
 	Graph.set_selected(node)
 	selected_nodes.clear()
 	selected_nodes[node] = true
+	
+	dialogue_box_preview = dialogue_box_preview_scn.instantiate()
+	Graph.add_child(dialogue_box_preview)
+	
+	if(dialogue_box == null):
+		dialogue_box = dialogue_box_scn.instantiate()
+		dialogue_box.finished_revealing.connect(_on_dialogue_box_finished)
+		
 	ChickenScratch.dialogue_box = dialogue_box_preview.dialogue_box
 	
-#	await ChickenScratch.load_dialogue_tree(graph_to_dict())
+	
 	
 	dialogue_box_preview.show()
-	ChickenScratch.load_dialogue(node.to_dict())
+	ChickenScratch.play_at(node.name)
+
+
+func _on_branch_play_requested(slot : int):
+	if(ChickenScratch.started): return
+	
+	print_debug("playing branch %s" % [slot])
+	dialogue_box_preview = dialogue_box_preview_scn.instantiate()
+	Graph.add_child(dialogue_box_preview)
+	ChickenScratch.dialogue_box = dialogue_box_preview.dialogue_box
+	
+	dialogue_box_preview.show()
+	ChickenScratch.play_branch(slot)
 
 
 func _on_dialogue_box_preview_close_requested():
-	dialogue_box_preview.hide()
+	dialogue_box_preview.queue_free()
+	ChickenScratch.kill()
 
 
 func _on_dialogue_box_finished(dialogue : Dictionary):
