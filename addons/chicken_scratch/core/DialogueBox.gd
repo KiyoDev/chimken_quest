@@ -57,9 +57,10 @@ func show_indicator():
 	indicator.show()
 
 
-# \n terminates line, stops and shows indicator
+# \n\n terminates line, stops and shows indicator
 func load_dialogue(text : String, dialogue := {}):
-#	print_debug("box rect - %s" % [size])
+	await get_tree().create_timer(0.001).timeout
+	print_debug("box load_dialogue - %s" % [dialogue])
 	killed = false
 	reveal_all = false
 	clear()
@@ -77,14 +78,15 @@ func load_dialogue(text : String, dialogue := {}):
 		TextBox.visible_characters = 0
 		var len := TextBox.get_parsed_text().length()
 		
+		# Reveal text 1 character at a time w/ given delay
 		for sec in range(0, len):
-			print("killed=%s, %s" % [killed, reveal_all])
+#			print("killed=%s, %s" % [killed, reveal_all])
 			if(killed || reveal_all): break
 			# TODO: if forward dialogue, reveal rest of text and break loop
 			# if(forward): visible_characters = len; break
 			
 			TextBox.visible_characters += 1
-			print("t: %s, '%s'" % [len, TextBox.get_parsed_text().substr(0, TextBox.visible_characters)])
+#			print_debug("t: %s, '%s'" % [len, TextBox.get_parsed_text().substr(0, TextBox.visible_characters)])
 			await timer.timeout
 		
 			timer.wait_time = delay
@@ -107,6 +109,8 @@ func load_dialogue(text : String, dialogue := {}):
 	hide_indicator()
 	killed = false
 	reveal_all = false
+	ChickenScratch.Inputs.cancel_input.disconnect(_on_cancel_input)
+	
 
 
 #func _on_tween_finished(line : String):
@@ -118,12 +122,14 @@ func load_dialogue(text : String, dialogue := {}):
 #	show_indicator()
 #	tween_finished = true
 
+## Force stop the dialogue
 func kill():
 	killed = true
 	TextBox.visible_characters = TextBox.get_parsed_text().length()
 	hide_indicator()
 
 
+## Callback when Inputs receives cancel input. Reveals the remaining text and stops the current
 func _on_cancel_input():
 	print("cancel input")
 	reveal_all = true

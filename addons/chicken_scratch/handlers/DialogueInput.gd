@@ -42,7 +42,7 @@ func handle_cancel():
 
 func _input(event):
 #	print("inputtt - %s, %s, %s, %s" % [ChickenScratch.started, event is InputEventKey, event.is_action_pressed(DIALOGUE_ACCEPT) if event is InputEventKey else "not key", Input.is_key_pressed(KEY_SPACE)])
-	if(!ChickenScratch.started || !event is InputEventKey): return
+	if(!ChickenScratch.playing || !event is InputEventKey): return
 #	print("INPUT")
 #	if(Input.is_key_pressed(KEY_SPACE)):
 #		handle_accept()   

@@ -2,6 +2,13 @@
 class_name DialogueGraphEditor extends VBoxContainer
 
 
+enum DialogType {
+	OPEN_GRAPH,
+	SAVE_GRAPH,
+	CHANGE_THEME
+}
+
+
 @export var Graph : DialogueGraph
 @export var FileMenu : MenuButton
 @export var Filename : Label
@@ -37,15 +44,19 @@ var current_file_path : String = ""
 
 var new_node_position := Vector2()
 
-static var OpenFileDialog : EditorFileDialog
-static var SaveFileDialog : EditorFileDialog
-static var ChangeThemeDialog : EditorFileDialog
+var dialog : EditorFileDialog
 
 static var save_pretty := false
 
 
 func _ready():
 	print_debug("ready")
+	var popup := FileMenu.get_popup()
+	if(!popup.id_pressed.is_connected(_on_file_menu_opened)):
+		popup.id_pressed.connect(_on_file_menu_opened)
+#
+	for i in popup.item_count:
+		file_menu_items[i] = popup.get_item_text(i)
 
 
 func _enter_tree():
@@ -63,18 +74,10 @@ func _notification(what):
 			root_node = null
 #		var popup := FileMenu.get_popup()
 #		popup.id_pressed.disconnect(_on_file_menu_opened)
-		OpenFileDialog.queue_free()
-		SaveFileDialog.queue_free()
 
 
 func on_plugin_start():
 	# init EditorFileDialogs
-	var popup := FileMenu.get_popup()
-	if(!popup.id_pressed.is_connected(_on_file_menu_opened)):
-		popup.id_pressed.connect(_on_file_menu_opened)
-
-	for i in popup.item_count:
-		file_menu_items[i] = popup.get_item_text(i)
 		
 #	ChickenScratch.dialogue_finished.connect(_on_dialogue_player_finished)
 
@@ -85,37 +88,72 @@ func on_plugin_start():
 	
 	new_dialogue_graph(Vector2(380, 380))
 
-	OpenFileDialog = EditorFileDialog.new()
-	OpenFileDialog.title = "Open a DialogueNode graph"
-	OpenFileDialog.size = Vector2i(800, 400)
-	OpenFileDialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE
-	OpenFileDialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS
-#	OpenFileDialog.transient = true
-	OpenFileDialog.add_filter("*.dngraph", "DialogueNode Graph")
-	OpenFileDialog.add_filter("*.json", "JSON file")
-	OpenFileDialog.file_selected.connect(_on_open_file)
-	add_child(OpenFileDialog)
+#	setup_dialogs()
 
-	SaveFileDialog = EditorFileDialog.new()
-	SaveFileDialog.size = Vector2i(800, 400)
-	SaveFileDialog.file_mode = EditorFileDialog.FILE_MODE_SAVE_FILE
-	SaveFileDialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS
-#	SaveFileDialog.transient = true
-	SaveFileDialog.add_filter("*.dngraph", "DialogueNode Graph")
-	SaveFileDialog.add_filter("*.json", "JSON file")
-	SaveFileDialog.file_selected.connect(_on_save_file)
-	add_child(SaveFileDialog)
 
-	ChangeThemeDialog = EditorFileDialog.new()
-	ChangeThemeDialog.size = Vector2i(800, 400)
-	ChangeThemeDialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE
-	ChangeThemeDialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS
-#	SaveFileDialog.transient = true
-	ChangeThemeDialog.add_filter("*.theme", "UI Theme")
-	ChangeThemeDialog.file_selected.connect(_on_change_theme)
-	add_child(ChangeThemeDialog)
+func open_dialog(type):
+	dialog = EditorFileDialog.new()
+	dialog.size = Vector2i(800, 400)
+	dialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS
+	add_child(dialog)
+	dialog.close_requested.connect(_on_dialog_close_requested)
+	
+	match(type):
+		DialogType.OPEN_GRAPH:
+			dialog.title = "Open a DialogueNode graph"
+			dialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE
+			dialog.add_filter("*.dngraph", "DialogueNode Graph")
+			dialog.add_filter("*.json", "JSON file")
+			dialog.file_selected.connect(_on_open_file)
+		DialogType.SAVE_GRAPH:
+			dialog.title = "Save DialogueNode graph"
+			dialog.file_mode = EditorFileDialog.FILE_MODE_SAVE_FILE
+			dialog.add_filter("*.dngraph", "DialogueNode Graph")
+			dialog.add_filter("*.json", "JSON file")
+			dialog.file_selected.connect(_on_save_file)
+		DialogType.CHANGE_THEME:
+			dialog.title = "Change UI theme"
+			dialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE
+			dialog.add_filter("*.theme", "UI Theme")
+			dialog.file_selected.connect(_on_change_theme)
+	
+	dialog.show()
 
-#	dialogue_preview.files_dropped.connect(_on_theme_dropped)
+
+func _on_dialog_close_requested():
+	dialog.queue_free()
+
+
+#func setup_dialogs():
+#	OpenFileDialog = EditorFileDialog.new()
+#	OpenFileDialog.title = "Open a DialogueNode graph"
+#	OpenFileDialog.size = Vector2i(800, 400)
+#	OpenFileDialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE
+#	OpenFileDialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS
+##	OpenFileDialog.transient = true
+#	OpenFileDialog.add_filter("*.dngraph", "DialogueNode Graph")
+#	OpenFileDialog.add_filter("*.json", "JSON file")
+#	OpenFileDialog.file_selected.connect(_on_open_file)
+#	add_child(OpenFileDialog)
+#
+#	SaveFileDialog = EditorFileDialog.new()
+#	SaveFileDialog.size = Vector2i(800, 400)
+#	SaveFileDialog.file_mode = EditorFileDialog.FILE_MODE_SAVE_FILE
+#	SaveFileDialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS
+##	SaveFileDialog.transient = true
+#	SaveFileDialog.add_filter("*.dngraph", "DialogueNode Graph")
+#	SaveFileDialog.add_filter("*.json", "JSON file")
+#	SaveFileDialog.file_selected.connect(_on_save_file)
+#	add_child(SaveFileDialog)
+#
+#	ChangeThemeDialog = EditorFileDialog.new()
+#	ChangeThemeDialog.size = Vector2i(800, 400)
+#	ChangeThemeDialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE
+#	ChangeThemeDialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS
+##	SaveFileDialog.transient = true
+#	ChangeThemeDialog.add_filter("*.theme", "UI Theme")
+#	ChangeThemeDialog.file_selected.connect(_on_change_theme)
+#	add_child(ChangeThemeDialog)
 
 
 func _on_theme_dropped(files: PackedStringArray):
@@ -459,13 +497,13 @@ func _on_file_menu_opened(id : int):
 			print("rect %s, %s" %[Graph.global_position, Graph.get_rect().end/2])
 			new_dialogue_graph(Graph.get_rect().end/2)
 		1: # Open
-			OpenFileDialog.show()
+			open_dialog(DialogType.OPEN_GRAPH)
 		2: # Save
 			save_pretty = false
-			SaveFileDialog.show()
+			open_dialog(DialogType.SAVE_GRAPH)
 		3: # Save Pretty
 			save_pretty = true
-			SaveFileDialog.show()
+			open_dialog(DialogType.SAVE_GRAPH)
 
 
 func _on_open_file(path : String):
@@ -569,9 +607,9 @@ func _on_dialogue_node_preview(node : DialogueNode):
 		dialogue_box.load_dialogue(dialogue_preview.get_node("%PreviewText").text)
 
 
-# PLAY
+#region Dialogue Play
 func _on_dialogue_node_play(node : DialogueNode):
-	if(ChickenScratch.started): return
+	if(ChickenScratch.playing): return
 	print_debug("Play: %s, %s" % [node.text(), node.dialogue_variables])
 	Graph.set_selected(node)
 	selected_nodes.clear()
@@ -769,7 +807,7 @@ func _on_variable_name_changed(old : String, new : String):
 
 
 func _on_change_theme_pressed():
-	ChangeThemeDialog.show()
+	open_dialog(DialogType.CHANGE_THEME)
 	
 
 func _on_change_theme(path : String):

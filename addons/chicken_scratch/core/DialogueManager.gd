@@ -33,7 +33,7 @@ var variables := {} # { "name": <value> }
 
 var dialogue_tree : DialogueTree
 
-var started := false 
+var playing := false 
 
 
 func _ready():
@@ -73,19 +73,19 @@ func delete_variable(name : String):
 	variables_updated.emit()
 
 
-func start_from_path(path : String):
-	if path.begins_with("res://"):
-		if path.to_lower().ends_with(".dngraph") || path.to_lower().ends_with(".json"):
-			print_debug("path - %s" % path)
-			dialogue_tree = DialogueTree.new()
-			dialogue_tree.open_from_path(path)
-			
-			variables = dialogue_tree.variables
-		elif path.to_lower().ends_with(".tres") || path.to_lower().ends_with(".res"):
-			dialogue_tree = load(path)
-	
-	started = true
-	dialogue_started.emit()
+#func start_from_path(path : String):
+#	if path.begins_with("res://"):
+#		if path.to_lower().ends_with(".dngraph") || path.to_lower().ends_with(".json"):
+#			print_debug("path - %s" % path)
+#			dialogue_tree = DialogueTree.new()
+#			dialogue_tree.open_from_path(path)
+#
+#			variables = dialogue_tree.variables
+#		elif path.to_lower().ends_with(".tres") || path.to_lower().ends_with(".res"):
+#			dialogue_tree = load(path)
+#
+#	playing = true
+#	dialogue_started.emit()
 	# else: search through a directory of dialogue trees?
 
 
@@ -106,54 +106,69 @@ func preload_tree(path : String, dialogue_box : DialogueBox):
 		
 
 func reset():
-	started = false
+	playing = false
 
 
 func stop():
-	started = false
+	playing = false
 	dialogue_finished.emit()
 
 
 func kill():
-	started = false
+	playing = false
 	dialogue_box.kill()
 	dialogue_finished.emit()
 
 
 func play():
+	if(playing): 
+		push_warning("Dialogue already playing...")
+		return
+	playing = true
 	var root = dialogue_tree.root_node
-	load_next_dialogue(root.name, 0)
+	
+	await load_next_dialogue(root.name, 0)
+	
+	dialogue_finished.emit()
+	playing = false
 
 
 func play_branch(slot : int):
+	if(playing): 
+		push_warning("Dialogue already playing...")
+		return
+	playing = true
 	var root = dialogue_tree.root_node
-	load_next_dialogue(root.name, slot)
+	
+	await load_next_dialogue(root.name, slot)
+	print("#play_branch[%s] finished" % [slot])
+	
+	dialogue_finished.emit()
+	playing = false
 
 
 func play_at(name : String):
-	load_dialogue(dialogue_tree.nodes[name])
-
-
-func load_next_dialogue(name : String, slot):
-	slot = float(slot)
-	print("next - %s, %s" % [name, slot])
-	print("conn - %s, %s, %s" % [dialogue_tree.connections, dialogue_tree.connections.has(name), dialogue_tree.connections[name].has(slot)])
-	
-	if(dialogue_tree.connections.has(name) && dialogue_tree.connections[name].has(slot)):
-		var next = dialogue_tree.connections[name][slot]
-		print("connections[root.name] %s" % [next])
-		load_dialogue(dialogue_tree.nodes[next.to])
-	else:
-		print_debug("No connections left")
-		dialogue_finished.emit()
-
-
-func load_dialogue(dialogue : Dictionary):
-	if(started): 
-		push_warning("Dialogue already started...")
+	if(playing): 
+		push_warning("Dialogue already playing...")
 		return
-	started = true
-	print("dialogue - %s" % [dialogue])
+	playing = true
+	
+	await load_dialogue(dialogue_tree.nodes[name])
+	print("#play_at[%s] finished" % [name])
+	
+	dialogue_finished.emit()
+	playing = false
+
+# TODO: implement displaying dialogue boxes at a position (based off of Character); when switching speakers, animate dialogue box close and open at next speakers location
+
+
+## Load dialogue from a dictionary
+func load_dialogue(dialogue : Dictionary):
+#	if(playing): 
+#		push_warning("Dialogue already playing...")
+#		return
+#	playing = true
+	print("# dialogue - %s" % [dialogue])
 	var type : Type = Type[dialogue.type] # type name -> enum
 	var speaker : String = dialogue.speaker
 	var text : String = dialogue.text
@@ -166,18 +181,28 @@ func load_dialogue(dialogue : Dictionary):
 			pass
 		Type.Response:
 			pass
-	print_debug("VariableHandler %s" % [VariableHandler])
+	
 	var parsed := VariableHandler.parse_text(text)
+	print_debug("# parsed %s" % [parsed])
 	
 #	DialogueInputHandler.accept_input.connect()
 	await dialogue_box.load_dialogue(parsed, dialogue)
+	print_debug("# dialogue_box finished")
 	
-	dialogue_finished.emit()
-	started = false
+	return await try_move_next(dialogue)
+	
+#	while(has_next):
+#		print_debug("go next")
+#		has_next = await try_move_next(dialogue)
+#		print_debug("finished next")
+	
+#	dialogue_finished.emit()
+#	playing = false
 
 
-func _on_dialogue_finished(dialogue : Dictionary):
-	print_debug("dialogue finished, try to move on to next.")
+## Tries to advance dialogue to the next available dialogue option
+func try_move_next(dialogue : Dictionary) -> bool:
+	print_debug("## dialogue finished, try to move on to next.")
 	var type : Type = Type[dialogue.type] # type name -> enum
 	var speaker : String = dialogue.speaker
 	var text : String = dialogue.text
@@ -185,13 +210,33 @@ func _on_dialogue_finished(dialogue : Dictionary):
 	
 	match(type):
 		Type.Dialogue:
-			print_debug("current is dialogue, go to slot 0")
-			load_next_dialogue(dialogue.name, 0)
+			print_debug("## current is dialogue, go to slot 0")
+			return await load_next_dialogue(dialogue.name, 0)
 		Type.Offering:
-			print_debug("current is offering, bring up offering")
-			load_next_dialogue(dialogue.name, 0)
+			print_debug("## current is offering, bring up offering")
+			return await load_next_dialogue(dialogue.name, 0)
 #			await offering_submitted
 		Type.Response:
-			print_debug("current is response, go to slot of the chosen response")
-			load_next_dialogue(dialogue.name, 0)
+			print_debug("## current is response, go to slot of the chosen response")
+			return await load_next_dialogue(dialogue.name, 0)
 #			await response_chosen
+	return false
+	
+
+## Tries to load the dialogue with the given name
+func load_next_dialogue(name : String, slot) -> bool:
+	slot = str(slot)
+	print("### next - %s, %s" % [name, slot])
+	print("### conn - %s, %s" % [dialogue_tree.connections, dialogue_tree.connections.has(name)])
+#	print("conn - %s, %s, %s" % [dialogue_tree.connections, dialogue_tree.connections.has(name), dialogue_tree.connections[name].has(slot)])
+	
+	if(dialogue_tree.connections.has(name) && dialogue_tree.connections[name].has(slot)):
+		var next = dialogue_tree.connections[name][slot]
+		print("### connections[next] %s" % [next])
+		await load_dialogue(dialogue_tree.nodes[next.to])
+		print("### finished loading next" )
+		return true
+	else:
+		print_debug("No connections left")
+		dialogue_finished.emit()
+		return false

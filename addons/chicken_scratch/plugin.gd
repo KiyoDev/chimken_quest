@@ -1,5 +1,5 @@
 @tool
-class_name ChickenScratchPlugin extends EditorPlugin
+extends EditorPlugin
 
 const DIALOGUE_ACCEPT := "input/dialogue_accept"
 const DIALOGUE_CANCEL := "input/dialogue_cancel"
@@ -35,8 +35,10 @@ func _ready():
 
 func _enable_plugin():
 	print("_enable_plugin")
-	default_settings()
+	print("before - %s" % [get_tree().root.get_children()])
 	add_autoload_singleton("ChickenScratch", "res://addons/chicken_scratch/core/DialogueManager.gd")
+	print("after  - %s" % [get_tree().root.get_children()])
+	default_settings()
 	enabled = true
 	graph_instance.on_plugin_start()
 	
@@ -88,7 +90,6 @@ func default_settings():
 	controller_accept.button_index = JOY_BUTTON_A
 	
 	if(!ProjectSettings.has_setting(DIALOGUE_ACCEPT)):
-
 		ProjectSettings.set_setting(DIALOGUE_ACCEPT, {
 			"deadzone": 0.5,
 			"events": [
@@ -98,13 +99,16 @@ func default_settings():
 				controller_accept
 			]
 		});
+		ProjectSettings.set_as_basic(DIALOGUE_ACCEPT, true)
 
-	if(!InputMap.has_action("dialogue_accept")):
-		InputMap.add_action("dialogue_accept")
-		InputMap.action_add_event("dialogue_accept", enter)
-		InputMap.action_add_event("dialogue_accept", space)
-		InputMap.action_add_event("dialogue_accept", x)
-		InputMap.action_add_event("dialogue_accept", controller_accept)
+	if(InputMap.has_action("dialogue_accept")):
+		InputMap.erase_action("dialogue_accept")
+		
+	InputMap.add_action("dialogue_accept")
+	InputMap.action_add_event("dialogue_accept", enter)
+	InputMap.action_add_event("dialogue_accept", space)
+	InputMap.action_add_event("dialogue_accept", x)
+	InputMap.action_add_event("dialogue_accept", controller_accept)
 
 	var escape := InputEventKey.new()
 	escape.keycode = KEY_ESCAPE
@@ -114,9 +118,8 @@ func default_settings():
 	z.keycode = KEY_Z
 	var controller_cancel := InputEventJoypadButton.new()
 	controller_cancel.button_index = JOY_BUTTON_B
-	
-	if(!ProjectSettings.has_setting(DIALOGUE_CANCEL)):
 
+	if(!ProjectSettings.has_setting(DIALOGUE_CANCEL)):
 		ProjectSettings.set_setting(DIALOGUE_CANCEL, {
 			"deadzone": 0.5,
 			"events": [
@@ -126,12 +129,16 @@ func default_settings():
 				controller_cancel
 			]
 		});
+	ProjectSettings.set_as_basic(DIALOGUE_CANCEL, true)
 
-	if(!InputMap.has_action("dialogue_cancel")):
-		InputMap.add_action("dialogue_cancel")
-		InputMap.action_add_event("dialogue_cancel", escape)
-		InputMap.action_add_event("dialogue_cancel", backspace)
-		InputMap.action_add_event("dialogue_cancel", z)
-		InputMap.action_add_event("dialogue_cancel", controller_cancel)
+	
+	if(InputMap.has_action("dialogue_cancel")):
+		InputMap.erase_action("dialogue_cancel")
+		
+	InputMap.add_action("dialogue_cancel")
+	InputMap.action_add_event("dialogue_cancel", escape)
+	InputMap.action_add_event("dialogue_cancel", backspace)
+	InputMap.action_add_event("dialogue_cancel", z)
+	InputMap.action_add_event("dialogue_cancel", controller_cancel)
 	ProjectSettings.save()
 

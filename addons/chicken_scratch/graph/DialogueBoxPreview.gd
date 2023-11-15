@@ -1,5 +1,5 @@
 @tool
-class_name DialogueBoxPreview extends GraphNode
+class_name DialogueBoxPreview extends BaseNode
 
 
 @export var dialogue_box : DialogueBox
@@ -18,7 +18,7 @@ func _ready():
 	ChangeThemeDialog.file_selected.connect(_on_change_theme)
 	add_child(ChangeThemeDialog)
 	ChangeThemeDialog.hide()
-	dialogue_box.finished_revealing.connect(_on_finished_revealing)
+	ChickenScratch.dialogue_finished.connect(_on_finished_revealing)
 
 
 func load_dialogue(text : String):
@@ -41,11 +41,13 @@ func _on_change_theme(path : String):
 #	dialogue_preview.get_node("Container/VBoxContainer/ThemeLabel").text = path.get_file()
 
 
-func _on_finished_revealing(dialogue):
+func _on_finished_revealing():
+	print_debug("box preview finished")
 #	dialogue_box.queue_free()
 	hide()
 
 
 func _on_close_request():
-	ChickenScratch.started = false
+	ChickenScratch.playing = false
 	queue_free()
+
