@@ -103,7 +103,7 @@ func preload_tree(path : String, dialogue_box : DialogueBox):
 			dialogue_tree = load(path)
 		
 		self.dialogue_box = dialogue_box
-		
+
 
 func reset():
 	playing = false
@@ -159,21 +159,53 @@ func play_at(name : String):
 	dialogue_finished.emit()
 	playing = false
 
+
+func play_text(dialogue : Dictionary):
+	if(playing): 
+		push_warning("Dialogue already playing...")
+		return
+	playing = true
+	
+#	await load_dialogue(dialogue)
+	var type : Type = Type[dialogue.type] # type name -> enum
+	var speaker : String = dialogue.speaker
+	var text : String = dialogue.text
+#	print_debug("loading dialogue - %s" % [variables])
+	
+	# TODO: 
+	match(type):
+		Type.Dialogue:
+			pass
+		Type.Offering:
+			pass
+		Type.Response:
+			pass
+	
+	var parsed := VariableHandler.parse_text(text)
+	print_debug("# parsed %s" % [parsed])
+	
+#	DialogueInputHandler.accept_input.connect()
+	await dialogue_box.load_dialogue(parsed, dialogue)
+	print_debug("# dialogue_box finished")
+	print("#play_text[%s] finished" % [name])
+	
+	dialogue_finished.emit()
+	playing = false
+
+
 # TODO: implement displaying dialogue boxes at a position (based off of Character); when switching speakers, animate dialogue box close and open at next speakers location
 
 
 ## Load dialogue from a dictionary
 func load_dialogue(dialogue : Dictionary):
-#	if(playing): 
-#		push_warning("Dialogue already playing...")
-#		return
-#	playing = true
+	# get dialogue info from dictionary
 	print("# dialogue - %s" % [dialogue])
 	var type : Type = Type[dialogue.type] # type name -> enum
 	var speaker : String = dialogue.speaker
 	var text : String = dialogue.text
 #	print_debug("loading dialogue - %s" % [variables])
 	
+	# TODO: 
 	match(type):
 		Type.Dialogue:
 			pass
@@ -190,14 +222,6 @@ func load_dialogue(dialogue : Dictionary):
 	print_debug("# dialogue_box finished")
 	
 	return await try_move_next(dialogue)
-	
-#	while(has_next):
-#		print_debug("go next")
-#		has_next = await try_move_next(dialogue)
-#		print_debug("finished next")
-	
-#	dialogue_finished.emit()
-#	playing = false
 
 
 ## Tries to advance dialogue to the next available dialogue option
@@ -208,17 +232,22 @@ func try_move_next(dialogue : Dictionary) -> bool:
 	var text : String = dialogue.text
 #	print_debug("loading dialogue - %s" % [variables])
 	
+	# TODO: do different things depending on the dialogue type;
 	match(type):
 		Type.Dialogue:
 			print_debug("## current is dialogue, go to slot 0")
 			return await load_next_dialogue(dialogue.name, 0)
 		Type.Offering:
+			# TODO: bring up a menu to choose items from inventory to offer
 			print_debug("## current is offering, bring up offering")
 			return await load_next_dialogue(dialogue.name, 0)
 #			await offering_submitted
 		Type.Response:
+			# TODO: bring up a menu to choose responses
 			print_debug("## current is response, go to slot of the chosen response")
-			return await load_next_dialogue(dialogue.name, 0)
+#			dialogue_box.open_response(dialogue.properties.responses)
+#			await dialogue_box.response_box.selected
+			return await load_next_dialogue(dialogue.name, dialogue_box.response_index())
 #			await response_chosen
 	return false
 	
@@ -240,3 +269,7 @@ func load_next_dialogue(name : String, slot) -> bool:
 		print_debug("No connections left")
 		dialogue_finished.emit()
 		return false
+
+
+#func _on_response_selected(node, index : int):
+#	dialogue_box.response_box.selected.disconnect(_on_response_selected)

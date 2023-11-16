@@ -24,7 +24,7 @@ func _ready():
 
 func handle_accept():
 	print_debug("accepted")
-	if !input_consumed:
+	if(!input_consumed):
 		input_consumed = true
 
 	accept_input.emit()
@@ -33,17 +33,17 @@ func handle_accept():
 
 func handle_cancel():
 	print_debug("canceled")
-	if !input_consumed:
+	if(!input_consumed):
 		input_consumed = true
 
 	cancel_input.emit()
 	input_action.emit()
 
 
-func _input(event):
+func _unhandled_input(event):
 #	print("inputtt - %s, %s, %s, %s" % [ChickenScratch.started, event is InputEventKey, event.is_action_pressed(DIALOGUE_ACCEPT) if event is InputEventKey else "not key", Input.is_key_pressed(KEY_SPACE)])
 	if(!ChickenScratch.playing || !event is InputEventKey): return
-#	print("INPUT")
+	print("ChickenScratch input")
 #	if(Input.is_key_pressed(KEY_SPACE)):
 #		handle_accept()   
 #	print_debug("has[%s] - %s" % [InputMap.get_actions(), ProjectSettings.get_setting("input/ui_accept")])

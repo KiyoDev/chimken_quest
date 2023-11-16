@@ -8,7 +8,7 @@ class_name DialogueTree extends Resource
 #	"nodes": get_graph_node_dicts()
 #}
 
-#var connections : Array[Dictionary] = []
+var path := ""
 var connections := {}
 var variables := {}
 var root_node := {}
@@ -68,6 +68,7 @@ func open_from_path(path : String):
 	variables = dict.variables
 	root_node = dict.root_node
 	nodes = dict.nodes
+	self.path = path
 
 
 func from_json(text : String):
@@ -84,3 +85,13 @@ func from_json(text : String):
 	
 #	print_debug("dialogue(%s)" % JSON.stringify(data, "\t", false))
 	return data as Dictionary
+
+func _to_string():
+	return { path: 
+		{
+			"connections": connections,
+			"variables": variables,
+			"root_node": root_node,
+			"nodes": nodes
+		}
+	}

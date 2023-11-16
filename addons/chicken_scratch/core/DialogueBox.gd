@@ -1,5 +1,5 @@
 @tool
-class_name DialogueBox extends MarginContainer
+class_name DialogueBox extends Control
 
 
 signal go_next
@@ -8,11 +8,12 @@ signal text_stopped
 
 signal finished_revealing
 
-
+@export var container : Container
 @export var Background : NinePatchRect
 @export var TextBox : RichTextLabel
 @export var indicator : Sprite2D
 @export var indicator_animator : AnimationPlayer
+@export var response_box : ResponseBox
 
 var delay := 0.05
 
@@ -23,6 +24,7 @@ var killed := false
 
 func _ready():
 	hide_indicator()
+	response_box.hide()
 #	ChickenScratch.dialogue_finished.connect(_on_dialogue_finished)
 
 
@@ -30,15 +32,26 @@ func _exit_tree():
 	pass
 
 
-#func restart():
-#	go_next.emit(false)
-#	if(tween):
-#		print_debug("cancel dialogue")
-#		tween.finished.disconnect(_on_tween_finished)
-#		tween.kill()
-#	tween_finished = false
-#	indicator_animator.stop()
-#	indicator.hide()
+func response_index() -> int:
+	return response_box.current_index
+
+
+#func _connect_response(callable : Callable):
+#	revealing_text = false
+#	killed = false
+#	reveal_all = false
+#	hide_indicator()
+#	response_box.hide()
+#	response_box.selected.connect(callable)
+#
+#
+#func _disconnect_response(callable : Callable):
+#	revealing_text = false
+#	killed = false
+#	reveal_all = false
+#	hide_indicator()
+#	response_box.hide()
+#	response_box.selected.disconnect(callable)
 
 
 func clear():
@@ -64,7 +77,7 @@ func load_dialogue(text : String, dialogue := {}):
 	killed = false
 	reveal_all = false
 	clear()
-	indicator.position = Vector2i(size.x - 16, size.y - 10)
+	indicator.position = Vector2i(container.size.x - 16, container.size.y - 10)
 	
 	var timer := Timer.new()
 	add_child(timer)
@@ -112,15 +125,9 @@ func load_dialogue(text : String, dialogue := {}):
 	ChickenScratch.Inputs.cancel_input.disconnect(_on_cancel_input)
 	
 
+func open_response(responses : Array):
+	response_box.open(responses)
 
-#func _on_tween_finished(line : String):
-#	if(tween_finished):
-#		print_debug("tween finished but already finished - %s" % [line])
-##		restart()
-#		return
-#	print_debug("tween finished - %s, %s" % [tween_finished, line])
-#	show_indicator()
-#	tween_finished = true
 
 ## Force stop the dialogue
 func kill():
@@ -139,4 +146,8 @@ func _on_cancel_input():
 
 func _on_resized():
 #	print_debug("box rect - %s" % [size])
-	indicator.position = Vector2i(size.x - 16, size.y - 10)
+	indicator.position = Vector2i(container.size.x - 16, container.size.y - 10)
+
+
+func _on_response_selected(node, index : int):
+	pass

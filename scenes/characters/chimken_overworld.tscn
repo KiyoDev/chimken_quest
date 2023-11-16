@@ -215,7 +215,7 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s5tcc"]
-size = Vector2(15.5, 8)
+size = Vector2(14, 8)
 
 [node name="Chimken" type="CharacterBody2D"]
 z_index = 1

@@ -48,6 +48,9 @@ var dialog : EditorFileDialog
 
 static var save_pretty := false
 
+static var settings := {
+	"current_tree": ""
+}
 
 func _ready():
 	print_debug("ready")
@@ -88,8 +91,6 @@ func on_plugin_start():
 	
 	new_dialogue_graph(Vector2(380, 380))
 
-#	setup_dialogs()
-
 
 func open_dialog(type):
 	dialog = EditorFileDialog.new()
@@ -122,38 +123,6 @@ func open_dialog(type):
 
 func _on_dialog_close_requested():
 	dialog.queue_free()
-
-
-#func setup_dialogs():
-#	OpenFileDialog = EditorFileDialog.new()
-#	OpenFileDialog.title = "Open a DialogueNode graph"
-#	OpenFileDialog.size = Vector2i(800, 400)
-#	OpenFileDialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE
-#	OpenFileDialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS
-##	OpenFileDialog.transient = true
-#	OpenFileDialog.add_filter("*.dngraph", "DialogueNode Graph")
-#	OpenFileDialog.add_filter("*.json", "JSON file")
-#	OpenFileDialog.file_selected.connect(_on_open_file)
-#	add_child(OpenFileDialog)
-#
-#	SaveFileDialog = EditorFileDialog.new()
-#	SaveFileDialog.size = Vector2i(800, 400)
-#	SaveFileDialog.file_mode = EditorFileDialog.FILE_MODE_SAVE_FILE
-#	SaveFileDialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS
-##	SaveFileDialog.transient = true
-#	SaveFileDialog.add_filter("*.dngraph", "DialogueNode Graph")
-#	SaveFileDialog.add_filter("*.json", "JSON file")
-#	SaveFileDialog.file_selected.connect(_on_save_file)
-#	add_child(SaveFileDialog)
-#
-#	ChangeThemeDialog = EditorFileDialog.new()
-#	ChangeThemeDialog.size = Vector2i(800, 400)
-#	ChangeThemeDialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE
-#	ChangeThemeDialog.initial_position = Window.WindowInitialPosition.WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS
-##	SaveFileDialog.transient = true
-#	ChangeThemeDialog.add_filter("*.theme", "UI Theme")
-#	ChangeThemeDialog.file_selected.connect(_on_change_theme)
-#	add_child(ChangeThemeDialog)
 
 
 func _on_theme_dropped(files: PackedStringArray):
@@ -220,15 +189,6 @@ func get_variables_parsed() -> Dictionary:
 	return dict
 
 
-#func get_variable_values(vars : Array) -> Dictionary:
-#	var dict := {}
-#	var v := get_graph_variables()
-#	for variable in vars:
-#		dict[variable] = v[variable].value()
-#
-#	return dict
-
-
 func graph_to_dict() -> Dictionary:
 	return {
 #		"connections": Graph.get_connection_list(),
@@ -263,7 +223,7 @@ func new_dialogue_graph(root_position := Vector2()):
 		child.queue_free() # free all graph nodes
 
 	right_click_menu.hide()
-	dialogue_preview.get_node("%PreviewText").text = ""
+	dialogue_preview.get_node("Container/VBoxContainer/PreviewText").text = ""
 	dialogue_preview.hide()
 	previewed_node = null
 	node_dict.clear()
@@ -459,7 +419,7 @@ func update_dialogue_tree(node : DialogueNode):
 
 
 func update_preview_text(text : String):
-	dialogue_preview.get_node("%PreviewText").text = text
+	dialogue_preview.get_node("Container/VBoxContainer/PreviewText").text = text
 
 
 func update_dialogue_preview():
@@ -475,19 +435,21 @@ func update_dialogue_preview():
 func swap_dialogue_preview(node : DialogueNode):
 	if(node == previewed_node): return
 	
+	
 	var text := node.text()
 	var variables := node.dialogue_variables
 	var vars := get_graph_variables()
-	for variable_name in vars:
-		text = text.replace("${%s}" % variable_name, str(vars[variable_name]))
 	
+#	for variable_name in vars:
+#		text = text.replace("${%s}" % variable_name, str(vars[variable_name]))
+
 	if(previewed_node != null):
 		previewed_node.text_changed.disconnect(_on_dialogue_node_text_changed)
 	
 	previewed_node = node
 	node.text_changed.connect(_on_dialogue_node_text_changed)
 	
-	update_preview_text(text)
+	update_preview_text(ChickenScratch.VariableHandler.parse_text(text))
 
 
 func _on_file_menu_opened(id : int):
@@ -506,6 +468,14 @@ func _on_file_menu_opened(id : int):
 			open_dialog(DialogType.SAVE_GRAPH)
 
 
+func init_dialogue_box():
+	if(dialogue_box != null):
+		dialogue_box.queue_free()
+		
+	dialogue_box = dialogue_box_scn.instantiate()
+	dialogue_box.finished_revealing.connect(_on_dialogue_box_finished)
+
+
 func _on_open_file(path : String):
 	print_debug("opening file '%s'" % [path])
 #	var file := FileAccess.open(path, FileAccess.READ)
@@ -518,11 +488,12 @@ func _on_open_file(path : String):
 	
 #	if(dict.has("variables") && dict.variables.size() > 0):
 
-	if(dialogue_box == null):
-		dialogue_box = dialogue_box_scn.instantiate()
-		dialogue_box.finished_revealing.connect(_on_dialogue_box_finished)
-		
+	init_dialogue_box()
+	
+	EditorUtil.set_editor_setting("current_tree", path)
 	ChickenScratch.preload_tree(path, dialogue_box)
+	
+	print("NEW TREE - %s" % [EditorUtil.get_editor_setting("current_tree")])
 	
 	test_variables_container.show()
 	for child in test_variables.get_children():
@@ -591,6 +562,7 @@ func _on_graph_node_slots_removed(node : GraphNode, from_port : int):
 			Graph.connect_node(connections.from, connections.from_port - 1, connections.to, connections.to_port)
 
 
+#region Dialogue Play
 ## Shows a dialogue preview node when the preview button is pressed on a DialogueNode
 func _on_dialogue_node_preview(node : DialogueNode):
 	print_debug("Preview: %s, %s" % [node.text, node.dialogue_variables])
@@ -600,14 +572,27 @@ func _on_dialogue_node_preview(node : DialogueNode):
 	swap_dialogue_preview(node)
 	dialogue_preview.show()
 	
-	if(dialogue_box == null):
-		dialogue_box = dialogue_box_scn.instantiate()
-		dialogue_box.finished_revealing.connect(_on_dialogue_box_finished)
-		dialogue_preview.get_node("Container/VBoxContainer").add_child(dialogue_box)
-		dialogue_box.load_dialogue(dialogue_preview.get_node("%PreviewText").text)
+	init_dialogue_box()
+	ChickenScratch.dialogue_box = dialogue_box
+	dialogue_preview.get_node("Container/VBoxContainer").add_child(dialogue_box)
+	ChickenScratch.reparent(dialogue_preview)
+	ChickenScratch.play_text({
+		"type": "Dialogue",
+		"speaker": "",
+		"text": dialogue_preview.get_node("Container/VBoxContainer/PreviewText").text
+		})
+#		dialogue_box.load_dialogue(dialogue_preview.get_node("%PreviewText").text)
 
 
-#region Dialogue Play
+func _on_dialogue_preview_close_requested():
+	print_debug("close preview window")
+	ChickenScratch.reparent(get_tree().root)
+	ChickenScratch.stop()
+	close_preview()
+	if(dialogue_box != null):
+		dialogue_box.queue_free()
+
+
 func _on_dialogue_node_play(node : DialogueNode):
 	if(ChickenScratch.playing): return
 	print_debug("Play: %s, %s" % [node.text(), node.dialogue_variables])
@@ -621,9 +606,7 @@ func _on_dialogue_node_play(node : DialogueNode):
 	Graph.add_child(dialogue_box_preview)
 	dialogue_box_preview.position_offset = ((get_viewport_rect().size / 4) + Graph.scroll_offset) / Graph.zoom
 	
-	if(dialogue_box == null):
-		dialogue_box = dialogue_box_scn.instantiate()
-		dialogue_box.finished_revealing.connect(_on_dialogue_box_finished)
+	init_dialogue_box()
 		
 	ChickenScratch.dialogue_box = dialogue_box_preview.dialogue_box
 	ChickenScratch.play_at(node.name)
@@ -644,8 +627,8 @@ func _on_branch_play_requested(slot : int):
 
 
 func _on_dialogue_box_preview_close_requested():
-	dialogue_box_preview.queue_free()
 	ChickenScratch.kill()
+	dialogue_box_preview.queue_free()
 
 
 func _on_dialogue_box_finished(dialogue : Dictionary):
@@ -655,25 +638,31 @@ func _on_dialogue_box_finished(dialogue : Dictionary):
 #	dialogue_preview.reset_size()
 
 
+## Play the current dialogue tree in a scene
 func _on_play_pressed():
 	print_debug("playing whole dialogue.")
-	ChickenScratch.dialogue_box = dialogue_box_preview.dialogue_box
-	
-	dialogue_box_preview.show()
-#	ChickenScratch.load_dialogue_tree(graph_to_dict())
-	ChickenScratch.play_branch(0)
+	var plugin : EditorPlugin
+	for child in Engine.get_main_loop().get_root().get_children():
+		if child.get_class() == "EditorNode":
+			plugin = child.get_node("ChickenScratchPlugin")
+			plugin.get_editor_interface().play_custom_scene("res://addons/chicken_scratch/editor/play_scene.tscn")
+	return
+#	dialogue_box_preview = dialogue_box_preview_scn.instantiate()
+##	add_child(dialogue_box_preview)
+#	dialogue_box_preview.show()
+#	Graph.add_child(dialogue_box_preview)
+#	dialogue_box_preview.position_offset = ((get_viewport_rect().size / 4) + Graph.scroll_offset) / Graph.zoom
+#	ChickenScratch.dialogue_box = dialogue_box_preview.dialogue_box
+#
+#	dialogue_box_preview.show()
+##	ChickenScratch.load_dialogue_tree(graph_to_dict())
+#	ChickenScratch.play_branch(0)
 
 
 func _on_dialogue_player_finished():
 	print_debug("dialogue player finished branch")
-	dialogue_box_preview.hide()
-
-
-func _on_window_close_requested():
-	print_debug("close preview window")
-	close_preview()
-	if(dialogue_box != null):
-		dialogue_box.queue_free()
+	if(dialogue_box_preview != null):
+		dialogue_box_preview.queue_free()
 
 # DIALOGUE NODE
 func _on_dialogue_node_text_changed(node : DialogueNode, text : String, variables : Dictionary):

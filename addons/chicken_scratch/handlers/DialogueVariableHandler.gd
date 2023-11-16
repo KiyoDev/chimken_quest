@@ -31,7 +31,7 @@ func get_autoloads() -> Array:
 # TODO: be able to get dialogue from an autoload utilizing paths .
 func get_variable(name : String):
 	name = name.trim_prefix("${").trim_suffix("}")
-	if '.' in name:
+	if('.' in name):
 		var value = null
 		var split := name.split('.')
 		var len := split.size()
@@ -41,7 +41,7 @@ func get_variable(name : String):
 		var current_obj = null
 		for autoload in get_autoloads():
 #			print_debug("autoload[%s] %s" % [autoload.name, key])
-			if key == autoload.name:
+			if(key == autoload.name):
 				current_obj = autoload
 				# check for nested properties/methods
 				for i in range(1, len):
@@ -49,16 +49,16 @@ func get_variable(name : String):
 #					print_debug("ket[%s] %s-%s" % [key, current_obj, current_obj.get(key)])
 					if(key.is_empty() || !current_obj): return null
 					
-					if i == len - 1:
+					if(i == len - 1):
 						return current_obj.get(key) if current_obj is Dictionary || !current_obj.has_method(key) else current_obj.call(key)
 					current_obj = current_obj.get(key)
 					
 		key = split[0]
 		var dict := ChickenScratch.variables;
 		for i in range(1, len):
-			if key.is_empty() || !dict.has(key): return null
+			if(key.is_empty() || !dict.has(key)): return null
 			
-			if i == len - 1:
+			if(i == len - 1):
 				value = dict[key]
 				break
 			

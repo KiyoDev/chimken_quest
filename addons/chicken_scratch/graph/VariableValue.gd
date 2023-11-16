@@ -52,16 +52,16 @@ func set_variable(name : String, value : Variant):
 	variable_name.text = name
 	_name_cache = name
 	
-	if value is String:
+	if(value is String):
 		swap_type(Type.STRING)
 		string_value.text = value
-	elif value is int:
+	elif(value is int):
 		swap_type(Type.INT)
 		int_value.value = value
-	elif value is float:
+	elif(value is float):
 		swap_type(Type.FLOAT)
 		float_value.value = value
-	elif value is bool:
+	elif(value is bool):
 		swap_type(Type.BOOL)
 		bool_value.button_pressed = value
 

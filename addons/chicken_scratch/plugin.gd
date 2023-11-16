@@ -1,5 +1,5 @@
 @tool
-extends EditorPlugin
+class_name ChickenScratchPlugin extends EditorPlugin
 
 const DIALOGUE_ACCEPT := "input/dialogue_accept"
 const DIALOGUE_CANCEL := "input/dialogue_cancel"
@@ -11,6 +11,10 @@ var graph_instance : DialogueGraphEditor
 #	print_debug(graph)
 
 var enabled : bool
+
+
+func _init():
+	name = "ChickenScratchPlugin"
 
 
 func _enter_tree():
@@ -66,7 +70,7 @@ func _has_main_screen():
 
 
 func _make_visible(visible):
-	if graph_instance:
+	if(graph_instance):
 		graph_instance.visible = visible
 
 
@@ -141,4 +145,3 @@ func default_settings():
 	InputMap.action_add_event("dialogue_cancel", z)
 	InputMap.action_add_event("dialogue_cancel", controller_cancel)
 	ProjectSettings.save()
-

@@ -1,0 +1,17 @@
+[remap]
+
+importer="dt.abfi"
+type="FontFile"
+uid="uid://cyavlch7yn2o7"
+path="res://.godot/imported/black_font_small.png-431dd3cecc71170dfc9ac4ba283a24b7.fontdata"
+
+[deps]
+
+source_file="res://assets/fonts/black_font_small.png"
+dest_files=["res://.godot/imported/black_font_small.png-431dd3cecc71170dfc9ac4ba283a24b7.fontdata"]
+
+[params]
+
+ranges=PackedStringArray(" -~")
+letter_spacing=0
+mipmaps=false
