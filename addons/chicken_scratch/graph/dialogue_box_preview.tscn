@@ -1,9 +1,64 @@
-[gd_scene load_steps=3 format=3 uid="uid://cwt4loou338go"]
+[gd_scene load_steps=16 format=3 uid="uid://cwt4loou338go"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueBoxPreview.gd" id="1_1lin0"]
-[ext_resource type="PackedScene" uid="uid://3543xgdit3ts" path="res://addons/chicken_scratch/dialogue_box.tscn" id="2_8p3e4"]
+[ext_resource type="Theme" uid="uid://dgfwyxdpnd7it" path="res://addons/chicken_scratch/theme/black_font_small.theme" id="2_xafls"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/core/DialogueBox.gd" id="3_ifax1"]
+[ext_resource type="Texture2D" uid="uid://dhn5w56l72mo8" path="res://addons/chicken_scratch/sprites/dialogue_box.png" id="4_sou8r"]
+[ext_resource type="Texture2D" uid="uid://8f31gva4o6mr" path="res://addons/chicken_scratch/sprites/next_indicator_small.png" id="5_tyfef"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/core/ResponseBox.gd" id="6_s3i5k"]
+[ext_resource type="PackedScene" uid="uid://djlrv3gq2qk7h" path="res://addons/chicken_scratch/response_label.tscn" id="7_3qi55"]
+[ext_resource type="Texture2D" uid="uid://b1q47f5wqk7q4" path="res://addons/chicken_scratch/sprites/cursor.png" id="8_odnh0"]
+[ext_resource type="Texture2D" uid="uid://unurkh78d3hx" path="res://addons/chicken_scratch/sprites/cursor_shadow.png" id="9_ovdn5"]
 
-[node name="DialogueBoxPreview" type="GraphNode" node_paths=PackedStringArray("dialogue_box")]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0cvq0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b3kqx"]
+
+[sub_resource type="Animation" id="Animation_y5c7r"]
+resource_name = "idle"
+length = 1.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(0, 0), Vector2(0, 1), Vector2(0, 2), Vector2(0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_w4wnf"]
+_data = {
+"idle": SubResource("Animation_y5c7r")
+}
+
+[sub_resource type="Animation" id="Animation_ftq5x"]
+resource_name = "moving"
+length = 1.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Main:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.8, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(0, 0), Vector2(1, 0), Vector2(2, 0), Vector2(1, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_q745f"]
+_data = {
+"moving": SubResource("Animation_ftq5x")
+}
+
+[node name="DialogueBoxPreview" type="GraphNode"]
 offset_right = 259.0
 offset_bottom = 143.0
 title = "Dialogue Box Previewer"
@@ -19,7 +74,19 @@ slot/0/right_color = Color(1, 1, 1, 1)
 slot/0/right_icon = null
 slot/0/draw_stylebox = true
 script = ExtResource("1_1lin0")
-dialogue_box = NodePath("VBoxContainer/DialogueBox")
+dialogue_box = Object(Control,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":true,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"clip_contents":false,"custom_minimum_size":Vector2(200, 64),"layout_direction":0,"layout_mode":2,"size_flags_horizontal":1,"size_flags_vertical":3,"size_flags_stretch_ratio":1.0,"auto_translate":true,"localize_numeral_system":true,"tooltip_text":"","focus_neighbor_left":NodePath(""),"focus_neighbor_top":NodePath(""),"focus_neighbor_right":NodePath(""),"focus_neighbor_bottom":NodePath(""),"focus_next":NodePath(""),"focus_previous":NodePath(""),"focus_mode":0,"mouse_filter":0,"mouse_force_pass_scroll_events":true,"mouse_default_cursor_shape":0,"shortcut_context":null,"theme":ExtResource("2_xafls"),"theme_type_variation":&"","script":ExtResource("3_ifax1"),"container":Object(MarginContainer,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":1,"texture_repeat":0,"material":null,"use_parent_material":false,"clip_contents":false,"custom_minimum_size":Vector2(200, 64),"layout_direction":0,"layout_mode":0,"anchors_preset":0,"anchor_left":0.0,"anchor_top":0.0,"anchor_right":0.0,"anchor_bottom":0.0,"offset_left":0.0,"offset_top":0.0,"offset_right":200.0,"offset_bottom":64.0,"grow_horizontal":1,"grow_vertical":1,"rotation":0.0,"scale":Vector2(1, 1),"pivot_offset":Vector2(0, 0),"size_flags_horizontal":1,"size_flags_vertical":1,"size_flags_stretch_ratio":1.0,"auto_translate":true,"localize_numeral_system":true,"tooltip_text":"","focus_neighbor_left":NodePath(""),"focus_neighbor_top":NodePath(""),"focus_neighbor_right":NodePath(""),"focus_neighbor_bottom":NodePath(""),"focus_next":NodePath(""),"focus_previous":NodePath(""),"focus_mode":0,"mouse_filter":1,"mouse_force_pass_scroll_events":true,"mouse_default_cursor_shape":0,"shortcut_context":null,"theme":null,"theme_type_variation":&"","script":null)
+,"Background":Object(NinePatchRect,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":1,"texture_repeat":0,"material":null,"use_parent_material":false,"clip_contents":false,"custom_minimum_size":Vector2(0, 0),"layout_direction":0,"layout_mode":2,"size_flags_horizontal":1,"size_flags_vertical":1,"size_flags_stretch_ratio":1.0,"auto_translate":true,"localize_numeral_system":true,"tooltip_text":"","focus_neighbor_left":NodePath(""),"focus_neighbor_top":NodePath(""),"focus_neighbor_right":NodePath(""),"focus_neighbor_bottom":NodePath(""),"focus_next":NodePath(""),"focus_previous":NodePath(""),"focus_mode":0,"mouse_filter":2,"mouse_force_pass_scroll_events":true,"mouse_default_cursor_shape":0,"shortcut_context":null,"theme":null,"theme_type_variation":&"","texture":ExtResource("4_sou8r"),"draw_center":true,"region_rect":Rect2(0, 0, 0, 0),"patch_margin_left":8,"patch_margin_top":8,"patch_margin_right":8,"patch_margin_bottom":8,"axis_stretch_horizontal":0,"axis_stretch_vertical":0,"script":null)
+,"TextBox":Object(RichTextLabel,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":1,"texture_repeat":0,"material":null,"use_parent_material":false,"clip_contents":false,"custom_minimum_size":Vector2(0, 0),"layout_direction":0,"layout_mode":2,"size_flags_horizontal":1,"size_flags_vertical":3,"size_flags_stretch_ratio":1.0,"auto_translate":true,"localize_numeral_system":true,"tooltip_text":"","focus_neighbor_left":NodePath(""),"focus_neighbor_top":NodePath(""),"focus_neighbor_right":NodePath(""),"focus_neighbor_bottom":NodePath(""),"focus_next":NodePath(""),"focus_previous":NodePath(""),"focus_mode":0,"mouse_filter":0,"mouse_force_pass_scroll_events":true,"mouse_default_cursor_shape":0,"shortcut_context":null,"theme":null,"theme_type_variation":&"","theme_override_styles/focus":SubResource("StyleBoxEmpty_0cvq0"),"theme_override_styles/normal":SubResource("StyleBoxEmpty_b3kqx"),"bbcode_enabled":true,"text":"","fit_content":false,"scroll_active":false,"scroll_following":true,"autowrap_mode":3,"tab_size":4,"context_menu_enabled":false,"shortcut_keys_enabled":true,"custom_effects":[],"meta_underlined":true,"hint_underlined":true,"threaded":false,"progress_bar_delay":1000,"selection_enabled":false,"deselect_on_focus_loss_enabled":true,"visible_characters":-1,"visible_characters_behavior":0,"visible_ratio":1.0,"text_direction":0,"language":"","structured_text_bidi_override":0,"structured_text_bidi_override_options":[],"script":null)
+,"indicator":Object(Sprite2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":false,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":1,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(256, 90),"rotation":0.0,"scale":Vector2(1, 1),"skew":0.0,"texture":ExtResource("5_tyfef"),"centered":true,"offset":Vector2(0, 0),"flip_h":false,"flip_v":false,"hframes":1,"vframes":1,"frame":0,"region_enabled":false,"region_rect":Rect2(0, 0, 0, 0),"region_filter_clip_enabled":false,"script":null)
+,"indicator_animator":Object(AnimationPlayer,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","root_node":NodePath(".."),"autoplay":"","reset_on_save":true,"playback_process_mode":1,"playback_default_blend_time":0.0,"speed_scale":1.0,"method_call_mode":0,"audio_max_polyphony":32,"movie_quit_on_finish":false,"libraries":{
+"": SubResource("AnimationLibrary_w4wnf")
+},"blend_times":[],"script":null)
+,"response_box":Object(MarginContainer,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":false,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":1,"texture_repeat":0,"material":null,"use_parent_material":false,"clip_contents":false,"custom_minimum_size":Vector2(80, 50),"layout_direction":0,"layout_mode":0,"anchors_preset":0,"anchor_left":0.0,"anchor_top":0.0,"anchor_right":0.0,"anchor_bottom":0.0,"offset_left":58.0,"offset_top":69.0,"offset_right":138.0,"offset_bottom":119.0,"grow_horizontal":1,"grow_vertical":1,"rotation":0.0,"scale":Vector2(1, 1),"pivot_offset":Vector2(0, 0),"size_flags_horizontal":1,"size_flags_vertical":1,"size_flags_stretch_ratio":1.0,"auto_translate":true,"localize_numeral_system":true,"tooltip_text":"","focus_neighbor_left":NodePath(""),"focus_neighbor_top":NodePath(""),"focus_neighbor_right":NodePath(""),"focus_neighbor_bottom":NodePath(""),"focus_next":NodePath(""),"focus_previous":NodePath(""),"focus_mode":0,"mouse_filter":1,"mouse_force_pass_scroll_events":true,"mouse_default_cursor_shape":0,"shortcut_context":null,"theme":null,"theme_type_variation":&"","script":ExtResource("6_s3i5k"),"background":Object(NinePatchRect,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":1,"texture_repeat":0,"material":null,"use_parent_material":false,"clip_contents":false,"custom_minimum_size":Vector2(0, 0),"layout_direction":0,"layout_mode":2,"size_flags_horizontal":1,"size_flags_vertical":1,"size_flags_stretch_ratio":1.0,"auto_translate":true,"localize_numeral_system":true,"tooltip_text":"","focus_neighbor_left":NodePath(""),"focus_neighbor_top":NodePath(""),"focus_neighbor_right":NodePath(""),"focus_neighbor_bottom":NodePath(""),"focus_next":NodePath(""),"focus_previous":NodePath(""),"focus_mode":0,"mouse_filter":2,"mouse_force_pass_scroll_events":true,"mouse_default_cursor_shape":0,"shortcut_context":null,"theme":null,"theme_type_variation":&"","texture":ExtResource("4_sou8r"),"draw_center":true,"region_rect":Rect2(0, 0, 0, 0),"patch_margin_left":8,"patch_margin_top":8,"patch_margin_right":8,"patch_margin_bottom":8,"axis_stretch_horizontal":0,"axis_stretch_vertical":0,"script":null)
+,"responses":Object(VBoxContainer,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"clip_contents":false,"custom_minimum_size":Vector2(0, 0),"layout_direction":0,"layout_mode":2,"size_flags_horizontal":1,"size_flags_vertical":1,"size_flags_stretch_ratio":1.0,"auto_translate":true,"localize_numeral_system":true,"tooltip_text":"","focus_neighbor_left":NodePath(""),"focus_neighbor_top":NodePath(""),"focus_neighbor_right":NodePath(""),"focus_neighbor_bottom":NodePath(""),"focus_next":NodePath(""),"focus_previous":NodePath(""),"focus_mode":0,"mouse_filter":1,"mouse_force_pass_scroll_events":true,"mouse_default_cursor_shape":0,"shortcut_context":null,"theme":null,"theme_type_variation":&"","alignment":0,"script":null)
+,"cursor":Object(Node2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":false,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":4,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":1,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(0, 0),"rotation":0.0,"scale":Vector2(1, 1),"skew":0.0,"script":null)
+,"response_label_scn":ExtResource("7_3qi55"),"current_index":0,"selecting":false)
+,"delay":0.05,"revealing_text":false,"reveal_all":false,"killed":false)
+
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -46,8 +113,122 @@ size_flags_horizontal = 3
 focus_mode = 0
 text = "Remove Theme"
 
-[node name="DialogueBox" parent="VBoxContainer" instance=ExtResource("2_8p3e4")]
+[node name="DialogueBox" type="Control" parent="VBoxContainer" node_paths=PackedStringArray("container", "Background", "TextBox", "indicator", "indicator_animator", "response_box")]
+top_level = true
+custom_minimum_size = Vector2(200, 64)
 layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_xafls")
+script = ExtResource("3_ifax1")
+container = NodePath("MainContainer")
+Background = NodePath("MainContainer/Background")
+TextBox = NodePath("MainContainer/MarginContainer/VBoxContainer/Text")
+indicator = NodePath("MainContainer/NextIndicator")
+indicator_animator = NodePath("MainContainer/NextIndicator/AnimationPlayer")
+response_box = NodePath("ResponseBox")
+
+[node name="MainContainer" type="MarginContainer" parent="VBoxContainer/DialogueBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(200, 64)
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 64.0
+
+[node name="Background" type="NinePatchRect" parent="VBoxContainer/DialogueBox/MainContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("4_sou8r")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/DialogueBox/MainContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/DialogueBox/MainContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Text" type="RichTextLabel" parent="VBoxContainer/DialogueBox/MainContainer/MarginContainer/VBoxContainer"]
+texture_filter = 1
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/focus = SubResource("StyleBoxEmpty_0cvq0")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_b3kqx")
+bbcode_enabled = true
+scroll_active = false
+scroll_following = true
+
+[node name="NextIndicator" type="Sprite2D" parent="VBoxContainer/DialogueBox/MainContainer"]
+visible = false
+texture_filter = 1
+position = Vector2(256, 90)
+texture = ExtResource("5_tyfef")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/DialogueBox/MainContainer/NextIndicator"]
+libraries = {
+"": SubResource("AnimationLibrary_w4wnf")
+}
+
+[node name="ResponseBox" type="MarginContainer" parent="VBoxContainer/DialogueBox" node_paths=PackedStringArray("background", "responses", "cursor")]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(80, 50)
+layout_mode = 0
+offset_left = 58.0
+offset_top = 69.0
+offset_right = 138.0
+offset_bottom = 119.0
+script = ExtResource("6_s3i5k")
+background = NodePath("Background")
+responses = NodePath("MarginContainer/VBoxContainer")
+cursor = NodePath("../Cursor")
+response_label_scn = ExtResource("7_3qi55")
+
+[node name="Background" type="NinePatchRect" parent="VBoxContainer/DialogueBox/ResponseBox"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("4_sou8r")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/DialogueBox/ResponseBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/DialogueBox/ResponseBox/MarginContainer"]
+layout_mode = 2
+
+[node name="Cursor" type="Node2D" parent="VBoxContainer/DialogueBox"]
+visible = false
+z_index = 4
+texture_filter = 1
+
+[node name="Main" type="Sprite2D" parent="VBoxContainer/DialogueBox/Cursor"]
+position = Vector2(2, 0)
+texture = ExtResource("8_odnh0")
+centered = false
+
+[node name="Shadow" type="Sprite2D" parent="VBoxContainer/DialogueBox/Cursor/Main"]
+show_behind_parent = true
+texture = ExtResource("9_ovdn5")
+centered = false
+offset = Vector2(0, 3)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/DialogueBox/Cursor"]
+libraries = {
+"": SubResource("AnimationLibrary_q745f")
+}
 
 [connection signal="close_request" from="." to="." method="_on_close_request"]
 [connection signal="resize_request" from="." to="." method="_on_resize_request"]

@@ -7,7 +7,7 @@ class_name GraphPlayScene extends Control
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var box : DialogueBox = dialogue_box_scn.instantiate()
-	box.set_theme(load("res://addons/chicken_scratch/theme/black_font_small.theme"))
+	box.set_theme(load("res://addons/chicken_scratch/theme/white_font_small_outline.theme"))
 	add_child(box)
 	
 	var tree_path = EditorUtil.get_editor_setting("current_tree")

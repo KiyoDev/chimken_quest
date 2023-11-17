@@ -1,0 +1,17 @@
+[remap]
+
+importer="dt.abfi"
+type="FontFile"
+uid="uid://bklmpctt48juu"
+path="res://.godot/imported/white_font_small_no_shadow.png-f3522e700075e3a923a8bd8cb4b739fa.fontdata"
+
+[deps]
+
+source_file="res://addons/chicken_scratch/theme/white_font_small_no_shadow.png"
+dest_files=["res://.godot/imported/white_font_small_no_shadow.png-f3522e700075e3a923a8bd8cb4b739fa.fontdata"]
+
+[params]
+
+ranges=PackedStringArray(" -~")
+letter_spacing=0
+mipmaps=false

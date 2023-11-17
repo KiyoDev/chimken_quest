@@ -24,7 +24,7 @@ enum Type {
 }
 
 
-@export var dialogue_box : DialogueBox
+@export var dialogue_box : Node
 
 var VariableHandler : DialogueVariableHandler
 var Inputs : DialogueInputHandler
@@ -89,7 +89,7 @@ func delete_variable(name : String):
 	# else: search through a directory of dialogue trees?
 
 
-func preload_tree(path : String, dialogue_box : DialogueBox):
+func preload_tree(path : String, dialogue_box : Node):
 	print("preload tree - %s" % [path])
 	if path.begins_with("res://"):
 		print_debug("??? - %s, %s" % [path.to_lower().ends_with(".dngraph"), path.to_lower().ends_with(".json")])
@@ -245,8 +245,8 @@ func try_move_next(dialogue : Dictionary) -> bool:
 		Type.Response:
 			# TODO: bring up a menu to choose responses
 			print_debug("## current is response, go to slot of the chosen response")
-#			dialogue_box.open_response(dialogue.properties.responses)
-#			await dialogue_box.response_box.selected
+			dialogue_box.open_response(dialogue.properties.responses)
+			await dialogue_box.response_box.selected
 			return await load_next_dialogue(dialogue.name, dialogue_box.response_index())
 #			await response_chosen
 	return false

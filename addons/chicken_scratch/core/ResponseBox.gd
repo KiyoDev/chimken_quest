@@ -89,7 +89,8 @@ func focus(next : int):
 	
 	var next_response : RichTextLabel = responses.get_child(next)
 	print("next response(%s->%s)=%s" % [current_index, next, next_response])
-	next_response.add_theme_color_override("font_shadow_color", Color.BLACK)
+	next_response.set_theme(load("res://addons/chicken_scratch/theme/white_font_small_outline.theme"))
+	next_response.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 100))
 	var highlighted := "[wave][rainbow]%s[/rainbow][/wave]" % [next_response.text]
 	next_response.text = highlighted
 	(next_response as RichTextLabel).append_text(highlighted)
@@ -106,7 +107,9 @@ func focus(next : int):
 
 func unfocus(index : int):
 	var next_response : RichTextLabel = responses.get_child(index)
-	next_response.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0))
+	next_response.set_theme(load("res://addons/chicken_scratch/theme/black_font_small.theme"))
+	next_response.remove_theme_color_override("font_shadow_color")
+#	next_response.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0))
 	next_response.text = next_response.get_parsed_text()
 	
 

@@ -1,0 +1,17 @@
+[remap]
+
+importer="dt.abfi"
+type="FontFile"
+uid="uid://c1mxw5fcjkoim"
+path="res://.godot/imported/white_font_small_outline.png-9fab7ef1f8d59d8ced682009536b1d06.fontdata"
+
+[deps]
+
+source_file="res://addons/chicken_scratch/theme/white_font_small_outline.png"
+dest_files=["res://.godot/imported/white_font_small_outline.png-9fab7ef1f8d59d8ced682009536b1d06.fontdata"]
+
+[params]
+
+ranges=PackedStringArray(" -~")
+letter_spacing=0
+mipmaps=false

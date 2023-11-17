@@ -54,6 +54,7 @@ static var settings := {
 
 func _ready():
 	print_debug("ready")
+	EditorUtil.set_editor_setting("current_tree", null)
 	var popup := FileMenu.get_popup()
 	if(!popup.id_pressed.is_connected(_on_file_menu_opened)):
 		popup.id_pressed.connect(_on_file_menu_opened)
@@ -641,6 +642,12 @@ func _on_dialogue_box_finished(dialogue : Dictionary):
 ## Play the current dialogue tree in a scene
 func _on_play_pressed():
 	print_debug("playing whole dialogue.")
+	
+	var tree_path = EditorUtil.get_editor_setting("current_tree")
+	if(!tree_path):
+		push_warning("No tree path was found in editor settings or setting was not set yet...")
+		return
+		
 	var plugin : EditorPlugin
 	for child in Engine.get_main_loop().get_root().get_children():
 		if child.get_class() == "EditorNode":
