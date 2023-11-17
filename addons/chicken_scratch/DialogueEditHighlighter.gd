@@ -2,7 +2,8 @@
 class_name DialogueEditHighlighter extends SyntaxHighlighter
 
 
-const VARIABLE_PATTERN := "(?<variable>\\${[a-zA-Z_]+[\\w\\.]*})"
+#const VARIABLE_PATTERN := "(?<variable>\\${[a-zA-Z_]+[\\w\\.]*})"
+const VARIABLE_PATTERN := "\\${\\s*(?<var>[a-zA-Z_]+[a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]+)*)(?<params>\\(\\s*(?<param>(\\${\\s*[a-zA-Z_]+[a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]+)*\\s*})|('[^'\"]*')|((true)|(false))|(?<int>[0-9]+[0-9_]*)|((?&int)\\.(?&int)))(\\s*,\\s*(?&param)\\s*)*\\))?\\s*}"
 const BINARY_PATTERN := "0b([01]+_?)+"
 const HEX_PATTERN := "0x([0-9a-fA-F]+_?)+"
 const NUMBER_PATTERN := "([0-9]+\\.[0-9]+)|(([0-9]+_?)+)"

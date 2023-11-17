@@ -56,8 +56,8 @@ func _ready():
 	print_debug("ready")
 	EditorUtil.set_editor_setting("current_tree", null)
 	var popup := FileMenu.get_popup()
-	if(!popup.id_pressed.is_connected(_on_file_menu_opened)):
-		popup.id_pressed.connect(_on_file_menu_opened)
+#	if(!popup.id_pressed.is_connected(_on_file_menu_opened)):
+	popup.id_pressed.connect(_on_file_menu_opened)
 #
 	for i in popup.item_count:
 		file_menu_items[i] = popup.get_item_text(i)

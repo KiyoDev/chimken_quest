@@ -161,7 +161,6 @@ z_index = 4
 texture_filter = 1
 
 [node name="Main" type="Sprite2D" parent="Cursor"]
-position = Vector2(2, 0)
 texture = ExtResource("5_u40iu")
 centered = false
 

@@ -1,12 +1,12 @@
 @tool
 class_name DialogueVariableHandler extends Node
 
-const VARIABLE_PATTERN := "(?<variable>\\${[a-zA-Z_]+[\\w\\.]*})"
+#const VARIABLE_PATTERN := "(?<variable>\\${[a-zA-Z_]+[\\w\\.]*})"
 
+# TODO: handle variable method params and nested variables
+const VARIABLE_PATTERN := "\\${\\s*\\K(?<var>[a-zA-Z_]+[a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]+)*)(?<params>\\(\\s*(?<param>(\\${\\s*[a-zA-Z_]+[a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]+)*\\s*})|('[^'\"]*')|((true)|(false))|(?<int>[0-9]+[0-9_]*)|((?&int)\\.(?&int)))(\\s*,\\s*(?&param)\\s*)*\\))?(?=\\s*})"
 
-const variable_pattern := "\\${\\s*\\K(?<var>[a-zA-Z_]+[a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]+)*)(?<params>\\(\\s*(?<param>(\\${\\s*[a-zA-Z_]+[a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]+)*\\s*})|('[^'\"]*')|((true)|(false))|(?<int>[0-9]+[0-9_]*)|((?&int)\\.(?&int)))(\\s*,\\s*(?&param)\\s*)*\\))?(?=\\s*})"
-
-const params_pattern := ",?\\s*\\K(?<bool>(true)|(false))|(?<float>\\d+\\.\\d+)|(?<int>(?:(?<!\\.)\\d(?!\\.))+)|(?<string>(?<=')[^'\"]*(?='))|(?<variable>(?<=\\${)\\s*\\K[a-zA-Z_]+[a-zA-Z0-9_]*(\\.[a-zA-Z_]+[a-zA-Z0-9_]*)*(?=\\s*}))"
+const PARAMS_PATTERN := ",?\\s*\\K(?<bool>(true)|(false))|(?<float>\\d+\\.\\d+)|(?<int>(?:(?<!\\.)\\d(?!\\.))+)|(?<string>(?<=')[^'\"]*(?='))|(?<variable>(?<=\\${)\\s*\\K[a-zA-Z_]+[a-zA-Z0-9_]*(\\.[a-zA-Z_]+[a-zA-Z0-9_]*)*(?=\\s*}))"
 
 
 # Called when the node enters the scene tree for the first time.
