@@ -4,7 +4,7 @@ class_name DialogueVariableHandler extends Node
 #const VARIABLE_PATTERN := "(?<variable>\\${[a-zA-Z_]+[\\w\\.]*})"
 
 # TODO: handle variable method params and nested variables
-const VARIABLE_PATTERN := "\\${\\s*\\K(?<var>[a-zA-Z_]+[a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]+)*)(?<params>\\(\\s*(?<param>(\\${\\s*[a-zA-Z_]+[a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]+)*\\s*})|('[^'\"]*')|((true)|(false))|(?<int>[0-9]+[0-9_]*)|((?&int)\\.(?&int)))(\\s*,\\s*(?&param)\\s*)*\\))?(?=\\s*})"
+const VARIABLE_PATTERN := "\\${\\s*\\K(?<variable>[a-zA-Z_]+[a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]+)*)(?<params>\\(\\s*(?<param>(\\${\\s*[a-zA-Z_]+[a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]+)*\\s*})|('[^'\"]*')|((true)|(false))|(?<int>[0-9]+[0-9_]*)|((?&int)\\.(?&int)))(\\s*,\\s*(?&param)\\s*)*\\))?(?=\\s*})"
 
 const PARAMS_PATTERN := ",?\\s*\\K(?<bool>(true)|(false))|(?<float>\\d+\\.\\d+)|(?<int>(?:(?<!\\.)\\d(?!\\.))+)|(?<string>(?<=')[^'\"]*(?='))|(?<variable>(?<=\\${)\\s*\\K[a-zA-Z_]+[a-zA-Z0-9_]*(\\.[a-zA-Z_]+[a-zA-Z0-9_]*)*(?=\\s*}))"
 
@@ -21,7 +21,7 @@ func parse_text(text : String) -> String:
 	
 	for v in found:
 		var name := v.get_string("variable")
-		parsed = parsed.replace(name, str(get_variable(name)))
+		parsed = parsed.replace("${%s}" % name, str(get_variable(name)))
 	
 	return parsed
 
@@ -33,8 +33,8 @@ func get_autoloads() -> Array:
 	return autoloads
 
 
-# TODO: be able to get dialogue from an autoload utilizing paths .
 func get_variable(name : String):
+	print_debug("v-name=%s" % [name])
 	name = name.trim_prefix("${").trim_suffix("}")
 	if('.' in name):
 		var value = null

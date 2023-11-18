@@ -13,11 +13,11 @@ enum Direction {
 }
 
 
-@export var background : NinePatchRect
-@export var responses : VBoxContainer
-@export var cursor : Node2D
+@onready var background : NinePatchRect = $Background
+@onready var responses : VBoxContainer = $MarginContainer/Responses
+@onready var cursor : Node2D = $Cursor
 
-@export var response_label_scn : PackedScene
+@onready var response_label_scn : PackedScene = preload("res://addons/chicken_scratch/core/response_label.tscn")
 
 
 var current_index := 0
@@ -92,7 +92,7 @@ func focus(next : int):
 	next_response.set_theme(load("res://addons/chicken_scratch/theme/white_font_small_outline.theme"))
 	next_response.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 100))
 	var highlighted := "[wave][rainbow]%s[/rainbow][/wave]" % [next_response.text]
-	next_response.text = highlighted
+	next_response.text = ""
 	(next_response as RichTextLabel).append_text(highlighted)
 #	(next_response as RichTextLabel).
 	print("next - %s, %s" % [next_response.bbcode_enabled, next_response.text])

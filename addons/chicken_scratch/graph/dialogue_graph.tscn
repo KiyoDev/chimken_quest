@@ -5,9 +5,9 @@
 [ext_resource type="PackedScene" uid="uid://542bcl844gbm" path="res://addons/chicken_scratch/graph/dialogue_node.tscn" id="3_76s1u"]
 [ext_resource type="Texture2D" uid="uid://bo6mykqvqv2y" path="res://addons/chicken_scratch/icons/cross.svg" id="4_7gnp3"]
 [ext_resource type="PackedScene" uid="uid://dttyij5w5h0nc" path="res://addons/chicken_scratch/graph/variable_value.tscn" id="4_wkgrm"]
-[ext_resource type="PackedScene" uid="uid://3543xgdit3ts" path="res://addons/chicken_scratch/dialogue_box.tscn" id="5_1byyu"]
+[ext_resource type="PackedScene" uid="uid://3543xgdit3ts" path="res://addons/chicken_scratch/core/dialogue_box.tscn" id="5_sfw66"]
 [ext_resource type="Texture2D" uid="uid://cnbk0jnfotvev" path="res://addons/chicken_scratch/icons/play_button.svg" id="6_av8pf"]
-[ext_resource type="PackedScene" uid="uid://cwt4loou338go" path="res://addons/chicken_scratch/graph/dialogue_box_preview.tscn" id="6_o5nju"]
+[ext_resource type="PackedScene" uid="uid://cwt4loou338go" path="res://addons/chicken_scratch/editor/dialogue_box_preview.tscn" id="6_o5nju"]
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueGraph.gd" id="8_do64j"]
 
 [node name="ChickenScratchEditor" type="VBoxContainer" node_paths=PackedStringArray("Graph", "FileMenu", "Filename", "right_click_menu", "delete_confirmation", "dialogue_preview", "test_variables_container", "test_variables")]
@@ -27,7 +27,7 @@ delete_confirmation = NodePath("DeleteConfirmationDialog")
 dialogue_preview = NodePath("Window")
 test_variables_container = NodePath("GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/TestVariableContainer")
 test_variables = NodePath("GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/TestVariableContainer/TestVariables")
-dialogue_box_scn = ExtResource("5_1byyu")
+dialogue_box_scn = ExtResource("5_sfw66")
 dialogue_box_preview_scn = ExtResource("6_o5nju")
 
 [node name="GraphContainer" type="VBoxContainer" parent="."]
@@ -230,7 +230,6 @@ context_menu_enabled = true
 [connection signal="popup_request" from="GraphContainer/HSplitContainer/Graph" to="." method="_on_graph_popup_request"]
 [connection signal="tree_entered" from="GraphContainer/HSplitContainer/Graph" to="." method="_on_graph_tree_entered"]
 [connection signal="tree_exited" from="GraphContainer/HSplitContainer/Graph" to="." method="_on_graph_tree_exited"]
-[connection signal="resize_request" from="GraphContainer/HSplitContainer/Graph/@GraphNode@53863" to="GraphContainer/HSplitContainer/Graph/@GraphNode@53863" method="_on_resize_request" flags=18]
 [connection signal="canceled" from="DeleteConfirmationDialog" to="." method="_on_delete_confirmation_dialog_canceled"]
 [connection signal="confirmed" from="DeleteConfirmationDialog" to="." method="_on_delete_confirmation_dialog_confirmed"]
 [connection signal="id_pressed" from="RightClickMenu" to="." method="_on_right_click_menu_id_pressed"]

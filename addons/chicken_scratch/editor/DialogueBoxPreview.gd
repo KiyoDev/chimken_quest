@@ -2,7 +2,7 @@
 class_name DialogueBoxPreview extends BaseNode
 
 
-@export var dialogue_box : DialogueBox
+@export var dialogue_box : Node
 
 static var ChangeThemeDialog : EditorFileDialog
 

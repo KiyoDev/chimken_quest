@@ -8,12 +8,12 @@ signal text_stopped
 
 signal finished_revealing
 
-@export var container : Container
-@export var Background : NinePatchRect
-@export var TextBox : RichTextLabel
-@export var indicator : Sprite2D
-@export var indicator_animator : AnimationPlayer
-@export var response_box : ResponseBox
+@onready var container : Container = $MainContainer
+@onready var Background : NinePatchRect = $MainContainer/Background
+@onready var TextBox : RichTextLabel = $MainContainer/MarginContainer/VBoxContainer/Text
+@onready var indicator : Sprite2D = $MainContainer/NextIndicator
+@onready var indicator_animator : AnimationPlayer = $MainContainer/NextIndicator/AnimationPlayer
+@onready var response_box : ResponseBox = %ResponseBox
 
 var delay := 0.05
 

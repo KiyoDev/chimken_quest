@@ -1,17 +1,16 @@
-[gd_scene load_steps=12 format=3 uid="uid://542bcl844gbm"]
+[gd_scene load_steps=11 format=3 uid="uid://542bcl844gbm"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueNode.gd" id="1_dm8qm"]
 [ext_resource type="PackedScene" uid="uid://j4i1b4cdlcrs" path="res://addons/chicken_scratch/graph/offerings_config.tscn" id="2_gb7sj"]
 [ext_resource type="PackedScene" uid="uid://2878ebeahf7g" path="res://addons/chicken_scratch/graph/offering_element.tscn" id="3_8bo6u"]
 [ext_resource type="PackedScene" uid="uid://nhonh44age0u" path="res://addons/chicken_scratch/graph/offering_fail.tscn" id="4_krwmt"]
-[ext_resource type="Script" path="res://addons/chicken_scratch/graph/SpeakerEdit.gd" id="5_35nv3"]
 [ext_resource type="PackedScene" uid="uid://r7ibrepvtebn" path="res://addons/chicken_scratch/graph/responses_config.tscn" id="5_aiqi7"]
 [ext_resource type="PackedScene" uid="uid://dv8pk15nx1s0w" path="res://addons/chicken_scratch/graph/response_element.tscn" id="5_dsjvb"]
 [ext_resource type="Texture2D" uid="uid://ble2jtawtk3mo" path="res://addons/chicken_scratch/icons/dialogue_preview.svg" id="7_5lumq"]
 [ext_resource type="Texture2D" uid="uid://cnbk0jnfotvev" path="res://addons/chicken_scratch/icons/play_button.svg" id="8_da1ju"]
-[ext_resource type="Script" path="res://addons/chicken_scratch/DialogueEditHighlighter.gd" id="9_wtywx"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/editor/DialogueEditHighlighter.gd" id="9_wtywx"]
 
-[sub_resource type="SyntaxHighlighter" id="SyntaxHighlighter_f742w"]
+[sub_resource type="SyntaxHighlighter" id="SyntaxHighlighter_lhkq2"]
 script = ExtResource("9_wtywx")
 variable_color = Color(0.933333, 0.509804, 0.933333, 1)
 binary_color = Color(0.172549, 0.356863, 0.960784, 1)
@@ -100,7 +99,6 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(180, 32)
 layout_mode = 2
 placeholder_text = "Speaker"
-script = ExtResource("5_35nv3")
 
 [node name="TextLabel" type="Label" parent="BaseElements"]
 layout_mode = 2
@@ -121,7 +119,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "Dialogue goes here... "
 wrap_mode = 1
-syntax_highlighter = SubResource("SyntaxHighlighter_f742w")
+syntax_highlighter = SubResource("SyntaxHighlighter_lhkq2")
 
 [node name="Test Print" type="Button" parent="BaseElements"]
 visible = false

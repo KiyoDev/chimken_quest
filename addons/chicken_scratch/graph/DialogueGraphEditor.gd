@@ -24,12 +24,13 @@ enum DialogType {
 @export var test_variables_container : Control
 @export var test_variables : Control
 
+@onready var editor_dialogue_box_scn : PackedScene = preload("res://addons/chicken_scratch/editor/editor_dialogue_box.tscn")
 @export var dialogue_box_scn : PackedScene
 @export var dialogue_box_preview_scn : PackedScene
 
 var root_node : RootNode
 var previewed_node : DialogueNode
-var dialogue_box : DialogueBox
+var dialogue_box : Node
 
 var dialogue_box_preview : DialogueBoxPreview
 
@@ -473,7 +474,7 @@ func init_dialogue_box():
 	if(dialogue_box != null):
 		dialogue_box.queue_free()
 		
-	dialogue_box = dialogue_box_scn.instantiate()
+	dialogue_box = editor_dialogue_box_scn.instantiate()
 	dialogue_box.finished_revealing.connect(_on_dialogue_box_finished)
 
 
@@ -573,7 +574,14 @@ func _on_dialogue_node_preview(node : DialogueNode):
 	swap_dialogue_preview(node)
 	dialogue_preview.show()
 	
-	init_dialogue_box()
+#	init_dialogue_box()
+
+	if(dialogue_box != null):
+		dialogue_box.queue_free()
+		
+	dialogue_box = editor_dialogue_box_scn.instantiate()
+	dialogue_box.finished_revealing.connect(_on_dialogue_box_finished)
+	
 	ChickenScratch.dialogue_box = dialogue_box
 	dialogue_preview.get_node("Container/VBoxContainer").add_child(dialogue_box)
 	ChickenScratch.reparent(dialogue_preview)

@@ -39,7 +39,7 @@ func handle_cancel():
 	cancel_input.emit()
 	input_action.emit()
 
-
+# FIXME: when in dialogue node, need to change focus to response box if applicable to pull inputs away from the main dialogue box; this is to allow the response box to receive input instead
 func _unhandled_input(event):
 #	print("inputtt - %s, %s, %s, %s" % [ChickenScratch.started, event is InputEventKey, event.is_action_pressed(DIALOGUE_ACCEPT) if event is InputEventKey else "not key", Input.is_key_pressed(KEY_SPACE)])
 	if(!ChickenScratch.playing || !event is InputEventKey): return
