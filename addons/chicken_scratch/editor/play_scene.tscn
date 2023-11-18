@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://scripts/chimken/character_definition.gd" id="4_i0def"]
 [ext_resource type="Script" path="res://scripts/battle/resources/actions/status_effect_action.gd" id="5_r6t3u"]
 [ext_resource type="PackedScene" uid="uid://by7jx4boe0eew" path="res://tilesets/tilemap_test.tscn" id="6_dc1vt"]
-[ext_resource type="PackedScene" uid="uid://3543xgdit3ts" path="res://addons/chicken_scratch/core/dialogue_box.tscn" id="8_df6kc"]
+[ext_resource type="PackedScene" uid="uid://3543xgdit3ts" path="res://addons/chicken_scratch/core/dialogue_box.tscn" id="8_q5bad"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t58gc"]
 texture = ExtResource("1_evg8m")
@@ -87,7 +87,7 @@ category = 1
 target = 2
 targeting_type = 1
 
-[sub_resource type="Resource" id="Resource_fmg50"]
+[sub_resource type="Resource" id="Resource_upisa"]
 resource_local_to_scene = true
 script = ExtResource("4_i0def")
 character_name = "Chimken"
@@ -141,7 +141,7 @@ layer_0/tile_data = PackedInt32Array(-1, 131072, 2, 0, 131072, 2, 131071, 131072
 [node name="CharacterBody2D" parent="." groups=["Player"] instance=ExtResource("2_7ck5l")]
 visible = false
 position = Vector2(128, 232)
-info = SubResource("Resource_fmg50")
+info = SubResource("Resource_upisa")
 
 [node name="Area" parent="." instance=ExtResource("6_dc1vt")]
 visible = false
@@ -154,4 +154,4 @@ transform = Transform2D(4, 0, 0, 4, 0, 0)
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_eouo4")
-dialogue_box_scn = ExtResource("8_df6kc")
+dialogue_box_scn = ExtResource("8_q5bad")

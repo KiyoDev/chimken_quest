@@ -198,6 +198,7 @@ func play_text(dialogue : Dictionary):
 
 ## Load dialogue from a dictionary
 func load_dialogue(dialogue : Dictionary):
+	Inputs.focused = DialogueInputHandler.Focused.DIALOGUE_BOX
 	# get dialogue info from dictionary
 	print("# dialogue - %s" % [dialogue])
 	var type : Type = Type[dialogue.type] # type name -> enum
@@ -245,8 +246,10 @@ func try_move_next(dialogue : Dictionary) -> bool:
 		Type.Response:
 			# TODO: bring up a menu to choose responses
 			print_debug("## current is response, go to slot of the chosen response")
+			Inputs.focused = DialogueInputHandler.Focused.RESPONSE_BOX
 			dialogue_box.open_response(dialogue.properties.responses)
 			await dialogue_box.response_box.selected
+			Inputs.focused = DialogueInputHandler.Focused.DIALOGUE_BOX
 			return await load_next_dialogue(dialogue.name, dialogue_box.response_index())
 #			await response_chosen
 	return false

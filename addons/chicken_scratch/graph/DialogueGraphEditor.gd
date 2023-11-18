@@ -9,24 +9,23 @@ enum DialogType {
 }
 
 
-@export var Graph : DialogueGraph
-@export var FileMenu : MenuButton
-@export var Filename : Label
+@onready var Graph : DialogueGraph = %DialogueGraph
+@onready var FileMenu : MenuButton = $GraphContainer/HBoxContainer/FileMenu
+@onready var Filename : Label = $GraphContainer/HBoxContainer/Filename
 
-@export var root_node_scn : PackedScene
-@export var dialogue_node : PackedScene
-@export var variable_value : PackedScene
+@onready var root_node_scn : PackedScene = preload("res://addons/chicken_scratch/graph/root_node.tscn")
+@onready var dialogue_node : PackedScene = preload("res://addons/chicken_scratch/graph/dialogue_node.tscn")
+@onready var variable_value : PackedScene = preload("res://addons/chicken_scratch/graph/variable_value.tscn")
 
-@export var right_click_menu : PopupMenu
-@export var delete_confirmation : ConfirmationDialog
-@export var dialogue_preview : Window
+@onready var delete_confirmation : ConfirmationDialog = $DeleteConfirmationDialog
+@onready var right_click_menu : PopupMenu = $RightClickMenu
+@onready var dialogue_preview : Window = $PreviewWindow
 
-@export var test_variables_container : Control
-@export var test_variables : Control
+@onready var test_variables_container : Control = $GraphContainer/HSplitContainer/TestVariableContainerParent/VBoxContainer/TestVariableContainer
+@onready var test_variables : Control = $GraphContainer/HSplitContainer/TestVariableContainerParent/VBoxContainer/TestVariableContainer/TestVariables
 
 @onready var editor_dialogue_box_scn : PackedScene = preload("res://addons/chicken_scratch/editor/editor_dialogue_box.tscn")
-@export var dialogue_box_scn : PackedScene
-@export var dialogue_box_preview_scn : PackedScene
+@onready var dialogue_box_preview_scn : PackedScene = preload("res://addons/chicken_scratch/editor/dialogue_box_preview.tscn")
 
 var root_node : RootNode
 var previewed_node : DialogueNode
@@ -593,7 +592,7 @@ func _on_dialogue_node_preview(node : DialogueNode):
 #		dialogue_box.load_dialogue(dialogue_preview.get_node("%PreviewText").text)
 
 
-func _on_dialogue_preview_close_requested():
+func _on_preview_window_close_requested():
 	print_debug("close preview window")
 	ChickenScratch.reparent(get_tree().root)
 	ChickenScratch.stop()

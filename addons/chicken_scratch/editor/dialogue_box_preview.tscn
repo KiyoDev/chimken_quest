@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://ydeqjfjbi7vj" path="res://addons/chicken_scratch/editor/editor_dialogue_box.tscn" id="2_w1f1h"]
 
 [node name="DialogueBoxPreview" type="GraphNode" node_paths=PackedStringArray("dialogue_box")]
+visible = false
 offset_right = 259.0
 offset_bottom = 143.0
 title = "Dialogue Box Previewer"

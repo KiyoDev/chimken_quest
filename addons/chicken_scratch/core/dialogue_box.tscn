@@ -100,6 +100,7 @@ size_flags_vertical = 3
 theme_override_styles/focus = SubResource("StyleBoxEmpty_0cvq0")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_b3kqx")
 bbcode_enabled = true
+text = "[tornado radius=3.0 freq=-8.0]Response[/tornado]"
 scroll_active = false
 scroll_following = true
 

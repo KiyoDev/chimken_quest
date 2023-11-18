@@ -8,6 +8,18 @@ signal cancel_input
 
 signal input_action
 
+signal input_up
+
+signal input_down
+
+signal accept_response
+
+
+enum Focused {
+	DIALOGUE_BOX,
+	RESPONSE_BOX
+}
+
 
 const DIALOGUE_ACCEPT := "dialogue_accept"
 const DIALOGUE_CANCEL := "dialogue_cancel"
@@ -17,12 +29,15 @@ const CANCEL_SETTING_OVERRIDE := "dialogue/settings/cancel"
 var input_consumed := false;
 
 
+static var focused := Focused.DIALOGUE_BOX
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
 
-func handle_accept():
+func handle_accept_dialogue():
 	print_debug("accepted")
 	if(!input_consumed):
 		input_consumed = true
@@ -31,7 +46,7 @@ func handle_accept():
 	input_action.emit()
 
 
-func handle_cancel():
+func handle_cancel_dialogue():
 	print_debug("canceled")
 	if(!input_consumed):
 		input_consumed = true
@@ -42,15 +57,23 @@ func handle_cancel():
 # FIXME: when in dialogue node, need to change focus to response box if applicable to pull inputs away from the main dialogue box; this is to allow the response box to receive input instead
 func _unhandled_input(event):
 #	print("inputtt - %s, %s, %s, %s" % [ChickenScratch.started, event is InputEventKey, event.is_action_pressed(DIALOGUE_ACCEPT) if event is InputEventKey else "not key", Input.is_key_pressed(KEY_SPACE)])
-	if(!ChickenScratch.playing || !event is InputEventKey): return
-	print("ChickenScratch input")
-#	if(Input.is_key_pressed(KEY_SPACE)):
-#		handle_accept()   
+	if(!ChickenScratch.playing || event is InputEventMouseMotion || event is InputEventMouseButton): return
+	print("ChickenScratch input - %s" % [focused])
 #	print_debug("has[%s] - %s" % [InputMap.get_actions(), ProjectSettings.get_setting("input/ui_accept")])
 #	print_debug("has[%s] - %s, %s" % [DIALOGUE_ACCEPT,  ProjectSettings.get_setting("input/ui_accept"), ProjectSettings.get_setting("input/dialogue_accept")]) 
-	var accept = ProjectSettings.get_setting(ACCEPT_SETTING_OVERRIDE, DIALOGUE_ACCEPT)
-#	print("-- %s-%s-%s" % [accept, Input.is_action_pressed(accept), Input.is_action_pressed(ProjectSettings.get_setting(CANCEL_SETTING_OVERRIDE, DIALOGUE_CANCEL))])
-	if(Input.is_action_pressed(ProjectSettings.get_setting(ACCEPT_SETTING_OVERRIDE, DIALOGUE_ACCEPT))):
-		handle_accept()
-	elif(Input.is_action_pressed(ProjectSettings.get_setting(CANCEL_SETTING_OVERRIDE, DIALOGUE_CANCEL))):
-		handle_cancel()
+	if(focused == Focused.DIALOGUE_BOX && event is InputEventKey):
+		var accept = ProjectSettings.get_setting(ACCEPT_SETTING_OVERRIDE, DIALOGUE_ACCEPT)
+	#	print("-- %s-%s-%s" % [accept, Input.is_action_pressed(accept), Input.is_action_pressed(ProjectSettings.get_setting(CANCEL_SETTING_OVERRIDE, DIALOGUE_CANCEL))])
+		if(Input.is_action_pressed(ProjectSettings.get_setting(ACCEPT_SETTING_OVERRIDE, DIALOGUE_ACCEPT))):
+			handle_accept_dialogue()
+		elif(Input.is_action_pressed(ProjectSettings.get_setting(CANCEL_SETTING_OVERRIDE, DIALOGUE_CANCEL))):
+			handle_cancel_dialogue()
+	elif(focused == Focused.RESPONSE_BOX):
+		if(event.is_action_pressed(&"ui_up")):
+			print_debug("response box input - %s" % [event.is_action_pressed(&"ui_up")])
+			input_up.emit()
+		elif(event.is_action_pressed(&"ui_down")):
+			input_down.emit()
+		elif(event.is_action_pressed(&"ui_accept")):
+			accept_response.emit()
+			

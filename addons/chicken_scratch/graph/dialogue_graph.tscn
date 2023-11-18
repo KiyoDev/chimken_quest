@@ -1,34 +1,16 @@
-[gd_scene load_steps=10 format=3 uid="uid://duio0ke3bpeoi"]
+[gd_scene load_steps=5 format=3 uid="uid://duio0ke3bpeoi"]
 
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueGraphEditor.gd" id="1_x85w6"]
-[ext_resource type="PackedScene" uid="uid://dgeynvwx2mhg5" path="res://addons/chicken_scratch/graph/root_node.tscn" id="2_f4bov"]
-[ext_resource type="PackedScene" uid="uid://542bcl844gbm" path="res://addons/chicken_scratch/graph/dialogue_node.tscn" id="3_76s1u"]
 [ext_resource type="Texture2D" uid="uid://bo6mykqvqv2y" path="res://addons/chicken_scratch/icons/cross.svg" id="4_7gnp3"]
-[ext_resource type="PackedScene" uid="uid://dttyij5w5h0nc" path="res://addons/chicken_scratch/graph/variable_value.tscn" id="4_wkgrm"]
-[ext_resource type="PackedScene" uid="uid://3543xgdit3ts" path="res://addons/chicken_scratch/core/dialogue_box.tscn" id="5_sfw66"]
 [ext_resource type="Texture2D" uid="uid://cnbk0jnfotvev" path="res://addons/chicken_scratch/icons/play_button.svg" id="6_av8pf"]
-[ext_resource type="PackedScene" uid="uid://cwt4loou338go" path="res://addons/chicken_scratch/editor/dialogue_box_preview.tscn" id="6_o5nju"]
 [ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueGraph.gd" id="8_do64j"]
 
-[node name="ChickenScratchEditor" type="VBoxContainer" node_paths=PackedStringArray("Graph", "FileMenu", "Filename", "right_click_menu", "delete_confirmation", "dialogue_preview", "test_variables_container", "test_variables")]
+[node name="ChickenScratchEditor" type="VBoxContainer"]
 offset_right = 1584.0
 offset_bottom = 942.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_x85w6")
-Graph = NodePath("GraphContainer/HSplitContainer/Graph")
-FileMenu = NodePath("GraphContainer/HBoxContainer/FileMenu")
-Filename = NodePath("GraphContainer/HBoxContainer/Filename")
-root_node_scn = ExtResource("2_f4bov")
-dialogue_node = ExtResource("3_76s1u")
-variable_value = ExtResource("4_wkgrm")
-right_click_menu = NodePath("RightClickMenu")
-delete_confirmation = NodePath("DeleteConfirmationDialog")
-dialogue_preview = NodePath("Window")
-test_variables_container = NodePath("GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/TestVariableContainer")
-test_variables = NodePath("GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/TestVariableContainer/TestVariables")
-dialogue_box_scn = ExtResource("5_sfw66")
-dialogue_box_preview_scn = ExtResource("6_o5nju")
 
 [node name="GraphContainer" type="VBoxContainer" parent="."]
 texture_filter = 1
@@ -102,36 +84,37 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="TestVariableContainer" type="HBoxContainer" parent="GraphContainer/HSplitContainer"]
+[node name="TestVariableContainerParent" type="HBoxContainer" parent="GraphContainer/HSplitContainer"]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="GraphContainer/HSplitContainer/TestVariableContainer"]
+[node name="Control" type="Control" parent="GraphContainer/HSplitContainer/TestVariableContainerParent"]
 custom_minimum_size = Vector2(4, 0)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GraphContainer/HSplitContainer/TestVariableContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="GraphContainer/HSplitContainer/TestVariableContainerParent"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ToggleShowVariables" type="Button" parent="GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer"]
+[node name="ToggleShowVariables" type="Button" parent="GraphContainer/HSplitContainer/TestVariableContainerParent/VBoxContainer"]
 custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
 focus_mode = 0
 text = "𝑥 Variables"
 
-[node name="TestVariableContainer" type="VBoxContainer" parent="GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer"]
+[node name="TestVariableContainer" type="VBoxContainer" parent="GraphContainer/HSplitContainer/TestVariableContainerParent/VBoxContainer"]
 visible = false
 layout_mode = 2
 
-[node name="AddVariable" type="Button" parent="GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/TestVariableContainer"]
+[node name="AddVariable" type="Button" parent="GraphContainer/HSplitContainer/TestVariableContainerParent/VBoxContainer/TestVariableContainer"]
 layout_mode = 2
 text = "Add Variable"
 icon = ExtResource("4_7gnp3")
 
-[node name="TestVariables" type="VBoxContainer" parent="GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/TestVariableContainer"]
+[node name="TestVariables" type="VBoxContainer" parent="GraphContainer/HSplitContainer/TestVariableContainerParent/VBoxContainer/TestVariableContainer"]
 layout_mode = 2
 
-[node name="Graph" type="GraphEdit" parent="GraphContainer/HSplitContainer"]
+[node name="DialogueGraph" type="GraphEdit" parent="GraphContainer/HSplitContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -155,7 +138,7 @@ item_count = 1
 item_0/text = "Add Dialogue Node"
 item_0/id = 0
 
-[node name="Window" type="Window" parent="."]
+[node name="PreviewWindow" type="Window" parent="."]
 handle_input_locally = false
 title = "Preview"
 initial_position = 4
@@ -166,7 +149,7 @@ always_on_top = true
 content_scale_mode = 1
 content_scale_aspect = 1
 
-[node name="Container" type="MarginContainer" parent="Window"]
+[node name="Container" type="MarginContainer" parent="PreviewWindow"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -179,32 +162,32 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Window/Container"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PreviewWindow/Container"]
 layout_mode = 2
 
-[node name="ThemeLabel" type="Label" parent="Window/Container/VBoxContainer"]
+[node name="ThemeLabel" type="Label" parent="PreviewWindow/Container/VBoxContainer"]
 layout_mode = 2
 text = "[default_theme]"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Window/Container/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PreviewWindow/Container/VBoxContainer"]
 layout_mode = 2
 
-[node name="ChangeTheme" type="Button" parent="Window/Container/VBoxContainer/HBoxContainer"]
+[node name="ChangeTheme" type="Button" parent="PreviewWindow/Container/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(34, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 text = "Change Theme"
 
-[node name="RemoveTheme" type="Button" parent="Window/Container/VBoxContainer/HBoxContainer"]
+[node name="RemoveTheme" type="Button" parent="PreviewWindow/Container/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 text = "Remove Theme"
 
-[node name="PreviewText" type="RichTextLabel" parent="Window/Container/VBoxContainer"]
+[node name="PreviewText" type="RichTextLabel" parent="PreviewWindow/Container/VBoxContainer"]
 unique_name_in_owner = true
 clip_contents = false
 custom_minimum_size = Vector2(200, 100)
@@ -216,23 +199,21 @@ context_menu_enabled = true
 
 [connection signal="pressed" from="GraphContainer/HBoxContainer/Print" to="." method="_on_print_pressed"]
 [connection signal="pressed" from="GraphContainer/HBoxContainer/Play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/ToggleShowVariables" to="." method="_on_toggle_show_variables_pressed"]
-[connection signal="pressed" from="GraphContainer/HSplitContainer/TestVariableContainer/VBoxContainer/TestVariableContainer/AddVariable" to="." method="_on_add_variable_pressed"]
-[connection signal="connection_request" from="GraphContainer/HSplitContainer/Graph" to="." method="_on_graph_connection_request"]
-[connection signal="copy_nodes_request" from="GraphContainer/HSplitContainer/Graph" to="." method="_on_graph_copy_nodes_request"]
-[connection signal="delete_nodes_request" from="GraphContainer/HSplitContainer/Graph" to="." method="_on_graph_delete_nodes_request"]
-[connection signal="disconnection_request" from="GraphContainer/HSplitContainer/Graph" to="." method="_on_graph_disconnection_request"]
-[connection signal="duplicate_nodes_request" from="GraphContainer/HSplitContainer/Graph" to="." method="_on_graph_duplicate_nodes_request"]
-[connection signal="gui_input" from="GraphContainer/HSplitContainer/Graph" to="." method="_on_graph_gui_input"]
-[connection signal="node_deselected" from="GraphContainer/HSplitContainer/Graph" to="." method="_on_graph_node_deselected"]
-[connection signal="node_selected" from="GraphContainer/HSplitContainer/Graph" to="." method="_on_graph_node_selected"]
-[connection signal="paste_nodes_request" from="GraphContainer/HSplitContainer/Graph" to="." method="_on_graph_paste_nodes_request"]
-[connection signal="popup_request" from="GraphContainer/HSplitContainer/Graph" to="." method="_on_graph_popup_request"]
-[connection signal="tree_entered" from="GraphContainer/HSplitContainer/Graph" to="." method="_on_graph_tree_entered"]
-[connection signal="tree_exited" from="GraphContainer/HSplitContainer/Graph" to="." method="_on_graph_tree_exited"]
+[connection signal="pressed" from="GraphContainer/HSplitContainer/TestVariableContainerParent/VBoxContainer/ToggleShowVariables" to="." method="_on_toggle_show_variables_pressed"]
+[connection signal="pressed" from="GraphContainer/HSplitContainer/TestVariableContainerParent/VBoxContainer/TestVariableContainer/AddVariable" to="." method="_on_add_variable_pressed"]
+[connection signal="connection_request" from="GraphContainer/HSplitContainer/DialogueGraph" to="." method="_on_graph_connection_request"]
+[connection signal="copy_nodes_request" from="GraphContainer/HSplitContainer/DialogueGraph" to="." method="_on_graph_copy_nodes_request"]
+[connection signal="delete_nodes_request" from="GraphContainer/HSplitContainer/DialogueGraph" to="." method="_on_graph_delete_nodes_request"]
+[connection signal="disconnection_request" from="GraphContainer/HSplitContainer/DialogueGraph" to="." method="_on_graph_disconnection_request"]
+[connection signal="duplicate_nodes_request" from="GraphContainer/HSplitContainer/DialogueGraph" to="." method="_on_graph_duplicate_nodes_request"]
+[connection signal="gui_input" from="GraphContainer/HSplitContainer/DialogueGraph" to="." method="_on_graph_gui_input"]
+[connection signal="node_deselected" from="GraphContainer/HSplitContainer/DialogueGraph" to="." method="_on_graph_node_deselected"]
+[connection signal="node_selected" from="GraphContainer/HSplitContainer/DialogueGraph" to="." method="_on_graph_node_selected"]
+[connection signal="paste_nodes_request" from="GraphContainer/HSplitContainer/DialogueGraph" to="." method="_on_graph_paste_nodes_request"]
+[connection signal="popup_request" from="GraphContainer/HSplitContainer/DialogueGraph" to="." method="_on_graph_popup_request"]
+[connection signal="tree_entered" from="GraphContainer/HSplitContainer/DialogueGraph" to="." method="_on_graph_tree_entered"]
+[connection signal="tree_exited" from="GraphContainer/HSplitContainer/DialogueGraph" to="." method="_on_graph_tree_exited"]
 [connection signal="canceled" from="DeleteConfirmationDialog" to="." method="_on_delete_confirmation_dialog_canceled"]
 [connection signal="confirmed" from="DeleteConfirmationDialog" to="." method="_on_delete_confirmation_dialog_confirmed"]
 [connection signal="id_pressed" from="RightClickMenu" to="." method="_on_right_click_menu_id_pressed"]
-[connection signal="close_requested" from="Window" to="." method="_on_dialogue_preview_close_requested"]
-[connection signal="pressed" from="Window/Container/VBoxContainer/HBoxContainer/ChangeTheme" to="." method="_on_change_theme_pressed"]
-[connection signal="pressed" from="Window/Container/VBoxContainer/HBoxContainer/RemoveTheme" to="." method="_on_remove_theme_pressed"]
+[connection signal="close_requested" from="PreviewWindow" to="." method="_on_preview_window_close_requested"]

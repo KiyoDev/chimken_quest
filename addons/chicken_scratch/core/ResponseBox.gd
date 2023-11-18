@@ -27,7 +27,17 @@ var selecting := false
 func _ready():
 	cursor.find_child("AnimationPlayer").play("moving")
 	cursor.hide()
+	
+	ChickenScratch.Inputs.input_up.connect(_on_input_up)
+	ChickenScratch.Inputs.input_down.connect(_on_input_down)
+	ChickenScratch.Inputs.accept_response.connect(_on_acccept_response)
 
+
+func _exit_tree():
+	ChickenScratch.Inputs.input_up.disconnect(_on_input_up)
+	ChickenScratch.Inputs.input_down.disconnect(_on_input_down)
+	ChickenScratch.Inputs.accept_response.disconnect(_on_acccept_response)
+	
 
 func open(responses : Array):
 	print("resopnjses - %s" % [responses])
@@ -37,6 +47,7 @@ func open(responses : Array):
 	for response in responses:
 		add_response_label(response.text)
 	focus(current_index)
+
 
 func clear():
 	for response in responses.get_children():
@@ -49,27 +60,43 @@ func select():
 		push_error("Cursor index is negative")
 		return
 	
+	selected.emit(responses.get_child(current_index), current_index)
 	selecting = false
 	cursor.hide()
-	selected.emit(responses.get_child(current_index), current_index)
 	clear()
 	hide()
 
 
-func _input(event):
-	if(!selecting): return
-	if(event is InputEventAction):
-		print_debug("response box input")
-		if(event.is_action_pressed(&"ui_up")):
-			var next := navigate(Direction.UP)
-			if(next == current_index): return
-			focus(next)
-		elif(event.is_action_pressed(&"ui_down")):
-			var next := navigate(Direction.DOWN)
-			if(next == current_index): return
-			focus(next)
-		elif(event.is_action_pressed(&"ui_accept")):
-			select()
+func _on_input_up():
+	var next := navigate(Direction.UP)
+	if(next == current_index): return
+	focus(next)
+	
+
+func _on_input_down():
+	var next := navigate(Direction.DOWN)
+	if(next == current_index): return
+	focus(next)
+	
+
+func _on_acccept_response():
+	select()
+
+
+#func _input(event):
+#	if(!selecting): return
+#	if(event is InputEventAction):
+#		print_debug("response box input")
+#		if(event.is_action_pressed(&"ui_up")):
+#			var next := navigate(Direction.UP)
+#			if(next == current_index): return
+#			focus(next)
+#		elif(event.is_action_pressed(&"ui_down")):
+#			var next := navigate(Direction.DOWN)
+#			if(next == current_index): return
+#			focus(next)
+#		elif(event.is_action_pressed(&"ui_accept")):
+#			select()
 		
 #try_get_option(clampi(focused_index + move.y, 0, option_count() - 1));
 
@@ -90,7 +117,7 @@ func focus(next : int):
 	var next_response : RichTextLabel = responses.get_child(next)
 	print("next response(%s->%s)=%s" % [current_index, next, next_response])
 	next_response.set_theme(load("res://addons/chicken_scratch/theme/white_font_small_outline.theme"))
-	next_response.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 100))
+	next_response.add_theme_color_override("font_shadow_color", Color(0, 0, 1, 0.40))
 	var highlighted := "[wave][rainbow]%s[/rainbow][/wave]" % [next_response.text]
 	next_response.text = ""
 	(next_response as RichTextLabel).append_text(highlighted)
@@ -116,7 +143,7 @@ func unfocus(index : int):
 
 func update_cursor_pos(label : RichTextLabel):
 #	print_debug("updating cursor pos - [%s, %s]" % [global_position, option.global_position]);
-	cursor.global_position = Vector2(label.global_position.x - 5, label.global_position.y );
+	cursor.global_position = Vector2(label.global_position.x - 22, label.global_position.y - 3 );
 
 
 func add_response_label(text : String):
