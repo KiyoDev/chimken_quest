@@ -55,7 +55,7 @@ func handle_cancel_dialogue():
 	input_action.emit()
 
 # FIXME: when in dialogue node, need to change focus to response box if applicable to pull inputs away from the main dialogue box; this is to allow the response box to receive input instead
-func _unhandled_input(event):
+func _input(event):
 #	print("inputtt - %s, %s, %s, %s" % [ChickenScratch.started, event is InputEventKey, event.is_action_pressed(DIALOGUE_ACCEPT) if event is InputEventKey else "not key", Input.is_key_pressed(KEY_SPACE)])
 	if(!ChickenScratch.playing || event is InputEventMouseMotion || event is InputEventMouseButton): return
 	print("ChickenScratch input - %s" % [focused])
@@ -63,12 +63,15 @@ func _unhandled_input(event):
 #	print_debug("has[%s] - %s, %s" % [DIALOGUE_ACCEPT,  ProjectSettings.get_setting("input/ui_accept"), ProjectSettings.get_setting("input/dialogue_accept")]) 
 	if(focused == Focused.DIALOGUE_BOX && event is InputEventKey):
 		var accept = ProjectSettings.get_setting(ACCEPT_SETTING_OVERRIDE, DIALOGUE_ACCEPT)
+		var cancel = ProjectSettings.get_setting(CANCEL_SETTING_OVERRIDE, DIALOGUE_CANCEL)
 	#	print("-- %s-%s-%s" % [accept, Input.is_action_pressed(accept), Input.is_action_pressed(ProjectSettings.get_setting(CANCEL_SETTING_OVERRIDE, DIALOGUE_CANCEL))])
-		if(Input.is_action_pressed(ProjectSettings.get_setting(ACCEPT_SETTING_OVERRIDE, DIALOGUE_ACCEPT))):
+		if(Input.is_action_pressed(accept)):
 			handle_accept_dialogue()
-		elif(Input.is_action_pressed(ProjectSettings.get_setting(CANCEL_SETTING_OVERRIDE, DIALOGUE_CANCEL))):
+		elif(Input.is_action_pressed(cancel)):
 			handle_cancel_dialogue()
-	elif(focused == Focused.RESPONSE_BOX):
+	elif(focused == Focused.RESPONSE_BOX && (Input.is_action_just_pressed(&"ui_up") || Input.is_action_just_pressed(&"ui_down") || Input.is_action_just_pressed(&"ui_accept"))):
+		
+		print("event.is_action_pressed(&ui_up)=%s" % [event.is_action_pressed(&"ui_up")])
 		if(event.is_action_pressed(&"ui_up")):
 			print_debug("response box input - %s" % [event.is_action_pressed(&"ui_up")])
 			input_up.emit()

@@ -45,6 +45,8 @@ func _ready():
 	Inputs.name = "Input"
 	add_child(Inputs)
 	
+	Inputs.set_process_input(false)
+	
 	print("VariableHandler %s" % [Inputs])
 #	print("InputHandler %s" % [ChickenScratch.Input])
 	print("Inputs %s" % [ChickenScratch.Inputs])
@@ -71,22 +73,6 @@ func delete_variable(name : String):
 	variables.erase(name)
 	dialogue_tree.variables.erase(name)
 	variables_updated.emit()
-
-
-#func start_from_path(path : String):
-#	if path.begins_with("res://"):
-#		if path.to_lower().ends_with(".dngraph") || path.to_lower().ends_with(".json"):
-#			print_debug("path - %s" % path)
-#			dialogue_tree = DialogueTree.new()
-#			dialogue_tree.open_from_path(path)
-#
-#			variables = dialogue_tree.variables
-#		elif path.to_lower().ends_with(".tres") || path.to_lower().ends_with(".res"):
-#			dialogue_tree = load(path)
-#
-#	playing = true
-#	dialogue_started.emit()
-	# else: search through a directory of dialogue trees?
 
 
 func preload_tree(path : String, dialogue_box : Node):
@@ -125,6 +111,7 @@ func play():
 		push_warning("Dialogue already playing...")
 		return
 	playing = true
+	Inputs.set_process_input(true)
 	var root = dialogue_tree.root_node
 	
 	await load_next_dialogue(root.name, 0)
@@ -138,6 +125,7 @@ func play_branch(slot : int):
 		push_warning("Dialogue already playing...")
 		return
 	playing = true
+	Inputs.set_process_input(true)
 	var root = dialogue_tree.root_node
 	
 	await load_next_dialogue(root.name, slot)
@@ -152,6 +140,7 @@ func play_at(name : String):
 		push_warning("Dialogue already playing...")
 		return
 	playing = true
+	Inputs.set_process_input(true)
 	
 	await load_dialogue(dialogue_tree.nodes[name])
 	print("#play_at[%s] finished" % [name])
@@ -165,6 +154,7 @@ func play_text(dialogue : Dictionary):
 		push_warning("Dialogue already playing...")
 		return
 	playing = true
+	Inputs.set_process_input(true)
 	
 #	await load_dialogue(dialogue)
 	var type : Type = Type[dialogue.type] # type name -> enum

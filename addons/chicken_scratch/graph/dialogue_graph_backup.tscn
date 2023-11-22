@@ -1,16 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://duio0ke3bpeoi"]
+[gd_scene load_steps=5 format=3 uid="uid://dxsrhilmyns2e"]
 
-[ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueGraphEditor.gd" id="1_x85w6"]
-[ext_resource type="Texture2D" uid="uid://bo6mykqvqv2y" path="res://addons/chicken_scratch/icons/cross.svg" id="4_7gnp3"]
-[ext_resource type="Texture2D" uid="uid://cnbk0jnfotvev" path="res://addons/chicken_scratch/icons/play_button.svg" id="6_av8pf"]
-[ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueGraph.gd" id="8_do64j"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueGraphEditor.gd" id="1_schls"]
+[ext_resource type="Texture2D" uid="uid://cnbk0jnfotvev" path="res://addons/chicken_scratch/icons/play_button.svg" id="2_fxulm"]
+[ext_resource type="Texture2D" uid="uid://bo6mykqvqv2y" path="res://addons/chicken_scratch/icons/cross.svg" id="3_k3dge"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/graph/DialogueGraph.gd" id="4_aowtt"]
 
 [node name="ChickenScratchEditor" type="VBoxContainer"]
 offset_right = 1584.0
 offset_bottom = 942.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_x85w6")
+script = ExtResource("1_schls")
 
 [node name="GraphContainer" type="VBoxContainer" parent="."]
 texture_filter = 1
@@ -51,7 +51,7 @@ custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 focus_mode = 0
 text = "Play Dialogue Tree"
-icon = ExtResource("6_av8pf")
+icon = ExtResource("2_fxulm")
 alignment = 2
 
 [node name="VSeparator2" type="VSeparator" parent="GraphContainer/HBoxContainer"]
@@ -107,9 +107,8 @@ layout_mode = 2
 
 [node name="AddVariable" type="Button" parent="GraphContainer/HSplitContainer/TestVariableContainerParent/VBoxContainer/TestVariableContainer"]
 layout_mode = 2
-focus_mode = 0
 text = "Add Variable"
-icon = ExtResource("4_7gnp3")
+icon = ExtResource("3_k3dge")
 
 [node name="TestVariables" type="VBoxContainer" parent="GraphContainer/HSplitContainer/TestVariableContainerParent/VBoxContainer/TestVariableContainer"]
 layout_mode = 2
@@ -123,7 +122,7 @@ right_disconnects = true
 show_zoom_label = true
 minimap_enabled = false
 arrange_nodes_button_hidden = true
-script = ExtResource("8_do64j")
+script = ExtResource("4_aowtt")
 
 [node name="DeleteConfirmationDialog" type="ConfirmationDialog" parent="."]
 initial_position = 4

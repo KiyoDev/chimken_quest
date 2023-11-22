@@ -88,8 +88,8 @@ func default_settings():
 	enter.keycode = KEY_ENTER
 	var space := InputEventKey.new()
 	space.keycode = KEY_SPACE
-	var x := InputEventKey.new()
-	x.keycode = KEY_X
+	var z := InputEventKey.new()
+	z.keycode = KEY_Z
 	var controller_accept := InputEventJoypadButton.new()
 	controller_accept.button_index = JOY_BUTTON_A
 	
@@ -99,7 +99,7 @@ func default_settings():
 			"events": [
 				enter,
 				space,
-				x,
+				z,
 				controller_accept
 			]
 		});
@@ -111,15 +111,15 @@ func default_settings():
 	InputMap.add_action("dialogue_accept")
 	InputMap.action_add_event("dialogue_accept", enter)
 	InputMap.action_add_event("dialogue_accept", space)
-	InputMap.action_add_event("dialogue_accept", x)
+	InputMap.action_add_event("dialogue_accept", z)
 	InputMap.action_add_event("dialogue_accept", controller_accept)
 
 	var escape := InputEventKey.new()
 	escape.keycode = KEY_ESCAPE
 	var backspace := InputEventKey.new()
 	backspace.keycode = KEY_BACKSPACE
-	var z := InputEventKey.new()
-	z.keycode = KEY_Z
+	var x := InputEventKey.new()
+	x.keycode = KEY_X
 	var controller_cancel := InputEventJoypadButton.new()
 	controller_cancel.button_index = JOY_BUTTON_B
 
@@ -129,7 +129,7 @@ func default_settings():
 			"events": [
 				escape,
 				backspace,
-				z,
+				x,
 				controller_cancel
 			]
 		});
@@ -142,6 +142,6 @@ func default_settings():
 	InputMap.add_action("dialogue_cancel")
 	InputMap.action_add_event("dialogue_cancel", escape)
 	InputMap.action_add_event("dialogue_cancel", backspace)
-	InputMap.action_add_event("dialogue_cancel", z)
+	InputMap.action_add_event("dialogue_cancel", x)
 	InputMap.action_add_event("dialogue_cancel", controller_cancel)
 	ProjectSettings.save()

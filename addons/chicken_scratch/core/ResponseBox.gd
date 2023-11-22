@@ -15,7 +15,7 @@ enum Direction {
 
 @onready var background : NinePatchRect = $Background
 @onready var responses : VBoxContainer = $MarginContainer/Responses
-@onready var cursor : Node2D = $Cursor
+@onready var cursor : SelectCursor = $SelectCursor
 
 @onready var response_label_scn : PackedScene = preload("res://addons/chicken_scratch/core/response_label.tscn")
 
@@ -25,18 +25,21 @@ var selecting := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	cursor.find_child("AnimationPlayer").play("moving")
+	print_debug("response box ready")
+	cursor.start()
 	cursor.hide()
 	
 	ChickenScratch.Inputs.input_up.connect(_on_input_up)
 	ChickenScratch.Inputs.input_down.connect(_on_input_down)
 	ChickenScratch.Inputs.accept_response.connect(_on_acccept_response)
+	print(ChickenScratch.Inputs.input_up.get_connections())
 
 
 func _exit_tree():
-	ChickenScratch.Inputs.input_up.disconnect(_on_input_up)
-	ChickenScratch.Inputs.input_down.disconnect(_on_input_down)
-	ChickenScratch.Inputs.accept_response.disconnect(_on_acccept_response)
+	if(ChickenScratch.Inputs.input_up.is_connected(_on_input_up)):
+		ChickenScratch.Inputs.input_up.disconnect(_on_input_up)
+		ChickenScratch.Inputs.input_down.disconnect(_on_input_down)
+		ChickenScratch.Inputs.accept_response.disconnect(_on_acccept_response)
 	
 
 func open(responses : Array):
@@ -46,6 +49,7 @@ func open(responses : Array):
 	clear()
 	for response in responses:
 		add_response_label(response.text)
+	await get_tree().create_timer(0.001).timeout
 	focus(current_index)
 
 
@@ -60,45 +64,19 @@ func select():
 		push_error("Cursor index is negative")
 		return
 	
+	ChickenScratch.Inputs.input_up.disconnect(_on_input_up)
+	ChickenScratch.Inputs.input_down.disconnect(_on_input_down)
+	ChickenScratch.Inputs.accept_response.disconnect(_on_acccept_response)
+	
 	selected.emit(responses.get_child(current_index), current_index)
+	
+	for response in responses.get_children():
+		response.queue_free()
+		
 	selecting = false
 	cursor.hide()
 	clear()
 	hide()
-
-
-func _on_input_up():
-	var next := navigate(Direction.UP)
-	if(next == current_index): return
-	focus(next)
-	
-
-func _on_input_down():
-	var next := navigate(Direction.DOWN)
-	if(next == current_index): return
-	focus(next)
-	
-
-func _on_acccept_response():
-	select()
-
-
-#func _input(event):
-#	if(!selecting): return
-#	if(event is InputEventAction):
-#		print_debug("response box input")
-#		if(event.is_action_pressed(&"ui_up")):
-#			var next := navigate(Direction.UP)
-#			if(next == current_index): return
-#			focus(next)
-#		elif(event.is_action_pressed(&"ui_down")):
-#			var next := navigate(Direction.DOWN)
-#			if(next == current_index): return
-#			focus(next)
-#		elif(event.is_action_pressed(&"ui_accept")):
-#			select()
-		
-#try_get_option(clampi(focused_index + move.y, 0, option_count() - 1));
 
 
 func navigate(direction : Direction) -> int:
@@ -121,29 +99,19 @@ func focus(next : int):
 	var highlighted := "[wave][rainbow]%s[/rainbow][/wave]" % [next_response.text]
 	next_response.text = ""
 	(next_response as RichTextLabel).append_text(highlighted)
-#	(next_response as RichTextLabel).
 	print("next - %s, %s" % [next_response.bbcode_enabled, next_response.text])
 	
 	cursor.show()
+	cursor.update_pos(next_response)
 #	cursor.reparent(self)
-	update_cursor_pos(next_response)
 	current_index = next
-	
-
 
 
 func unfocus(index : int):
 	var next_response : RichTextLabel = responses.get_child(index)
 	next_response.set_theme(load("res://addons/chicken_scratch/theme/black_font_small.theme"))
 	next_response.remove_theme_color_override("font_shadow_color")
-#	next_response.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0))
 	next_response.text = next_response.get_parsed_text()
-	
-
-
-func update_cursor_pos(label : RichTextLabel):
-#	print_debug("updating cursor pos - [%s, %s]" % [global_position, option.global_position]);
-	cursor.global_position = Vector2(label.global_position.x - 22, label.global_position.y - 3 );
 
 
 func add_response_label(text : String):
@@ -155,6 +123,25 @@ func add_response_label(text : String):
 #	label.fit_content = true
 #	label.bbcode_enabled = true
 	label.text = text
+
+
+func _on_input_up():
+	print_debug("input up")
+	var next := navigate(Direction.UP)
+	if(next == current_index): return
+	focus(next)
+	
+
+func _on_input_down():
+	print_debug("input down")
+	var next := navigate(Direction.DOWN)
+	if(next == current_index): return
+	focus(next)
+	
+
+func _on_acccept_response():
+	print_debug("accept response")
+	select()
 
 
 func _on_response_close():

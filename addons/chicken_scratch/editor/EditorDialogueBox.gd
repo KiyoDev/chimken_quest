@@ -1,6 +1,7 @@
 @tool
 class_name EDialogueBox extends MarginContainer
 
+
 signal go_next
 
 signal text_stopped
@@ -35,24 +36,6 @@ func response_index() -> int:
 	return response_box.current_index
 
 
-#func _connect_response(callable : Callable):
-#	revealing_text = false
-#	killed = false
-#	reveal_all = false
-#	hide_indicator()
-#	response_box.hide()
-#	response_box.selected.connect(callable)
-#
-#
-#func _disconnect_response(callable : Callable):
-#	revealing_text = false
-#	killed = false
-#	reveal_all = false
-#	hide_indicator()
-#	response_box.hide()
-#	response_box.selected.disconnect(callable)
-
-
 func clear():
 	hide_indicator()
 	TextBox.text = ""
@@ -73,6 +56,7 @@ func show_indicator():
 func load_dialogue(text : String, dialogue := {}):
 	await get_tree().create_timer(0.001).timeout
 	print_debug("box load_dialogue - %s" % [dialogue])
+	TextBox.visible_characters = 0
 	killed = false
 	reveal_all = false
 	clear()
@@ -115,7 +99,6 @@ func load_dialogue(text : String, dialogue := {}):
 		line_num += 1
 	
 	print("finished")
-	TextBox.visible_characters = 0
 	timer.queue_free()
 	finished_revealing.emit(dialogue)
 	hide_indicator()
@@ -146,7 +129,3 @@ func _on_cancel_input():
 func _on_resized():
 #	print_debug("box rect - %s" % [size])
 	indicator.position = Vector2i(container.size.x - 16, container.size.y - 10)
-
-
-func _on_response_selected(node, index : int):
-	pass

@@ -1,10 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://3543xgdit3ts"]
+[gd_scene load_steps=15 format=3 uid="uid://3543xgdit3ts"]
 
-[ext_resource type="Theme" uid="uid://dgfwyxdpnd7it" path="res://addons/chicken_scratch/theme/black_font_small.theme" id="1_630mf"]
+[ext_resource type="Theme" uid="uid://b83iy5aklyar3" path="res://addons/chicken_scratch/theme/white_font_small_outline.theme" id="1_xsp7y"]
 [ext_resource type="Script" path="res://addons/chicken_scratch/core/DialogueBox.gd" id="2_kjyyn"]
 [ext_resource type="Texture2D" uid="uid://dhn5w56l72mo8" path="res://addons/chicken_scratch/sprites/dialogue_box.png" id="3_6geoo"]
 [ext_resource type="Texture2D" uid="uid://8f31gva4o6mr" path="res://addons/chicken_scratch/sprites/next_indicator_small.png" id="4_1u0le"]
 [ext_resource type="Script" path="res://addons/chicken_scratch/core/ResponseBox.gd" id="5_gjuok"]
+[ext_resource type="Script" path="res://addons/chicken_scratch/core/SelectCursor.gd" id="6_dudyk"]
 [ext_resource type="Texture2D" uid="uid://b1q47f5wqk7q4" path="res://addons/chicken_scratch/sprites/cursor.png" id="6_y7ms7"]
 [ext_resource type="Texture2D" uid="uid://unurkh78d3hx" path="res://addons/chicken_scratch/sprites/cursor_shadow.png" id="7_pxduu"]
 
@@ -41,7 +42,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Main:position")
+tracks/0/path = NodePath("../SelectCursor/Main:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -58,17 +59,17 @@ _data = {
 
 [node name="DialogueBox" type="Control"]
 top_level = true
-custom_minimum_size = Vector2(200, 64)
+custom_minimum_size = Vector2(200, 72)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 200.0
-offset_bottom = 64.0
-theme = ExtResource("1_630mf")
+offset_bottom = 72.0
+theme = ExtResource("1_xsp7y")
 script = ExtResource("2_kjyyn")
 
 [node name="MainContainer" type="MarginContainer" parent="."]
 texture_filter = 1
-custom_minimum_size = Vector2(200, 64)
+custom_minimum_size = Vector2(200, 72)
 layout_mode = 0
 offset_right = 200.0
 offset_bottom = 64.0
@@ -87,7 +88,7 @@ layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_bottom = 12
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/MarginContainer"]
 layout_mode = 2
@@ -100,9 +101,9 @@ size_flags_vertical = 3
 theme_override_styles/focus = SubResource("StyleBoxEmpty_0cvq0")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_b3kqx")
 bbcode_enabled = true
-text = "[tornado radius=3.0 freq=-8.0]Response[/tornado]"
 scroll_active = false
 scroll_following = true
+visible_characters_behavior = 1
 
 [node name="NextIndicator" type="Sprite2D" parent="MainContainer"]
 visible = false
@@ -121,10 +122,10 @@ visible = false
 texture_filter = 1
 custom_minimum_size = Vector2(80, 50)
 layout_mode = 0
-offset_left = 58.0
-offset_top = 69.0
-offset_right = 138.0
-offset_bottom = 119.0
+offset_left = 60.0
+offset_top = 80.0
+offset_right = 140.0
+offset_bottom = 130.0
 script = ExtResource("5_gjuok")
 
 [node name="Background" type="NinePatchRect" parent="ResponseBox"]
@@ -146,24 +147,22 @@ theme_override_constants/margin_bottom = 8
 [node name="Responses" type="VBoxContainer" parent="ResponseBox/MarginContainer"]
 layout_mode = 2
 
-[node name="Cursor" type="Node2D" parent="ResponseBox"]
+[node name="SelectCursor" type="Node2D" parent="ResponseBox"]
 visible = false
-z_index = 4
-texture_filter = 1
-position = Vector2(-58, -69)
+script = ExtResource("6_dudyk")
 
-[node name="Main" type="Sprite2D" parent="ResponseBox/Cursor"]
+[node name="Main" type="Sprite2D" parent="ResponseBox/SelectCursor"]
 position = Vector2(1, 0)
 texture = ExtResource("6_y7ms7")
 centered = false
 
-[node name="Shadow" type="Sprite2D" parent="ResponseBox/Cursor/Main"]
+[node name="Shadow" type="Sprite2D" parent="ResponseBox/SelectCursor/Main"]
 show_behind_parent = true
 texture = ExtResource("7_pxduu")
 centered = false
 offset = Vector2(0, 3)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ResponseBox/Cursor"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ResponseBox/SelectCursor"]
 libraries = {
 "": SubResource("AnimationLibrary_q745f")
 }

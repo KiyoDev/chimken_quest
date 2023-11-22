@@ -19,6 +19,7 @@ enum Type {
 }
 
 
+const NODE_TYPE = "DialogueNode"
 const VARIABLE_PATTERN := "\\${[a-zA-Z_\\.]+[\\w]*}"
 
 
@@ -238,6 +239,51 @@ func from_dict(dict : Dictionary):
 func to_dict() -> Dictionary:
 	var dict := {
 		"name": name,
+		"node_type": NODE_TYPE,
+		"type": Type.keys()[type],
+		"speaker": Speaker.text,
+		"text": Text.text,
+		"variables": get_variables(),
+		"properties": {},
+		"metadata": {
+			"position": {"x": position_offset.x, "y": position_offset.y},
+			"size": {"x": size.x, "y": size.y},
+			"custom_minimum_size": {"x": custom_minimum_size.x, "y": custom_minimum_size.y}
+		}
+	}
+	
+	match(type):
+		Type.Dialogue:
+			# TODO: add connections?
+			pass
+		Type.Offering:
+			dict.properties["offerings"] = []
+			for offer in offerings_config.get_offers():
+				var item := {}
+
+				item["item_name"] = offer.ItemName.text
+				item["item_type"] = offer.ItemType.text
+				item["quantity"] = offer.Quantity.value
+
+				dict.properties["offerings"].append(item)
+			# TODO: add connections
+		Type.Response:
+			# TODO: add connections but maybe is just managed by the graph editor itself
+			# response index = node port for the editor connections
+			dict.properties["responses"] = []
+			for index in range(responses_config.get_index() + 1, get_child_count()):
+				var child : ResponseElement = get_child(index)
+				var response := {"text": child.text()}
+				dict.properties["responses"].append(response)
+#			print_debug("responses - %s" % [get_responses()])
+			pass
+	return dict
+
+
+func to_dict_no_meta() -> Dictionary:
+	var dict := {
+		"name": name,
+		"node_type": NODE_TYPE,
 		"type": Type.keys()[type],
 		"speaker": Speaker.text,
 		"text": Text.text,
@@ -270,12 +316,6 @@ func to_dict() -> Dictionary:
 				dict.properties["responses"].append(response)
 #			print_debug("responses - %s" % [get_responses()])
 			pass
-
-	dict["metadata"] = {
-		"position": {"x": position_offset.x, "y": position_offset.y},
-		"size": {"x": size.x, "y": size.y},
-		"custom_minimum_size": {"x": custom_minimum_size.x, "y": custom_minimum_size.y}
-	}
 	return dict
 
 

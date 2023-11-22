@@ -4,6 +4,7 @@ class_name RootNode extends BaseNode
 
 signal branch_play_requested(slot : int)
 
+const NODE_TYPE = "RootNode"
 
 @export var ConditionConfig : HBoxContainer
 
@@ -45,12 +46,20 @@ func set_from_dict(dict : Dictionary):
 
 
 func to_dict() -> Dictionary:
-	var dict := {}
+	var dict := {
+		"name": name,
+		"node_type": NODE_TYPE,
+		"conditions": [],
+		"properties": {},
+		"metadata": {
+			"position": {"x": position_offset.x, "y": position_offset.y},
+			"size": {"x": size.x, "y": size.y},
+			"custom_minimum_size": {"x": custom_minimum_size.x, "y": custom_minimum_size.y}
+		}
+	}
 	
-	dict["name"] = name
 	# TODO: add connections but maybe is just managed by the graph editor itself
 	# response index = node port for the editor connections
-	dict["conditions"] = []
 #	print_debug("hhh '%s'" % [get_children()])
 	for index in range(ConditionConfig.get_parent().get_index() + 1, get_child_count()):
 		var child : ConditionElement = get_child(index)
@@ -60,10 +69,28 @@ func to_dict() -> Dictionary:
 		})
 #			print_debug("responses - %s" % [get_responses()])
 #	return "{\"name\":\"%s\"}" % []
-	dict["metadata"] = {
-		"position": {"x": position_offset.x, "y": position_offset.y},
-		"custom_minimum_size": {"x": custom_minimum_size.x, "y": custom_minimum_size.y}
+	return dict
+
+
+func to_dict_no_meta() -> Dictionary:
+	var dict := {
+		"name": name,
+		"node_type": NODE_TYPE,
+		"conditions": [],
+		"properties": {}
 	}
+	
+	# TODO: add connections but maybe is just managed by the graph editor itself
+	# response index = node port for the editor connections
+#	print_debug("hhh '%s'" % [get_children()])
+	for index in range(ConditionConfig.get_parent().get_index() + 1, get_child_count()):
+		var child : ConditionElement = get_child(index)
+#		print_debug("lakdhgjklad '%s', '%s'" % [child.condition.name, child.condition.text])
+		dict["conditions"].append({
+			"condition": child.condition.text
+		})
+#			print_debug("responses - %s" % [get_responses()])
+#	return "{\"name\":\"%s\"}" % []
 	return dict
 
 

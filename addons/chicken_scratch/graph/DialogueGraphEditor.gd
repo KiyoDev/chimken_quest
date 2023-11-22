@@ -573,13 +573,7 @@ func _on_dialogue_node_preview(node : DialogueNode):
 	swap_dialogue_preview(node)
 	dialogue_preview.show()
 	
-#	init_dialogue_box()
-
-	if(dialogue_box != null):
-		dialogue_box.queue_free()
-		
-	dialogue_box = editor_dialogue_box_scn.instantiate()
-	dialogue_box.finished_revealing.connect(_on_dialogue_box_finished)
+	init_dialogue_box()
 	
 	ChickenScratch.dialogue_box = dialogue_box
 	dialogue_preview.get_node("Container/VBoxContainer").add_child(dialogue_box)
@@ -621,7 +615,7 @@ func _on_dialogue_node_play(node : DialogueNode):
 
 
 func _on_branch_play_requested(slot : int):
-	if(ChickenScratch.started): return
+	if(ChickenScratch.playing): return
 	
 	print_debug("playing branch %s" % [slot])
 	dialogue_box_preview = dialogue_box_preview_scn.instantiate()
