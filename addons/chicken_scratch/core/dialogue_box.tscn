@@ -152,7 +152,7 @@ visible = false
 script = ExtResource("6_dudyk")
 
 [node name="Main" type="Sprite2D" parent="ResponseBox/SelectCursor"]
-position = Vector2(1, 0)
+position = Vector2(2, 0)
 texture = ExtResource("6_y7ms7")
 centered = false
 

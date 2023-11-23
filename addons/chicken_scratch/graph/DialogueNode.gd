@@ -13,13 +13,13 @@ signal text_changed(node : DialogueNode, text : String, variables : Dictionary)
 
 
 enum Type {
-	Dialogue,
-	Offering,
-	Response
+	DIALOGUE,
+	OFFERING,
+	RESPONSE
 }
 
 
-const NODE_TYPE = "DialogueNode"
+const NODE_TYPE = "DIALOGUE"
 const VARIABLE_PATTERN := "\\${[a-zA-Z_\\.]+[\\w]*}"
 
 
@@ -34,7 +34,7 @@ const VARIABLE_PATTERN := "\\${[a-zA-Z_\\.]+[\\w]*}"
 @export var ResponsesConfig : PackedScene
 @export var ResponseElement : PackedScene
 
-var type := Type.Dialogue
+var type := Type.DIALOGUE
 
 var offerings_config : OfferingsConfig
 var item_offerings : VBoxContainer
@@ -140,7 +140,7 @@ func on_create():
 	TypeOptions.clear()
 	for type in Type.keys():
 		TypeOptions.add_item(type, Type[type])
-	type = Type.Dialogue
+	type = Type.DIALOGUE
 	
 	response_elements.append(get_child(responses_config.get_index() + 1))
 	
@@ -171,9 +171,9 @@ static func new_from_dict(scn : PackedScene, dict : Dictionary, graph : GraphEdi
 #	node.position_offset = Vector2(dict.metadata.position.x, dict.metadata.position.y)
 	print_debug("new from dict - %s" % [dict])
 	match(node.type):
-		Type.Dialogue:
+		Type.DIALOGUE:
 			pass
-		Type.Offering:
+		Type.OFFERING:
 			# Update node's properties to saved properties
 			var index := 0
 			for offering in dict.properties.offerings:
@@ -184,7 +184,7 @@ static func new_from_dict(scn : PackedScene, dict : Dictionary, graph : GraphEdi
 				off.ItemType.text = offering.item_type
 				off.Quantity.value = offering.quantity
 				index += 1
-		Type.Response:
+		Type.RESPONSE:
 			# Update node's properties to saved properties
 			var index := node.responses_config.get_index() + 1
 			for response in dict.properties.responses:
@@ -209,9 +209,9 @@ func from_dict(dict : Dictionary):
 	print_debug("new from dict - %s" % [dict])
 #	dialogue_variables = dict.variables
 	match(type):
-		Type.Dialogue:
+		Type.DIALOGUE:
 			pass
-		Type.Offering:
+		Type.OFFERING:
 			# Update node's properties to saved properties
 			var index := 0
 			for offering in dict.properties.offerings:
@@ -222,7 +222,7 @@ func from_dict(dict : Dictionary):
 				off.ItemType.text = offering.item_type
 				off.Quantity.value = offering.quantity
 				index += 1
-		Type.Response:
+		Type.RESPONSE:
 			# Update node's properties to saved properties
 			var index := responses_config.get_index() + 1
 			for response in dict.properties.responses:
@@ -236,6 +236,14 @@ func from_dict(dict : Dictionary):
 	find_dialogue_variables()
 
 
+func get_metadata():
+	return {
+		"position": {"x": position_offset.x, "y": position_offset.y},
+		"size": {"x": size.x, "y": size.y},
+		"custom_minimum_size": {"x": custom_minimum_size.x, "y": custom_minimum_size.y}
+	}
+
+
 func to_dict() -> Dictionary:
 	var dict := {
 		"name": name,
@@ -245,18 +253,14 @@ func to_dict() -> Dictionary:
 		"text": Text.text,
 		"variables": get_variables(),
 		"properties": {},
-		"metadata": {
-			"position": {"x": position_offset.x, "y": position_offset.y},
-			"size": {"x": size.x, "y": size.y},
-			"custom_minimum_size": {"x": custom_minimum_size.x, "y": custom_minimum_size.y}
-		}
+		"metadata": get_metadata()
 	}
 	
 	match(type):
-		Type.Dialogue:
+		Type.DIALOGUE:
 			# TODO: add connections?
 			pass
-		Type.Offering:
+		Type.OFFERING:
 			dict.properties["offerings"] = []
 			for offer in offerings_config.get_offers():
 				var item := {}
@@ -267,7 +271,7 @@ func to_dict() -> Dictionary:
 
 				dict.properties["offerings"].append(item)
 			# TODO: add connections
-		Type.Response:
+		Type.RESPONSE:
 			# TODO: add connections but maybe is just managed by the graph editor itself
 			# response index = node port for the editor connections
 			dict.properties["responses"] = []
@@ -292,10 +296,10 @@ func to_dict_no_meta() -> Dictionary:
 	}
 	
 	match(type):
-		Type.Dialogue:
+		Type.DIALOGUE:
 			# TODO: add connections?
 			pass
-		Type.Offering:
+		Type.OFFERING:
 			dict.properties["offerings"] = []
 			for offer in offerings_config.get_offers():
 				var item := {}
@@ -306,7 +310,7 @@ func to_dict_no_meta() -> Dictionary:
 
 				dict.properties["offerings"].append(item)
 			# TODO: add connections
-		Type.Response:
+		Type.RESPONSE:
 			# TODO: add connections but maybe is just managed by the graph editor itself
 			# response index = node port for the editor connections
 			dict.properties["responses"] = []
@@ -321,9 +325,9 @@ func to_dict_no_meta() -> Dictionary:
 
 func update_node_options():
 	match(type):
-		Type.Dialogue:
+		Type.DIALOGUE:
 			set_slot_enabled_right(0, true)
-		Type.Offering:
+		Type.OFFERING:
 			offerings_config.reparent(self)
 			offering_fail.reparent(self)
 			offerings_config.show()
@@ -331,7 +335,7 @@ func update_node_options():
 			print_debug("g - %s, %s" % [offerings_config.get_index(), offering_fail.get_index()])
 			set_slot_enabled_right(offerings_config.get_index(), true)
 			set_slot_enabled_right(offering_fail.get_index(), true)
-		Type.Response:
+		Type.RESPONSE:
 			responses_config.reparent(self)
 			responses_config.show()
 			set_slot_enabled_right(responses_config.get_index(), false) # config index = first response slot
@@ -348,12 +352,12 @@ func update_node_options():
 
 func hide_previous_options(type : Type):
 	match(type):
-		Type.Dialogue:
+		Type.DIALOGUE:
 			set_slot_enabled_right(0, false)
 			slots_removed.emit(self, 0)
-		Type.Offering:
+		Type.OFFERING:
 			hide_offer_slots()
-		Type.Response:
+		Type.RESPONSE:
 			hide_response_slots()
 
 
@@ -417,7 +421,7 @@ func delete_item_offering(offering : OfferingElement):
 
 func empty() -> DialogueNode:
 	var node := super.duplicate(0b0111)
-	node.type = Type.Dialogue
+	node.type = Type.DIALOGUE
 	print_debug("empty - %s" % [node.dialogue])
 	return node
 

@@ -4,7 +4,7 @@ class_name RootNode extends BaseNode
 
 signal branch_play_requested(slot : int)
 
-const NODE_TYPE = "RootNode"
+const NODE_TYPE = "Root"
 
 @export var ConditionConfig : HBoxContainer
 

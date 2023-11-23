@@ -1,7 +1,7 @@
 class_name SignalNode extends BaseNode
 
 
-const NODE_TYPE = "SignalNode"
+const NODE_TYPE = "Signal"
 
 
 # Called when the node enters the scene tree for the first time.

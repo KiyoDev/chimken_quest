@@ -106,12 +106,14 @@ func open_dialog(type):
 			dialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE
 			dialog.add_filter("*.dngraph", "DialogueNode Graph")
 			dialog.add_filter("*.json", "JSON file")
+			dialog.add_filter("*.cst", "ChickenScratch DialogueTree")
 			dialog.file_selected.connect(_on_open_file)
 		DialogType.SAVE_GRAPH:
 			dialog.title = "Save DialogueNode graph"
 			dialog.file_mode = EditorFileDialog.FILE_MODE_SAVE_FILE
 			dialog.add_filter("*.dngraph", "DialogueNode Graph")
 			dialog.add_filter("*.json", "JSON file")
+			dialog.add_filter("*.cst", "ChickenScratch DialogueTree")
 			dialog.file_selected.connect(_on_save_file)
 		DialogType.CHANGE_THEME:
 			dialog.title = "Change UI theme"
@@ -188,6 +190,21 @@ func get_variables_parsed() -> Dictionary:
 		dict[variable.var_name()] = variable.value()
 	
 	return dict
+
+
+func new_dialogue_tree(path : String) -> void:
+#	_save()
+#	var new_timeline := DialogicTimeline.new()
+#	new_timeline.resource_path = path
+#	new_timeline.set_meta('timeline_not_saved', true)
+#	var err := ResourceSaver.save(new_timeline)
+#	editors_manager.resource_helper.rebuild_timeline_directory()
+#	editors_manager.edit_resource(new_timeline)
+	var new_tree := DialogueTree.new()
+	new_tree.resource_path = path
+	new_tree.set_meta("tree_saved", true)
+	var err := ResourceSaver.save(new_tree)
+	pass
 
 
 func graph_to_dict() -> Dictionary:
@@ -367,6 +384,7 @@ func add_dialogue_variable() -> VariableValue:
 func update_variable_name(old : String, new : Variant):
 	ChickenScratch.update_variable_name(old, new)
 
+
 func update_variable_value(name : String, value : Variant):
 	ChickenScratch.update_variable_value(name, value)
 	
@@ -393,7 +411,6 @@ func disconnect_node(node : DialogueNode, from_port : int):
 #		print_debug("connections - %s, %s" % [connections, typeof(connections)])
 		if(connections.from == node.name && connections.from_port == from_port):
 			Graph.disconnect_node(connections.from, connections.from_port, connections.to, connections.to_port)
-	
 
 
 func close_node(node : DialogueNode):
@@ -477,6 +494,10 @@ func init_dialogue_box():
 	dialogue_box.finished_revealing.connect(_on_dialogue_box_finished)
 
 
+func _save():
+	pass
+
+
 func _on_open_file(path : String):
 	print_debug("opening file '%s'" % [path])
 #	var file := FileAccess.open(path, FileAccess.READ)
@@ -489,33 +510,62 @@ func _on_open_file(path : String):
 	
 #	if(dict.has("variables") && dict.variables.size() > 0):
 
-	init_dialogue_box()
-	
-	EditorUtil.set_editor_setting("current_tree", path)
-	ChickenScratch.preload_tree(path, dialogue_box)
-	
-	print("NEW TREE - %s" % [EditorUtil.get_editor_setting("current_tree")])
-	
-	test_variables_container.show()
-	for child in test_variables.get_children():
-		test_variables.remove_child(child)
-	
-	for variable in ChickenScratch.variables:
-#		ChickenScratch.variables[variable] = dict.variables[variable]
-		var v := add_dialogue_variable()
-		v.set_variable(variable, ChickenScratch.variables[variable])
-#			v.from_dict(dict.variables[variable])
+	if(path.ends_with(".cst")):
+		print_debug("opening '%s'" % [path])
+		pass
+	else:
+		init_dialogue_box()
+		
+		EditorUtil.set_editor_setting("current_tree", path)
+		ChickenScratch.preload_tree(path, dialogue_box)
+		
+		print("NEW TREE - %s" % [EditorUtil.get_editor_setting("current_tree")])
+		
+		test_variables_container.show()
+		for child in test_variables.get_children():
+			test_variables.remove_child(child)
+		
+		for variable in ChickenScratch.variables:
+	#		ChickenScratch.variables[variable] = dict.variables[variable]
+			var v := add_dialogue_variable()
+			v.set_variable(variable, ChickenScratch.variables[variable])
+	#			v.from_dict(dict.variables[variable])
 
-	init_nodes_from_tree()
-	current_file_path = path
-	Filename.text = path.get_file()
+		init_nodes_from_tree()
+		current_file_path = path
+		Filename.text = path.get_file()
 
 
 func _on_save_file(path : String):
 	print_debug("saving file '%s'" % [path])
-	var file := FileAccess.open(path, FileAccess.WRITE)
-	file.store_string(graph_to_json("\t" if save_pretty else ""))
-	save_pretty = false
+	# TODO: add support for saving .tres
+	if(path.ends_with(".cst")):
+		var new_tree := DialogueTree.new()
+		var dict := graph_to_dict()
+		
+		new_tree.connections = dict.connections
+		new_tree.variables = dict.variables
+		new_tree.root_node = dict.root_node
+		
+		var meta := {}
+		for i in range(0, Graph.get_child_count()):
+			var node : GraphNode = Graph.get_child(i)
+			if(node is RootNode): continue
+			var node_dict : Dictionary = node.to_dict_no_meta()
+			new_tree.nodes[node_dict.name] = node_dict
+			meta[node_dict.name] = node.get_metadata()
+		
+		new_tree.resource_path = path
+		new_tree.set_meta("nodes_meta", meta)
+		new_tree.set_meta("tree_saved", true)
+		var err := ResourceSaver.save(new_tree)
+		if(err != OK):
+			push_error("Unable to save file - %s" % [("File '%s' not recognized" % path) if ERR_FILE_UNRECOGNIZED else err])
+		print_debug("saving cst - %s" % [err])
+	else:
+		var file := FileAccess.open(path, FileAccess.WRITE)
+		file.store_string(graph_to_json("\t" if save_pretty else ""))
+		save_pretty = false
 
 
 func _on_graph_connection_request(from_node, from_port, to_node, to_port):

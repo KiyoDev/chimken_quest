@@ -1,0 +1,285 @@
+[gd_resource type="Resource" script_class="DialogueTree" load_steps=2 format=3 uid="uid://bxg2oh305a73h"]
+
+[ext_resource type="Script" path="res://addons/chicken_scratch/core/resources/DialogueTree.gd" id="1_060di"]
+
+[resource]
+script = ExtResource("1_060di")
+path = ""
+connections = {
+"GraphNode": {
+"0": {
+"to": "_GraphNode_40334",
+"to_port": 0.0
+}
+},
+"RootNode": {
+"0": {
+"to": "GraphNode",
+"to_port": 0.0
+},
+"1": {
+"to": "_GraphNode_40286",
+"to_port": 0.0
+},
+"2": {
+"to": "_GraphNode_74624",
+"to_port": 0.0
+}
+},
+"_GraphNode_40286": {
+"0": {
+"to": "_GraphNode_40359",
+"to_port": 0.0
+},
+"1": {
+"to": "_GraphNode_40384",
+"to_port": 0.0
+}
+},
+"_GraphNode_40359": {
+"0": {
+"to": "_GraphNode_50723",
+"to_port": 0.0
+},
+"1": {
+"to": "_GraphNode_50748",
+"to_port": 0.0
+}
+}
+}
+variables = {
+"active": false,
+"burgers": 2.0,
+"item_name": "tendies"
+}
+root_node = {
+"conditions": [{
+"condition": "hungry"
+}, {
+"condition": "none"
+}],
+"metadata": {
+"custom_minimum_size": {
+"x": 0.0,
+"y": 0.0
+},
+"position": {
+"x": -200.0,
+"y": 400.0
+},
+"size": {
+"x": 162.0,
+"y": 171.0
+}
+},
+"name": &"RootNode",
+"node_type": "RootNode",
+"properties": {}
+}
+nodes = {
+"GraphNode": {
+"name": &"GraphNode",
+"node_type": "DialogueNode",
+"properties": {},
+"speaker": "Bungus",
+"text": "Hi.",
+"type": "Dialogue",
+"variables": []
+},
+"_GraphNode_40286": {
+"name": &"_GraphNode_40286",
+"node_type": "DialogueNode",
+"properties": {
+"responses": [{
+"text": "Yes"
+}, {
+"text": "No"
+}]
+},
+"speaker": "Bungus",
+"text": "Food?",
+"type": "Response",
+"variables": []
+},
+"_GraphNode_40334": {
+"name": &"_GraphNode_40334",
+"node_type": "DialogueNode",
+"properties": {},
+"speaker": "Bungus",
+"text": "That is [shake rate=22.0 level=4]${active}![/shake] Please give me ${InventoryManager.nested.nested.value} gold!",
+"type": "Dialogue",
+"variables": ["${active}", "${InventoryManager.nested.nested.value}"]
+},
+"_GraphNode_40359": {
+"name": &"_GraphNode_40359",
+"node_type": "DialogueNode",
+"properties": {
+"offerings": [{
+"item_name": "phoenix_burger",
+"item_type": "consumable",
+"quantity": 2.0
+}, {
+"item_name": "yagoo_burger",
+"item_type": "consumable",
+"quantity": 1.0
+}]
+},
+"speaker": "Bungus",
+"text": "[rainbow][wave]${burgers} ${item_name}[/wave][/rainbow]  pls.
+
+ [shake rate=20.0 level=4]I am so hungry! I could probably eat 1000 horses if I really wanted to...[/shake]",
+"type": "Offering",
+"variables": ["${burgers}", "${item_name}"]
+},
+"_GraphNode_40384": {
+"name": &"_GraphNode_40384",
+"node_type": "DialogueNode",
+"properties": {},
+"speaker": "Bungus",
+"text": "Fuck off.",
+"type": "Dialogue",
+"variables": []
+},
+"_GraphNode_50723": {
+"name": &"_GraphNode_50723",
+"node_type": "DialogueNode",
+"properties": {},
+"speaker": "Bungus",
+"text": "Thanks.",
+"type": "Dialogue",
+"variables": []
+},
+"_GraphNode_50748": {
+"name": &"_GraphNode_50748",
+"node_type": "DialogueNode",
+"properties": {},
+"speaker": "Bungus",
+"text": "Bruh.",
+"type": "Dialogue",
+"variables": []
+},
+"_GraphNode_74624": {
+"name": &"_GraphNode_74624",
+"node_type": "DialogueNode",
+"properties": {},
+"speaker": "Bungus",
+"text": "おはようございます。",
+"type": "Dialogue",
+"variables": []
+}
+}
+metadata/nodes_meta = {
+"GraphNode": {
+"custom_minimum_size": {
+"x": 240.0,
+"y": 0.0
+},
+"position": {
+"x": 400.0,
+"y": 200.0
+},
+"size": {
+"x": 240.0,
+"y": 287.0
+}
+},
+"_GraphNode_40286": {
+"custom_minimum_size": {
+"x": 240.0,
+"y": 0.0
+},
+"position": {
+"x": 400.0,
+"y": 600.0
+},
+"size": {
+"x": 240.0,
+"y": 462.0
+}
+},
+"_GraphNode_40334": {
+"custom_minimum_size": {
+"x": 240.0,
+"y": 0.0
+},
+"position": {
+"x": 800.0,
+"y": 200.0
+},
+"size": {
+"x": 240.0,
+"y": 287.0
+}
+},
+"_GraphNode_40359": {
+"custom_minimum_size": {
+"x": 240.0,
+"y": 0.0
+},
+"position": {
+"x": 800.0,
+"y": 500.0
+},
+"size": {
+"x": 240.0,
+"y": 604.0
+}
+},
+"_GraphNode_40384": {
+"custom_minimum_size": {
+"x": 240.0,
+"y": 0.0
+},
+"position": {
+"x": 780.0,
+"y": 1160.0
+},
+"size": {
+"x": 240.0,
+"y": 287.0
+}
+},
+"_GraphNode_50723": {
+"custom_minimum_size": {
+"x": 240.0,
+"y": 0.0
+},
+"position": {
+"x": 1120.0,
+"y": 520.0
+},
+"size": {
+"x": 575.532,
+"y": 287.0
+}
+},
+"_GraphNode_50748": {
+"custom_minimum_size": {
+"x": 240.0,
+"y": 0.0
+},
+"position": {
+"x": 1120.0,
+"y": 840.0
+},
+"size": {
+"x": 240.0,
+"y": 287.0
+}
+},
+"_GraphNode_74624": {
+"custom_minimum_size": {
+"x": 240.0,
+"y": 0.0
+},
+"position": {
+"x": 100.0,
+"y": 800.0
+},
+"size": {
+"x": 240.0,
+"y": 287.0
+}
+}
+}
+metadata/tree_saved = true
